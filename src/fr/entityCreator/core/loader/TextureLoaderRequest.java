@@ -9,17 +9,26 @@ import fr.entityCreator.graphics.textures.TextureLoader;
 public class TextureLoaderRequest extends GLRequest {
     private Entity e;
     private String file;
+    private TextureLoader texture;
 
     public TextureLoaderRequest(String file, Entity entity) {
         this.e = entity;
         this.file = file;
     }
 
+    public TextureLoaderRequest(String file) {
+        this.file = file;
+    }
+
+    public TextureLoader getTexture() {
+        return texture;
+    }
+
     @Override
     public void execute() {
         Texture tex;
-        TextureLoader loader = Loader.INSTANCE.loadTexture(file);
-        tex = new Texture(loader, TextureProperties.DEFAULT);
+        texture = Loader.INSTANCE.loadTexture(file);
+        tex = new Texture(texture, TextureProperties.DEFAULT);
         e.getModel().setTexture(tex);
         super.execute();
     }

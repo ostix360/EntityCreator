@@ -4,8 +4,8 @@ public class GLRequestProcessor {
     private static final int MAX_REQUEST_TIME = 12;
     private static GLRequestQueue requestQueue = new GLRequestQueue();
 
-    public static void sendRequest(GLRequest request) {
-        requestQueue.addRequest(request);
+    public static void sendRequest(GLRequest... request) {
+        requestQueue.addAllRequest(request);
     }
 
     public static void executeRequest() {

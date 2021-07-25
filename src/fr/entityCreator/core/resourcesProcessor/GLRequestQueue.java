@@ -1,6 +1,7 @@
 package fr.entityCreator.core.resourcesProcessor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GLRequestQueue {
@@ -10,6 +11,12 @@ public class GLRequestQueue {
     public synchronized void addRequest(GLRequest request) {
         this.requestQueue.add(request);
     }
+
+    public synchronized void addAllRequest(GLRequest... request) {
+        this.requestQueue.addAll(Arrays.asList(request));
+    }
+
+
 
     public synchronized GLRequest acceptNextRequest() {
         return this.requestQueue.remove(0);

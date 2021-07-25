@@ -10,6 +10,7 @@ public class ModelLoaderRequest extends GLRequest {
     private Entity e;
     private ModelData data;
     private boolean isAnimated = false;
+    private MeshModel model;
 
     public ModelLoaderRequest(Entity e, ModelData data,boolean isAnimated) {
         this.e = e;
@@ -18,9 +19,12 @@ public class ModelLoaderRequest extends GLRequest {
         e.setModel(new Model(e.getName()));
     }
 
+    public ModelLoaderRequest(ModelData data) {
+        this.data = data;
+    }
+
     @Override
     public void execute() {
-        MeshModel model;
         if (isAnimated){
           model = Loader.INSTANCE.loadToVAO(data.getIndices(), data.getVertices(),
        data.getTexcoords(), data.getNormals(), data.getJointsId(), data.getVertexWeights());
@@ -28,7 +32,11 @@ public class ModelLoaderRequest extends GLRequest {
             model = Loader.INSTANCE.loadToVAO(data.getVertices(),
                     data.getTexcoords(), data.getNormals(), data.getIndices());
         }
-        e.getModel().setMeshModel(model);
+        if (e != null)e.getModel().setMeshModel(model);
         super.execute();
+    }
+
+    public MeshModel getModel() {
+        return model;
     }
 }

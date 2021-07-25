@@ -2,14 +2,20 @@ package fr.entityCreator.terrain;
 
 
 
+import fr.entityCreator.core.Timer;
 import fr.entityCreator.core.loader.Loader;
+import fr.entityCreator.core.loader.ModelLoaderRequest;
+import fr.entityCreator.core.resourcesProcessor.GLRequest;
+import fr.entityCreator.core.resourcesProcessor.GLRequestProcessor;
 import fr.entityCreator.graphics.model.MeshModel;
+import fr.entityCreator.graphics.model.ModelData;
 import fr.entityCreator.terrain.texture.TerrainTexture;
 import fr.entityCreator.terrain.texture.TerrainTexturePack;
 import fr.entityCreator.toolBox.Logger;
 import fr.entityCreator.toolBox.Maths;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.lwjgl.opengl.GL11;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -28,51 +34,43 @@ public class Terrain {
     private final TerrainTexturePack texturePack;
     private final TerrainTexture blendMap;
 
-    public Terrain(float gridX, float gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap,
-                   String heightMap) {
+    public Terrain(float gridX, float gridZ, TerrainTexturePack texturePack, TerrainTexture blendMap) {
         this.x = gridX * SIZE;
         this.z = gridZ * SIZE;
-        this.model = generateTerrain(loader, heightMap);
+        this.model = generateTerrain();
         this.texturePack = texturePack;
         this.blendMap = blendMap;
     }
 
     public float getHeightOfTerrain(float worldX, float worldZ) {
-        float terrainX = worldX - this.x;
-        float terrainZ = worldZ - this.z;
-        float gridSquareSize = SIZE / ((float) heights.length - 1);  // cacul de la grille donc nombre de vertex - 1
-        int gridX = (int) Math.floor(terrainX / gridSquareSize);
-        int gridZ = (int) Math.floor(terrainZ / gridSquareSize);
-        if (gridX < 0 || gridX >= heights.length - 1 || gridZ < 0 || gridZ >= heights.length - 1) {
-            return 0;
-        }
-        float xCoord = (terrainX % gridSquareSize) / gridSquareSize;
-        float zCoord = (terrainZ % gridSquareSize) / gridSquareSize;
-        float answer;
-        if (xCoord <= (1 - zCoord)) {
-            answer = Maths.barryCentric(new Vector3f(0, heights[gridX][gridZ], 0), new Vector3f(1,
-                    heights[gridX + 1][gridZ], 0), new Vector3f(0,
-                    heights[gridX][gridZ + 1], 1), new Vector2f(xCoord, zCoord));
-        } else {
-            answer = Maths.barryCentric(new Vector3f(1, heights[gridX + 1][gridZ], 0), new Vector3f(1,
-                    heights[gridX + 1][gridZ + 1], 1), new Vector3f(0,
-                    heights[gridX][gridZ + 1], 1), new Vector2f(xCoord, zCoord));
-        }
-        return answer;
+        return 0;
+//        float terrainX = worldX - this.x;
+//        float terrainZ = worldZ - this.z;
+//        float gridSquareSize = SIZE / ((float) heights.length - 1);  // cacul de la grille donc nombre de vertex - 1
+//        int gridX = (int) Math.floor(terrainX / gridSquareSize);
+//        int gridZ = (int) Math.floor(terrainZ / gridSquareSize);
+//        if (gridX < 0 || gridX >= heights.length - 1 || gridZ < 0 || gridZ >= heights.length - 1) {
+//            return 0;
+//        }
+//        float xCoord = (terrainX % gridSquareSize) / gridSquareSize;
+//        float zCoord = (terrainZ % gridSquareSize) / gridSquareSize;
+//        float answer;
+//        if (xCoord <= (1 - zCoord)) {
+//            answer = Maths.barryCentric(new Vector3f(0, heights[gridX][gridZ], 0), new Vector3f(1,
+//                    heights[gridX + 1][gridZ], 0), new Vector3f(0,
+//                    heights[gridX][gridZ + 1], 1), new Vector2f(xCoord, zCoord));
+//        } else {
+//            answer = Maths.barryCentric(new Vector3f(1, heights[gridX + 1][gridZ], 0), new Vector3f(1,
+//                    heights[gridX + 1][gridZ + 1], 1), new Vector3f(0,
+//                    heights[gridX][gridZ + 1], 1), new Vector2f(xCoord, zCoord));
+//        }
+//        return answer;
     }
 
-    private MeshModel generateTerrain(Loader loader, String heigthMap) {
-        BufferedImage image = null;
+    private MeshModel generateTerrain() {
 
-        try {
-            image = ImageIO.read(Objects.requireNonNull(Terrain.class.getResource("/textures/terrain/" + heigthMap + ".png")));
-        } catch (IOException e) {
-            Logger.err("Couldn't load heightMap ", e);
-        }
-
-        assert image != null;
-        int VERTEX_COUNT = image.getHeight();
-        heights = new float[VERTEX_COUNT][VERTEX_COUNT];
+        int VERTEX_COUNT = 1024;
+        //heights = new float[VERTEX_COUNT][VERTEX_COUNT];
         int count = VERTEX_COUNT * VERTEX_COUNT;
         float[] vertices = new float[count * 3];
         float[] normals = new float[count * 3];
@@ -81,12 +79,11 @@ public class Terrain {
         int vertexPointer = 0;
         for (int z = 0; z < VERTEX_COUNT; z++) {            // Boucle de generation de monde
             for (int x = 0; x < VERTEX_COUNT; x++) {
-                float height = getHeight(x, z, image);
-                heights[x][z] = height;
+                //heights[x][z] = height;
                 vertices[vertexPointer * 3] = (float) x / ((float) VERTEX_COUNT - 1) * SIZE;
-                vertices[vertexPointer * 3 + 1] = height;
+                vertices[vertexPointer * 3 + 1] = 0;
                 vertices[vertexPointer * 3 + 2] = (float) z / ((float) VERTEX_COUNT - 1) * SIZE;
-                Vector3f normal = calculateNormal(x, z, image);
+                Vector3f normal = calculateNormal(x, z);
                 normals[vertexPointer * 3] = normal.x;
                 normals[vertexPointer * 3 + 1] = normal.y;
                 normals[vertexPointer * 3 + 2] = normal.z;
@@ -110,15 +107,14 @@ public class Terrain {
                 indices[pointer++] = bottomRight;
             }
         }
-        return loader.loadToVAO(vertices, textureCoords, normals, indices);
+        ModelLoaderRequest request = new ModelLoaderRequest(new ModelData(vertices,textureCoords,indices,normals));
+        GLRequestProcessor.sendRequest(request);
+        Timer.waitForRequest(request);
+        return request.getModel();
     }
 
-    private Vector3f calculateNormal(int x, int z, BufferedImage image) {
-        float heightL = getHeight(x - 1, z, image);
-        float heightR = getHeight(x + 1, z, image);
-        float heightD = getHeight(x, z - 1, image);
-        float heightU = getHeight(x, z + 1, image);
-        Vector3f normal = new Vector3f(heightL - heightR, 2f, heightD - heightU);
+    private Vector3f calculateNormal(int x, int z) {
+        Vector3f normal = new Vector3f(0, 3f, 0);
         normal.normalize();
         return normal;
     }

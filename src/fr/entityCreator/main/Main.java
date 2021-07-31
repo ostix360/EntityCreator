@@ -5,7 +5,10 @@ import fr.entityCreator.core.loader.Loader;
 import fr.entityCreator.core.loader.TextureLoaderRequest;
 import fr.entityCreator.core.resourcesProcessor.GLRequestProcessor;
 import fr.entityCreator.creator.Workspace;
+import fr.entityCreator.entity.Entity;
 import fr.entityCreator.entity.Light;
+import fr.entityCreator.entity.Transform;
+import fr.entityCreator.entity.camera.Camera;
 import fr.entityCreator.frame.MainFrame;
 import fr.entityCreator.graphics.MasterRenderer;
 import fr.entityCreator.terrain.Terrain;
@@ -15,15 +18,22 @@ import fr.entityCreator.toolBox.Color;
 import org.joml.Vector3f;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 public class Main {
 
+    public static Entity theEntity;
+    private static final List<Entity> entities = new ArrayList<>();
+
     public static void main(String[] args) throws InterruptedException {
         MasterRenderer renderer = new MasterRenderer();
+        Transform playerTransform = new Transform(100,0,100,0,0,0,1);
+        Camera cam = new Camera(playerTransform);
         Workspace workspace = new Workspace();
         Thread main = Thread.currentThread();
-        MainFrame frame = new MainFrame(renderer,workspace);
+        MainFrame frame = new MainFrame(renderer,workspace,cam);
         Thread renderThread = new Thread(frame.getRenderRunnable(),"Render Thread");
         renderThread.start();
         TextureLoaderRequest backgroundTexture = new TextureLoaderRequest(Main.class.getResource("/res/terrain/grassy2.png").getFile());
@@ -46,7 +56,8 @@ public class Main {
 
         TerrainTexturePack tp = new TerrainTexturePack(backt,rt,gt,bt);
         Terrain t = new Terrain(0,0,tp,blendt);
-
+        entities.add(theEntity);
+        renderer.initToRender(entities,t,light,cam);
 
     }
 

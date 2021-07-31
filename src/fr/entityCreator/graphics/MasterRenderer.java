@@ -80,6 +80,9 @@ public class MasterRenderer {
 
     public void initToRender(List<Entity> entities, Terrain terrains, Light light, Camera camera) {
         for (Entity entity : entities) {
+            if (entity == null){
+                continue;
+            }
             processEntity(entity);
         }
         this.terrains = terrains;

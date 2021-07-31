@@ -3,6 +3,7 @@ package fr.entityCreator.entity.camera;
 
 import fr.entityCreator.core.Input;
 import fr.entityCreator.entity.Player;
+import fr.entityCreator.entity.Transform;
 import fr.entityCreator.graphics.MasterRenderer;
 import fr.entityCreator.toolBox.Maths;
 import org.joml.Matrix4f;
@@ -24,9 +25,9 @@ public class Camera implements ICamera {
 
     float elapsedMouseDY;
 
-    private final Player player;
+    private final Transform player;
 
-    public Camera(Player player) {
+    public Camera(Transform player) {
         this.player = player;
     }
 
@@ -89,7 +90,7 @@ public class Camera implements ICamera {
     private void caculateCameraPosition(float horzontalDistance, float verticalDistance) {
         if (this.rotate) {
 
-            player.increaseRotation(new Vector3f(0.0F, 0.1F, 0.0F));
+            this.player.getRotation().rotateY(0.1f);
 
         }
         float theta = player.getRotation().y() + angleAroundPlayer;

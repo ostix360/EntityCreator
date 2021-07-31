@@ -40,7 +40,7 @@ public class MainFrame {
     private MainSettingsPanel mainSettings;
     private ComponentPanel currentComponentPanel;
 
-    public MainFrame(MasterRenderer renderer, Workspace workspace) {
+    public MainFrame(MasterRenderer renderer, Workspace workspace,Camera cam) {
         this.workspace = workspace;
         frame = new JFrame(TITLE) {
             @Override
@@ -59,7 +59,7 @@ public class MainFrame {
         initIcon();
         initMenuBar(workspace);
         initMainPanel();
-        initInnerPanel(renderer, null);
+        initInnerPanel(renderer, cam);
         frame.pack();
         frame.setVisible(true);
         frame.transferFocus();
@@ -165,8 +165,8 @@ public class MainFrame {
         GLData data = new GLData();
         data.samples = 1;
         data.swapInterval = 1;
-        data.majorVersion = 3;
-        data.minorVersion = 3;
+        data.majorVersion = 2;
+        data.minorVersion = 1;
         data.profile = GLData.Profile.CORE;
         canvas = new GLCanvas(data, renderer);
         canvas.setPreferredSize(new Dimension(580, 345));

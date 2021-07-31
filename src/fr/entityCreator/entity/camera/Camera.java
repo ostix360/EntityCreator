@@ -89,8 +89,7 @@ public class Camera implements ICamera {
 
     private void caculateCameraPosition(float horzontalDistance, float verticalDistance) {
         if (this.rotate) {
-
-            this.player.getRotation().rotateY(0.1f);
+            this.player.getRotation().add(0,0.5f,0);
 
         }
         float theta = player.getRotation().y() + angleAroundPlayer;

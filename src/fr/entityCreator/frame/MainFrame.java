@@ -34,6 +34,7 @@ public class MainFrame {
     public static final Font MEDIUM_FONT = new Font("Segoe UI", 1, 20);
     private final Workspace workspace;
 
+    private MasterRenderer renderer;
     private AddComponentPanel addComponentPanel;
     private ComponentListPanel componentListPanel;
     private PreviewSettingsPanel previewSettings;
@@ -42,6 +43,7 @@ public class MainFrame {
 
     public MainFrame(MasterRenderer renderer, Workspace workspace,Camera cam) {
         this.workspace = workspace;
+        this.renderer = renderer;
         frame = new JFrame(TITLE) {
             @Override
             public void dispose() {
@@ -163,12 +165,13 @@ public class MainFrame {
         previewSettings = new PreviewSettingsPanel(580, 105, camera);
         mainPanel.add(this.previewSettings, gc);
         GLData data = new GLData();
-        data.samples = 1;
+        data.samples = 8;
         data.swapInterval = 1;
-        data.majorVersion = 2;
-        data.minorVersion = 1;
+        data.majorVersion = 3;
+        data.minorVersion = 3;
+        data.debug = true;
         data.profile = GLData.Profile.CORE;
-        canvas = new GLCanvas(data, renderer);
+        canvas = new GLCanvas(data, renderer,camera);
         canvas.setPreferredSize(new Dimension(580, 345));
         gc.gridy = 2;
         mainPanel.add(this.canvas);
@@ -182,7 +185,8 @@ public class MainFrame {
     public void notifyModelSet() {
         Entity entity = this.workspace.getCurrentEntity();
         this.addComponentPanel.showStaticEntity(entity);
-
+        renderer.clearEntity();
+        renderer.setTheEntity(entity);
 
     }
 

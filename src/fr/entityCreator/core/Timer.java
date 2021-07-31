@@ -12,7 +12,7 @@ public class Timer {
         while(!request.isExecuted()){
            // System.out.println(request.isExecuted());
             if ((System.currentTimeMillis() - millis) > timpeOut){
-                new ErrorPopUp("there is some thig wrong during the GL request");
+                new ErrorPopUp("there is some thing wrong during the GL request");
             }
             try {
                 Thread.sleep(1);

@@ -58,7 +58,6 @@ public class Main {
         Terrain t = new Terrain(0,0,tp,blendt);
         entities.add(theEntity);
         renderer.initToRender(entities,t,light,cam);
-
     }
 
 }

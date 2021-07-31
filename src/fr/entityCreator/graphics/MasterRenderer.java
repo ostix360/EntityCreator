@@ -37,6 +37,7 @@ public class MasterRenderer {
     private Terrain terrains;
     private static Matrix4f projectionMatrix;
 
+    private Entity theEntity;
     private Camera cam;
     private Light light;
 
@@ -58,7 +59,6 @@ public class MasterRenderer {
 
 
     public void initFrame() {
-        skyColor = Color.YELLOW;
         glEnable(GL_DEPTH_TEST);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(skyColor.getRed(), skyColor.getGreen(), skyColor.getBlue(), skyColor.getAlpha());
@@ -96,10 +96,15 @@ public class MasterRenderer {
 
     }
 
-    private void render(Light lights, Camera cam) {
+    public void setTheEntity(Entity e){
+        this.theEntity = e;
+        processEntity(e);
+    }
+
+    private void render(Light light, Camera cam) {
         this.initFrame();
         shader.bind();
-        shader.loadLight(lights);
+        if (light != null)shader.loadLight(light);
         shader.loadSkyColor(skyColor);
         shader.loadViewMatrix(cam);
         entityRenderer.render(entities);
@@ -107,15 +112,19 @@ public class MasterRenderer {
 
         terrainShader.bind();
         terrainShader.loadSkyColour(skyColor);
-        terrainShader.loadLight(lights);
+        if (light != null)terrainShader.loadLight(light);
         terrainShader.loadViewMatrix(cam);
         terrainRenderer.render(terrains);
         terrainShader.unBind();
 
-        //entities.clear();
+    }
+
+    public void clearEntity(){
+        entities.clear();
     }
 
     public void cleanUp() {
+        clearEntity();
         this.terrainShader.cleanUp();
         this.shader.cleanUp();
         glDisable(GL_BLEND);
@@ -145,4 +154,7 @@ public class MasterRenderer {
         return projectionMatrix;
     }
 
+    public void setCam(Camera cam) {
+        this.cam = cam;
+    }
 }

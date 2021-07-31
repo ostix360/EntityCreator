@@ -27,10 +27,12 @@ public class TerrainRenderer {
 
     public void render(Terrain ter) {
         // shader.loadShaderMapSpace(toShadowSpace);
-        prepareTerrain(ter);
-        loadModelMatrix(ter);
-        glDrawElements(GL_TRIANGLES, ter.getModel().getVertexCount(), GL_UNSIGNED_INT, 0);
-        unbindTexturedModel();
+        if (ter != null) {
+            prepareTerrain(ter);
+            loadModelMatrix(ter);
+            glDrawElements(GL_TRIANGLES, ter.getModel().getVertexCount(), GL_UNSIGNED_INT, 0);
+            unbindTexturedModel();
+        }
 
     }
 

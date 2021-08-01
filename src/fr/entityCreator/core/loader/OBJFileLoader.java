@@ -9,17 +9,20 @@ import fr.entityCreator.graphics.model.ModelData;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class OBJFileLoader {
     public static void loadModel(String objFileName, Entity entity) {
-        InputStreamReader isr;
-        isr = new InputStreamReader(Objects.requireNonNull(OBJFileLoader.class.getResourceAsStream("/model/" + objFileName + ".obj")));
+        InputStreamReader isr = null;
+        try {
+            isr = new InputStreamReader(new FileInputStream(objFileName));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        assert isr != null;
         BufferedReader reader = new BufferedReader(isr);
         String line;
         List<Vertex> vertices = new ArrayList<>();

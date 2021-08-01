@@ -21,7 +21,7 @@ public class EntityRenderer implements IRenderer {
 
     private ClassicShader shader;
 
-    public EntityRenderer(ClassicShader shader,Matrix4f projectionMatrix) {
+    public EntityRenderer(ClassicShader shader, Matrix4f projectionMatrix) {
 
         OpenGlUtils.cullBackFaces(true);
         this.shader = shader;
@@ -30,18 +30,19 @@ public class EntityRenderer implements IRenderer {
         this.shader.unBind();
     }
 
-    public void render(Map<Model, List<Entity>> entities) {
-        for (Model model : entities.keySet()) {
+    public void render(List<Entity> entities) {
+        for (Entity entity : entities) {
+            Model model = entity.getModel();
+            if (model.getTexture() == null) {
+                return;
+            }
             if (model instanceof AnimatedModel) {
                 prepareAnimatedTexturedModel((AnimatedModel) model);
             } else {
                 prepareTexturedModel(model);
             }
-            List<Entity> batch = entities.get(model);
-            for (Entity entity : batch) {
-                prepareInstance(entity);
-                glDrawElements(GL_TRIANGLES, entity.getModel().getMeshModel().getVertexCount(), GL_UNSIGNED_INT, 0);
-            }
+            prepareInstance(entity);
+            glDrawElements(GL_TRIANGLES, entity.getModel().getMeshModel().getVertexCount(), GL_UNSIGNED_INT, 0);
             finish();
         }
     }

@@ -29,7 +29,7 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         MasterRenderer renderer = new MasterRenderer();
-        Transform playerTransform = new Transform(100,0,100,0,0,0,1);
+        Transform playerTransform = new Transform(200,0,200,0,0,0,1);
         Camera cam = new Camera(playerTransform);
         Workspace workspace = new Workspace();
         Thread main = Thread.currentThread();

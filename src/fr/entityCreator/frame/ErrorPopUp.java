@@ -58,6 +58,7 @@ public class ErrorPopUp {
                 frame.setVisible(false);
                 System.out.println("MODIFY ErrorPopUp 58");
                 frame.dispose();
+                System.exit(-168);
             }
         });
         this.frame.add(confirm, gc);

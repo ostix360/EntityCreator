@@ -41,7 +41,7 @@ public class MasterRenderer {
     private Camera cam;
     private Light light;
 
-    private final Map<Model, List<Entity>> entities = new HashMap<>();
+    private final List<Entity> entities = new ArrayList<>();
 
     public MasterRenderer() {
     }
@@ -67,15 +67,7 @@ public class MasterRenderer {
 
 
     private void processEntity(Entity e) {
-        Model model = e.getModel();
-        List<Entity> batch = entities.get(model);
-        if (batch != null) {
-            batch.add(e);
-        } else {
-            List<Entity> newBatch = new ArrayList<>();
-            newBatch.add(e);
-            entities.put(model, newBatch);
-        }
+            entities.add(e);
     }
 
     public void initToRender(List<Entity> entities, Terrain terrains, Light light, Camera camera) {

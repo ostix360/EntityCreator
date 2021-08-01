@@ -54,6 +54,10 @@ public class Entity {
 
     public Entity(String name) {
         this.name = name;
+        this.position = new Vector3f(200,0,200);
+        this.rotation = new Vector3f(0);
+        this.scale = 1;
+        this.transform = new Transform(position,rotation,scale);
     }
 
     public void setModel(Model model) {

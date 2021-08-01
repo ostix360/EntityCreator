@@ -30,7 +30,7 @@ public class TextureChooseScreen {
     }
 
     private void setup() {
-        chooser = new JFileChooser("D:\\Projet LWJGL\\3D\\Projet_1\\src\\main\\resources\\textures\\entities");
+        chooser = new JFileChooser("D:\\Projet LWJGL\\2D\\Test003\\src\\main\\resources\\textures");
         chooser.setApproveButtonText("Ouvrir");
         chooser.setDialogTitle("Selectioner une texture!");
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -44,16 +44,11 @@ public class TextureChooseScreen {
     private void applyChoice(JPanel parent,boolean diffuse) {
         File tex = getFileChoosen(parent);
         entity.setTexturedFile(tex);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         entity.getModel().getTexture().setNewDiffuse(tex);
         if (parent instanceof TexturePanel){
             boolean success = panel.setNewIcon(entity.getModel().getTexture().getNewDiffuse(), diffuse);
             if (success) {
-                chooser.setVisible(false);
+                this.chooser.setVisible(false);
             } else {
                 new ErrorPopUp("Impossible d'ouvrir la texture!");
             }

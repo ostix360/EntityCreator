@@ -48,7 +48,6 @@ public class MainSettingsPanel extends JPanel {
         if (entity.getModel() == null){
             new ModelChooseScreen(frame,entity,null,this);
             new TextureChooseScreen(entity,this);
-
         }
         this.standardInfo = new StandardInfoPanel((this.width - 10) / 2, this.height - 25, entity, frame);
         add(this.standardInfo,gc);

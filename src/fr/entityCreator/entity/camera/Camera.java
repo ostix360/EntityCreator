@@ -13,7 +13,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
 
 public class Camera implements ICamera {
 
-    private float distanceFromPlayer = 50;
+    private float distanceFromPlayer = 25;
     private float angleAroundPlayer = 0;
     private Matrix4f projection;
     private boolean rotate = true;

@@ -22,8 +22,10 @@ public class TexturePanel extends JPanel {
     private JLabel diffuseIcon;
     private JLabel extraIcon;
     private JCheckBox glows;
+    private Entity e;
 
     public TexturePanel(Entity entity, int width, int height) {
+        this.e = entity;
         setPreferredSize(new Dimension(width, height));
         this.texture = entity.getModel().getTexture();
         setLayout(new GridBagLayout());
@@ -110,7 +112,6 @@ public class TexturePanel extends JPanel {
         realLighting.setSelected(!this.texture.useFakeLighting());
         realLighting.addActionListener((e) -> {
             texture.setUseFakeLighting(!realLighting.isSelected());
-
         });
         settingsPanel.add(realLighting, gc2);
         gc2.gridy = 4;
@@ -210,9 +211,8 @@ public class TexturePanel extends JPanel {
                 this.diffuseIcon.setIcon(resized);
                 this.texture.setNewDiffuse(image);
             } else {
-                this.glows.setVisible(true);
+                //this.glows.setVisible(true);
                 this.extraIcon.setIcon(resized);
-                this.texture.setSpecularMapFile(image.getAbsolutePath());
             }
             return true;
         } catch (Exception e) {
@@ -289,7 +289,7 @@ public class TexturePanel extends JPanel {
             }
 
             public void mouseReleased(MouseEvent arg0) {
-                new TextureChooseScreen(TexturePanel.this,diffuse);
+                new TextureChooseScreen(TexturePanel.this,e,diffuse);
             }
         });
         icon.setPreferredSize(new Dimension(40, 40));

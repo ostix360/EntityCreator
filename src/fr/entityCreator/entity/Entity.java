@@ -13,6 +13,7 @@ import fr.entityCreator.entity.animated.animation.loaders.AnimatedModelLoader;
 import fr.entityCreator.entity.component.Component;
 import fr.entityCreator.entity.component.collision.CollisionComponent;
 import fr.entityCreator.entity.component.particle.ParticleComponent;
+import fr.entityCreator.frame.ErrorPopUp;
 import fr.entityCreator.graphics.model.MeshModel;
 import fr.entityCreator.graphics.model.Model;
 import fr.entityCreator.graphics.model.Texture;
@@ -181,12 +182,12 @@ public class Entity {
     public void setModelFile(File file) {
         if(file.exists() && file.canRead()){
             if(file.getName().endsWith(".dae")){
-                AnimatedModel model = AnimatedModelLoader.loadEntity(file.getAbsolutePath(),5,this);
+                AnimatedModelLoader.loadEntity(file.getAbsolutePath(),5,this);
             }else if(file.getName().endsWith(".obj")){
                 OBJFileLoader.loadModel(file.getAbsolutePath(),this);
             }
         }else{
-
+            new ErrorPopUp("impossible de charger le model");
         }
     }
 

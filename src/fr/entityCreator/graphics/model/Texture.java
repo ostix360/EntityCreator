@@ -61,12 +61,12 @@ public class Texture {
         return textureID;
     }
 
-    public void setNormalMapFile(String path) {
+    public void setNormalMapFile(TextureLoader path) {
         this.properties.setNormalMapFile(path);
     }
 
-    public void setSpecularMapFile(String specularMapFile) {
-        this.properties.setSpecularMapFile(specularMapFile);
+    public void setSpecularMap(TextureLoader specularMap) {
+        this.properties.setSpecularMapFile(specularMap);
     }
 
     public void setShineDamper(float shineDamper) {

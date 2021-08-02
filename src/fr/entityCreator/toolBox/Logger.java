@@ -60,13 +60,13 @@ public class Logger {
         System.err.println(log);
         logLines.add(log);
         BufferedWriter bw = null;
-        try {
-            bw = new BufferedWriter(new FileWriter("D:/Projet LWJGL/3D/Projet_1/log/log.txt"));
-            bw.write(log);
-            bw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            bw = new BufferedWriter(new FileWriter("D:/Projet LWJGL/3D/Projet_1/log/log.txt"));
+//            bw.write(log);
+//            bw.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
 

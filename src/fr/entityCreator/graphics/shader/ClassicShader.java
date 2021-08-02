@@ -20,6 +20,11 @@ public class ClassicShader extends ShaderProgram{
     private final FloatUniform lightPower = new FloatUniform("lightPower");
     private final FloatUniform reflectivity = new FloatUniform("reflectivity");
     private final FloatUniform shine = new FloatUniform("shine");
+    public final BooleanUniform useSpecularMap = new BooleanUniform("useSpecularMap");
+    private final IntUniform specularMap = new IntUniform("specularMap");
+    private final IntUniform diffuseMap = new IntUniform("textureSampler");
+    private final IntUniform normalMap = new IntUniform("normalMap");
+    public final BooleanUniform useFakeLighting = new BooleanUniform("useFakeLighting");
     public final MatrixUniformArray jointTransforms = new MatrixUniformArray("jointTransforms", 50);
     public final BooleanUniform isAnimated = new BooleanUniform("isAnimated");
     private final Vector3fUniform skyColor = new Vector3fUniform("skyColor");
@@ -27,7 +32,8 @@ public class ClassicShader extends ShaderProgram{
     public ClassicShader() {
         super("shader");
         super.getAllUniformLocations(transformationMatrix, projectionMatrix, viewMatrix,
-                reflectivity, shine, skyColor, jointTransforms, isAnimated);
+                reflectivity, shine, skyColor, jointTransforms, isAnimated,useSpecularMap,
+                specularMap,diffuseMap,normalMap,useFakeLighting);
         super.getAllUniformLocations(lightPos);
         super.getAllUniformLocations(lightColor);
         super.getAllUniformLocations(lightAttenuation);
@@ -42,6 +48,12 @@ public class ClassicShader extends ShaderProgram{
         super.bindAttribute(2, "normals");
         super.bindAttribute(3, "jointIndices");
         super.bindAttribute(4, "weights");
+    }
+
+    public void connectTextureUnits(){
+        diffuseMap.loadIntToUniform(0);
+        specularMap.loadIntToUniform(1);
+        normalMap.loadIntToUniform(2);
     }
 
 

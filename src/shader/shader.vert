@@ -14,8 +14,6 @@ uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 
 uniform vec3 lightPos;
-
-
 uniform float isAnimated;
 
 uniform mat4 jointTransforms[MAX_JOINTS];

@@ -162,7 +162,7 @@ public class MainFrame {
         mainSettings.setVisible(true);
         mainPanel.add(this.mainSettings, gc);
         gc.gridy = 1;
-        previewSettings = new PreviewSettingsPanel(580, 105, camera);
+        previewSettings = new PreviewSettingsPanel(580, 105, camera,workspace);
         mainPanel.add(this.previewSettings, gc);
         GLData data = new GLData();
         data.samples = 8;

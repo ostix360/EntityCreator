@@ -11,6 +11,8 @@ uniform sampler2D normalMapTexture;
 uniform sampler2D specularMap;
 
 uniform float useSpecularMap;
+uniform float useFakeLighting;
+
 uniform vec3 lightColor;
 uniform vec3 attenuation;
 uniform float lightPower;
@@ -54,13 +56,13 @@ void main(){
     if (useSpecularMap > 0.5){
         vec4 mapinfo = texture(specularMap, passTextureCoords);
         totalSpecular *= mapinfo.r;
-        if (mapinfo.g > 5){
+        if (mapinfo.g > 0.5){
             totalDiffuse = vec3(1.0);
         }
     }
 
     vec4 textureColor = texture(textureSampler, passTextureCoords);
-    if (textureColor.a < 0.5){
+    if (textureColor.a < 0.8){
         discard;
     }
     totalDiffuse = clamp(totalDiffuse, 0.15, 1.1);

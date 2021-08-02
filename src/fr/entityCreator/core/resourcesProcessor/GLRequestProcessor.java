@@ -12,7 +12,6 @@ public class GLRequestProcessor {
         float remainingTime = MAX_REQUEST_TIME * 1_000_000;
         long start = System.nanoTime();
         while (requestQueue.hasRequests()) {
-            System.out.println("there is some requests");
             requestQueue.acceptNextRequest().execute();
             long end = System.nanoTime();
             long timeTaken = end - start;

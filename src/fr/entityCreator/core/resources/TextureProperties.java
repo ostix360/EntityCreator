@@ -1,11 +1,13 @@
 package fr.entityCreator.core.resources;
 
+import fr.entityCreator.graphics.textures.TextureLoader;
+
 import java.util.Objects;
 
 public class TextureProperties {
 
-    private String normalMapFile;
-    private String specularMapFile;
+    private TextureLoader normalMapFile;
+    private TextureLoader specularMapFile;
 
     private float shineDamper;
     private float reflectivity;
@@ -18,7 +20,7 @@ public class TextureProperties {
 
     public static final TextureProperties DEFAULT = new TextureProperties(null,null,0,0,1,false,false,false);
 
-    public TextureProperties(String normalMapFile, String specularMapFile, float shineDamper, float reflectivity, int numbersOfRows, boolean isTransparency, boolean useFakeLighting, boolean isInverseNormal) {
+    public TextureProperties(TextureLoader normalMapFile, TextureLoader specularMapFile, float shineDamper, float reflectivity, int numbersOfRows, boolean isTransparency, boolean useFakeLighting, boolean isInverseNormal) {
         this.normalMapFile = normalMapFile;
         this.specularMapFile = specularMapFile;
         this.shineDamper = shineDamper;
@@ -43,11 +45,11 @@ public class TextureProperties {
         return Objects.hash(normalMapFile, specularMapFile, shineDamper, reflectivity, numbersOfRows, isTransparency, useFakeLighting, isInverseNormal);
     }
 
-    public void setNormalMapFile(String path) {
+    public void setNormalMapFile(TextureLoader path) {
         this.normalMapFile = path;
     }
 
-    public void setSpecularMapFile(String specularMapFile) {
+    public void setSpecularMapFile(TextureLoader specularMapFile) {
         this.specularMapFile = specularMapFile;
     }
 
@@ -76,11 +78,19 @@ public class TextureProperties {
     }
 
     public String getNormalMapFile() {
-        return normalMapFile;
+        return normalMapFile.getFile();
     }
 
     public String getSpecularMapFile() {
-        return specularMapFile;
+        return specularMapFile == null ? null : specularMapFile.getFile();
+    }
+
+    public int getSpecularMap(){
+        return specularMapFile != null ? specularMapFile.getId() : 0;
+    }
+
+    public int getNormalMap(){
+        return normalMapFile != null ? normalMapFile.getId() : 0;
     }
 
     public float getShineDamper() {

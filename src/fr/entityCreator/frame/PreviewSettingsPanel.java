@@ -2,6 +2,7 @@ package fr.entityCreator.frame;
 
 
 
+import fr.entityCreator.creator.Workspace;
 import fr.entityCreator.entity.camera.Camera;
 
 import javax.swing.*;
@@ -13,14 +14,14 @@ public class PreviewSettingsPanel extends JPanel {
     private boolean extraIsShown = false;
     private Camera camera;
 
-    public PreviewSettingsPanel(int width, int height, Camera camera) {
+    public PreviewSettingsPanel(int width, int height, Camera camera, Workspace workspace) {
         this.camera = camera;
         this.width = width;
         this.height = height;
         setBorder(BorderFactory.createTitledBorder("Option de visualisation"));
         setPreferredSize(new Dimension(width, height));
         super.setLayout(new BorderLayout());
-        add(new StandardPreviewSettings(width / 3 * 2 - 10, height - 15, camera), "West");
+        add(new StandardPreviewSettings(width / 3 * 2 - 10, height - 15, camera,workspace), "West");
     }
 
 //    public void showExtraOptions() {

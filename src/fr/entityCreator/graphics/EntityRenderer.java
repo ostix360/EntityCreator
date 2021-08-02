@@ -10,6 +10,7 @@ import fr.entityCreator.graphics.shader.ClassicShader;
 import fr.entityCreator.toolBox.OpenGL.OpenGlUtils;
 import fr.entityCreator.toolBox.OpenGL.VAO;
 import org.joml.Matrix4f;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class EntityRenderer implements IRenderer {
         this.shader = shader;
         this.shader.bind();
         this.shader.loadProjectionMatrix(projectionMatrix);
+        this.shader.connectTextureUnits();
         this.shader.unBind();
     }
 
@@ -55,9 +57,14 @@ public class EntityRenderer implements IRenderer {
 
         Texture texture = model.getTexture();
         shader.loadSpecular(texture.getReflectivity(), texture.getShineDamper());
-
+        shader.useSpecularMap.loadBooleanToUniform(texture.hasSpecularMap());
+        shader.useFakeLighting.loadBooleanToUniform(texture.useFakeLighting());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         texture.bindTexture();
+        GL13.glActiveTexture(GL13.GL_TEXTURE1);
+        GL11.glBindTexture(GL_TEXTURE_2D,texture.getProperties().getSpecularMap());
+        GL13.glActiveTexture(GL13.GL_TEXTURE2);
+        GL11.glBindTexture(GL_TEXTURE_2D,texture.getProperties().getNormalMap());
     }
 
     @Override
@@ -72,9 +79,14 @@ public class EntityRenderer implements IRenderer {
 
         Texture texture = model.getTexture();
         shader.loadSpecular(texture.getReflectivity(), texture.getShineDamper());
-
+        shader.useSpecularMap.loadBooleanToUniform(texture.hasSpecularMap());
+        shader.useFakeLighting.loadBooleanToUniform(texture.useFakeLighting());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         texture.bindTexture();
+        GL13.glActiveTexture(GL13.GL_TEXTURE1);
+        GL11.glBindTexture(GL_TEXTURE_2D,texture.getProperties().getSpecularMap());
+        GL13.glActiveTexture(GL13.GL_TEXTURE2);
+        GL11.glBindTexture(GL_TEXTURE_2D,texture.getProperties().getNormalMap());
     }
 
 

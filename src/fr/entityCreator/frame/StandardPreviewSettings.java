@@ -1,8 +1,10 @@
 package fr.entityCreator.frame;
 
 
+import fr.entityCreator.creator.Workspace;
 import fr.entityCreator.entity.camera.Camera;
 import javafx.scene.control.Slider;
+import org.joml.Vector3f;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -15,19 +17,25 @@ import java.awt.event.ActionListener;
 public class StandardPreviewSettings extends JPanel {
     private JCheckBox showPlayerBox;
     private JCheckBox rotateCameraBox;
+    private JButton rotateXAxis;
     private JCheckBox rotateTexturesBox;
     private Camera camera;
+    private Workspace workspace;
 
-    public StandardPreviewSettings(int width, int height, Camera camera) {
+    public StandardPreviewSettings(int width, int height, Camera camera, Workspace workspace) {
         this.camera = camera;
+        this.workspace = workspace;
         setPreferredSize(new Dimension(width, height));
         super.setLayout(new GridBagLayout());
         //addShowPlayerBox();
         addRotateCameraBox();
+        addRotateXAxis();
        // addRotateTexturesBox();
        // addShowTerrainBox();
        // addTimeSlider();
     }
+
+
 
 //    private void addShowPlayerBox() {
 //        GridBagConstraints gc = getGC(0, 0, 1);
@@ -44,7 +52,7 @@ public class StandardPreviewSettings extends JPanel {
 //    }
 
     private void addRotateCameraBox() {
-        GridBagConstraints gc = getGC(0, 1, 1);
+        GridBagConstraints gc = getGC(0, 1, 2);
         this.rotateCameraBox = new JCheckBox("Rotation de la Camera");
         this.rotateCameraBox.setFont(MainFrame.SMALL_FONT);
         this.rotateCameraBox.setSelected(true);
@@ -54,9 +62,22 @@ public class StandardPreviewSettings extends JPanel {
             }
         });
         add(this.rotateCameraBox, gc);
-
     }
 
+    private void addRotateXAxis() {
+        GridBagConstraints gc = getGC(0, 2, 2);
+        this.rotateXAxis = new JButton("Rotation de l' objet");
+        this.rotateXAxis.setFont(MainFrame.SMALL_FONT);
+        this.rotateXAxis.setSelected(true);
+        this.rotateXAxis.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (workspace.getCurrentEntity() != null){
+                    workspace.getCurrentEntity().increaseRotation(new Vector3f(45.0F,0,0));
+                }
+            }
+        });
+        add(this.rotateXAxis, gc);
+    }
 //    private void addTimeSlider() {
 //        final Slider slider = new Slider("Time", MainApp.time, 0.0F, 24000.0F, true, 220, 40);
 //        slider.addSliderListener(new ChangeListener() {

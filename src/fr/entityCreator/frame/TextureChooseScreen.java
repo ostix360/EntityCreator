@@ -1,6 +1,10 @@
 package fr.entityCreator.frame;
 
+import fr.entityCreator.core.Timer;
+import fr.entityCreator.core.loader.TextureLoaderRequest;
+import fr.entityCreator.core.resourcesProcessor.GLRequestProcessor;
 import fr.entityCreator.entity.Entity;
+import fr.entityCreator.graphics.textures.TextureLoader;
 import fr.entityCreator.toolBox.ToolDirectory;
 
 import javax.swing.*;
@@ -18,7 +22,9 @@ public class TextureChooseScreen {
     private TexturePanel panel;
     private Entity entity;
 
-    public TextureChooseScreen(TexturePanel texturePanel, boolean diffuse) {
+    public TextureChooseScreen(TexturePanel texturePanel,Entity e, boolean diffuse) {
+        this.entity = e;
+        this.panel = texturePanel;
         setup();
         applyChoice(texturePanel,diffuse);
     }
@@ -43,10 +49,20 @@ public class TextureChooseScreen {
 
     private void applyChoice(JPanel parent,boolean diffuse) {
         File tex = getFileChoosen(parent);
-        entity.setTexturedFile(tex);
-        entity.getModel().getTexture().setNewDiffuse(tex);
+        TextureLoader texID;
+        assert tex != null;
+        if (diffuse) {
+            entity.setTexturedFile(tex);
+            entity.getModel().getTexture().setNewDiffuse(tex);
+        }else{
+            TextureLoaderRequest request = new TextureLoaderRequest(tex.getAbsolutePath());
+            GLRequestProcessor.sendRequest(request);
+            Timer.waitForRequest(request);
+            texID = request.getTexture();
+            entity.getModel().getTexture().setSpecularMap(texID);
+        }
         if (parent instanceof TexturePanel){
-            boolean success = panel.setNewIcon(entity.getModel().getTexture().getNewDiffuse(), diffuse);
+            boolean success = panel.setNewIcon(diffuse ? entity.getModel().getTexture().getNewDiffuse() : new File(entity.getModel().getTexture().getSpecularMapFile()), diffuse);
             if (success) {
                 this.chooser.setVisible(false);
             } else {

@@ -16,7 +16,7 @@ public class ModelLoaderRequest extends GLRequest {
         this.e = e;
         this.data = data;
         this.isAnimated = isAnimated;
-        e.setModel(new Model(e.getName()));
+        if (e.getModel() == null)e.setModel(new Model(e.getName()));
     }
 
     public ModelLoaderRequest(ModelData data) {

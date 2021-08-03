@@ -1,6 +1,7 @@
 package fr.entityCreator.entity.component.particle;
 
 
+import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.core.loader.json.JsonUtils;
 import fr.entityCreator.entity.Entity;
 import fr.entityCreator.entity.component.Component;
@@ -11,7 +12,10 @@ import fr.entityCreator.graphics.particles.ParticleSystem;
 import fr.entityCreator.graphics.particles.ParticleTarget;
 import org.joml.Vector3f;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.channels.FileChannel;
 import java.util.Objects;
 
 
@@ -45,26 +49,31 @@ public class ParticleComponent extends Component {
     }
 
     @Override
-    public void export(PrintWriter writer) {
-        writer.print(this.getType().toString());            //write ParticleSystem
+    public void export(FileOutputStream fos) {
+        try(FileChannel fc = fos.getChannel()){
+            fc.write(DataTransformer.casteString(this.getType().toString()));            //write ParticleSystem
 
-        writer.println(this.system.getPps() + ";" + this.system.getAverageSpeed() + ";" + system.getGravity() //Write the data for the particle Constrctor
-                +  ";" + this.system.getAverageLifeLength()  + ";" + this.system.getAverageScale());
+            fc.write(DataTransformer.casteString(this.system.getPps() + ";" + this.system.getAverageSpeed() + ";" + system.getGravity() //Write the data for the particle Constrctor
+                    +  ";" + this.system.getAverageLifeLength()  + ";" + this.system.getAverageScale()));
 
-        writer.println(this.system.isRandomRotation() + ";" + this.system.getLifeError() + ";" + this.system.getScaleError() + ";"  //Write the error of ParticleSystem
-                + this.system.getSpeedError());
+            fc.write(DataTransformer.casteString(this.system.isRandomRotation() + ";" + this.system.getLifeError() + ";" + this.system.getScaleError() + ";"  //Write the error of ParticleSystem
+                    + this.system.getSpeedError()));
 
-        writer.println(offset.x() + ";" + offset.y() + ";" + offset.z());   //Write the offset of the particle
+            fc.write(DataTransformer.casteString(offset.x() + ";" + offset.y() + ";" + offset.z()));   //Write the offset of the particle
 
-        writer.println(this.system.getDirection().x() + ";" +       //Write all stuff about the direction
-                this.system.getDirection().y() + ";" + this.system.getDirection().z() + ";" + this.system.getDirectionDeviation());
+            fc.write(DataTransformer.casteString(this.system.getDirection().x() + ";" +       //Write all stuff about the direction
+                    this.system.getDirection().y() + ";" + this.system.getDirection().z() + ";" + this.system.getDirectionDeviation()));
 
-        this.system.getSpawn().export(writer);      //Write the kind of spwan
-        if (system.getTarget() != null) {           //If target isn't null write it in the file data
-            writer.println(JsonUtils.gsonInstance().toJson(system.getTarget().getProperties()));
-        } else {
-            writer.println();
+            this.system.getSpawn().export(fc);      //Write the kind of spwan
+            if (system.getTarget() != null) {           //If target isn't null write it in the file data
+                fc.write(DataTransformer.casteString(JsonUtils.gsonInstance().toJson(system.getTarget().getProperties())));
+            } else {
+                fc.write(DataTransformer.casteString("\n"));
+            }
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
+
     }
 
     @Override

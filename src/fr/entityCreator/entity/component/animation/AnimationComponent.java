@@ -2,6 +2,7 @@ package fr.entityCreator.entity.component.animation;
 
 
 
+import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.core.resources.ResourcePack;
 import fr.entityCreator.entity.Entity;
 import fr.entityCreator.entity.animated.animation.animatedModel.AnimatedModel;
@@ -13,7 +14,10 @@ import fr.entityCreator.frame.ComponentPanel;
 import fr.entityCreator.toolBox.Logger;
 import org.joml.Random;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.channels.FileChannel;
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,8 +57,12 @@ public class AnimationComponent extends Component {
     }
 
     @Override
-    public void export(PrintWriter writer) {
-        writer.println(this.getType().toString());
+    public void export(FileOutputStream fos) {
+        try(FileChannel fc = fos.getChannel()){
+            fc.write(DataTransformer.casteString(this.getType().toString()));
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
     }
 
     @Override

@@ -20,6 +20,10 @@ public class MenuBar extends JMenuBar {
     private void buildBar() {
         JMenu file = new JMenu("File");
         add(file);
+
+        JMenu others = new JMenu("Autres");
+        add(others);
+
         JMenuItem newStaticFile = new JMenuItem("Nouvelle static Entité");
         JMenuItem newAnimatedFile = new JMenuItem("Nouvelle Entité Animée");
         JMenuItem openFile = new JMenuItem("Ouvrir");
@@ -28,6 +32,9 @@ public class MenuBar extends JMenuBar {
         file.add(newAnimatedFile);
         file.add(openFile);
         file.add(save);
+
+        JMenuItem settings = new JMenuItem("Options");
+        others.add(settings);
 //        addOpenFileFunction(openFile, frame);
         addSaveFunction(save);
         addNewStaticFileFunction(newStaticFile);
@@ -37,6 +44,10 @@ public class MenuBar extends JMenuBar {
         newAnimatedFile.setFont(new Font("Segoe UI", 1, 12));
         openFile.setFont(new Font("Segoe UI", 1, 12));
         save.setFont(new Font("Segoe UI", 1, 12));
+
+        others.setFont(new Font("Segoe UI", 1, 12));
+        settings.setFont(new Font("Segoe UI", 1, 12));
+        addSettingsFunction(settings);
     }
 
 //    private void addOpenFileFunction(JMenuItem open, final MainFrame mainFrame) {
@@ -50,6 +61,18 @@ public class MenuBar extends JMenuBar {
 //            }
 //        });
 //    }
+
+    private void addSettingsFunction(JMenuItem settings){
+        settings.addActionListener(e ->{
+            new OptionPanel();
+        });
+    }
+
+    private void addAboutFunction(JMenuItem about){
+        about.addActionListener(e ->{
+            //new AboutPanel();
+        });
+    }
 
     private void addSaveFunction(JMenuItem save) {
         save.addActionListener(new ActionListener() {

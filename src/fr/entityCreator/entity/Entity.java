@@ -21,10 +21,7 @@ import fr.entityCreator.graphics.textures.TextureLoader;
 import fr.entityCreator.toolBox.ToolDirectory;
 import org.joml.Vector3f;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -55,10 +52,10 @@ public class Entity {
 
     public Entity(String name) {
         this.name = name;
-        this.position = new Vector3f(200,0,200);
+        this.position = new Vector3f(200, 0, 200);
         this.rotation = new Vector3f(0);
         this.scale = 1;
-        this.transform = new Transform(position,rotation,scale);
+        this.transform = new Transform(position, rotation, scale);
     }
 
     public void setModel(Model model) {
@@ -145,9 +142,10 @@ public class Entity {
     }
 
     public void exportAllComponents() throws IOException {
-        PrintWriter writer = openSave();
-        for (Component c : components){
-            c.export(writer);
+        try(FileOutputStream fos = openSave()) {
+            for (Component c : components) {
+                c.export(fos);
+            }
         }
     }
 
@@ -155,10 +153,15 @@ public class Entity {
         return components;
     }
 
-    private PrintWriter openSave() throws IOException {
-       FileWriter writer = new FileWriter(ToolDirectory.OUTPUT_FOLDER + "/component/"
-               + hashCode() + ".component");
-       return new PrintWriter(writer);
+    private FileOutputStream openSave() throws IOException {
+        File file = new File(ToolDirectory.OUTPUT_FOLDER + "/component/"
+                ,hashCode() + ".component");
+        if (!file.exists()){
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        }
+
+        return new FileOutputStream(file);
     }
 
 
@@ -180,20 +183,20 @@ public class Entity {
     }
 
     public void setModelFile(File file) {
-        if(file.exists() && file.canRead()){
-            if(file.getName().endsWith(".dae")){
-                AnimatedModelLoader.loadEntity(file.getAbsolutePath(),5,this);
-            }else if(file.getName().endsWith(".obj")){
-                OBJFileLoader.loadModel(file.getAbsolutePath(),this);
+        if (file.exists() && file.canRead()) {
+            if (file.getName().endsWith(".dae")) {
+                AnimatedModelLoader.loadEntity(file.getAbsolutePath(), 5, this);
+            } else if (file.getName().endsWith(".obj")) {
+                OBJFileLoader.loadModel(file.getAbsolutePath(), this);
             }
-        }else{
+        } else {
             new ErrorPopUp("impossible de charger le model");
         }
     }
 
     public void setTexturedFile(File file) {
-        if(file.exists() && file.canRead()){
-            GLRequest request = new TextureLoaderRequest(file.getAbsolutePath(),this);
+        if (file.exists() && file.canRead()) {
+            GLRequest request = new TextureLoaderRequest(file.getAbsolutePath(), this);
             GLRequestProcessor.sendRequest(request);
             Timer.waitForRequest(request);
         }
@@ -218,7 +221,6 @@ public class Entity {
             return id;
         }
     }
-
 
 
 }

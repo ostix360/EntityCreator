@@ -1,9 +1,12 @@
 package fr.entityCreator.graphics.particles.particleSpawn;
 
+import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.toolBox.Maths;
 import org.joml.Vector3f;
 
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.channels.FileChannel;
 import java.util.Objects;
 import java.util.Random;
 
@@ -42,8 +45,8 @@ public class Sphere implements ParticleSpawn {
     }
 
     @Override
-    public void export(PrintWriter writer) {
-        writer.println("3;" + this.radius);
+    public void export(FileChannel fc) throws IOException {
+        fc.write(DataTransformer.casteString("3;" + this.radius));
     }
 
     @Override

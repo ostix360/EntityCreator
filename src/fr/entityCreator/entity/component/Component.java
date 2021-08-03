@@ -5,6 +5,7 @@ import fr.entityCreator.entity.Entity;
 import fr.entityCreator.frame.ComponentListPanel;
 import fr.entityCreator.frame.ComponentPanel;
 
+import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
 public abstract class Component {
@@ -19,7 +20,7 @@ public abstract class Component {
 
     public abstract void update();
 
-    public abstract void export(PrintWriter writer);
+    public abstract void export(FileOutputStream fos);
 
     public ComponentType getType() {
         return this.type;

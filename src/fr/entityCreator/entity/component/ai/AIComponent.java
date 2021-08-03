@@ -1,6 +1,7 @@
 package fr.entityCreator.entity.component.ai;
 
 
+import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.core.loader.json.JsonUtils;
 import fr.entityCreator.core.resources.collision.maths.Vector3;
 import fr.entityCreator.entity.Entity;
@@ -11,7 +12,11 @@ import fr.entityCreator.frame.ComponentPanel;
 import org.joml.Random;
 import org.joml.Vector3f;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.channels.DatagramChannel;
+import java.nio.channels.FileChannel;
 import java.util.Objects;
 
 public class AIComponent extends Component {
@@ -69,9 +74,13 @@ public class AIComponent extends Component {
     }
 
     @Override
-    public void export(PrintWriter writer) {
-        writer.println(this.getType().toString());
-        writer.println(JsonUtils.gsonInstance().toJson(properties));
+    public void export(FileOutputStream fos) {
+        try(FileChannel fc = fos.getChannel()){
+            fc.write(DataTransformer.casteString(this.getType().toString()));
+            fc.write(DataTransformer.casteString(JsonUtils.gsonInstance().toJson(properties)));
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
     }
 
     @Override

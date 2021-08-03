@@ -1,8 +1,10 @@
 package fr.entityCreator.graphics.particles.particleSpawn;
 
+import fr.entityCreator.core.exporter.DataTransformer;
 import org.joml.Vector3f;
 
-import java.io.PrintWriter;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 public class Point implements ParticleSpawn {
     @Override
@@ -12,8 +14,8 @@ public class Point implements ParticleSpawn {
 
 
     @Override
-    public void export(PrintWriter writer) {
-        writer.println(2);
+    public void export(FileChannel fc) throws IOException {
+        fc.write(DataTransformer.casteString("2"));
     }
 
     @Override

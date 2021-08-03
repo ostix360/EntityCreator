@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import static fr.entityCreator.toolBox.ToolDirectory.RES_FOLDER;
 import static org.lwjgl.opengl.GL11.*;
 
 public class TextureLoader {

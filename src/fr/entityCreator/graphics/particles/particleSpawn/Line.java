@@ -1,9 +1,12 @@
 package fr.entityCreator.graphics.particles.particleSpawn;
 
+import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.toolBox.Maths;
 import org.joml.Vector3f;
 
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.channels.FileChannel;
 import java.util.Objects;
 
 public class Line implements ParticleSpawn {
@@ -23,8 +26,8 @@ public class Line implements ParticleSpawn {
     }
 
     @Override
-    public void export(PrintWriter writer) {
-        writer.println("1;" + this.length + ";" + this.axis.x + ";" + this.axis.y + ";" + this.axis.z);
+    public void export(FileChannel fc) throws IOException {
+        fc.write(DataTransformer.casteString("1;" + this.length + ";" + this.axis.x + ";" + this.axis.y + ";" + this.axis.z));
     }
 
     @Override

@@ -8,8 +8,9 @@ import fr.entityCreator.toolBox.ToolDirectory;
 
 import javax.management.openmbean.OpenDataException;
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.Objects;
-
 public class Model {
 
     private MeshModel meshModel;
@@ -58,13 +59,20 @@ public class Model {
         File file = new File(ToolDirectory.OUTPUT_FOLDER, isTexture ?
                 "/textures/entities/data/" + name + ".json" : "models/entities/data/" + name + ".json");
         if (!file.exists()){
-            file.mkdirs();
+            file.getParentFile().mkdirs();
+            file.createNewFile();
         }
         if (!file.canWrite()){
-            new OpenDataException("the file " + file.getAbsolutePath() + " can't to be writed");
+            throw new OpenDataException("the file " + file.getAbsolutePath() + " can't to be writed");
         }
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-        writer.write(fileContent);
+        try (FileOutputStream fos = new FileOutputStream(file);
+             FileChannel fc = fos.getChannel()) {
+            byte[] data = fileContent.getBytes();
+            ByteBuffer bytes = ByteBuffer.allocate(data.length);
+            bytes.put(data);
+            bytes.flip();
+            fc.write(bytes);
+        }
     }
 
     public String getName() {

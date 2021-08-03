@@ -1,11 +1,14 @@
 package fr.entityCreator.graphics.particles.particleSpawn;
 
+import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.toolBox.Maths;
 import org.joml.Math;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.channels.FileChannel;
 import java.util.Objects;
 
 public class Circle implements ParticleSpawn {
@@ -54,8 +57,8 @@ public class Circle implements ParticleSpawn {
     }
 
     @Override
-    public void export(PrintWriter writer) {
-        writer.println("0;" + this.radius + ";" + this.center.x() + ";" + this.center.y() + ";" + this.center.z());
+    public void export(FileChannel fc) throws IOException {
+        fc.write(DataTransformer.casteString("0;" + this.radius + ";" + this.center.x() + ";" + this.center.y() + ";" + this.center.z()));
     }
 
     @Override

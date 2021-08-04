@@ -36,10 +36,21 @@ public class Model {
     }
 
     public void export() throws Exception {
-        String file = JsonUtils.gsonInstance().toJson(new TextureResources(name, "entities/" + name, texture.getProperties()));
+        String file = JsonUtils.gsonInstance(true).toJson(new TextureResources(name, "entities/" + name, texture.getProperties()));
         saveFile(file,true);
-        file = JsonUtils.gsonInstance().toJson(new ModelResources(name, "entities/" + name,name,this instanceof AnimatedModel));
+        exportAllTexture();
+        file = JsonUtils.gsonInstance(false).toJson(new ModelResources(name, "entities/" + name,name,this instanceof AnimatedModel));
         saveFile(file,false);
+    }
+
+    private void exportAllTexture() throws IOException {
+        this.texture.exportDiffuse(this.name);
+        if (this.texture.hasSpecularMap()){
+            this.texture.getProperties().exportSpecular();
+        }
+        if (this.texture.getProperties().hasNormalMap()){
+            this.texture.getProperties().exportNormal();
+        }
     }
 
     @Override

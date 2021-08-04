@@ -17,11 +17,13 @@ public class TextureLoader {
     private final int id;
     private final int width;
     private final String file;
+    private final ByteBuffer image;
 
-    public TextureLoader(int id, int width, String file) {
+    public TextureLoader(int id, int width, String file, ByteBuffer image) {
         this.id = id;
         this.width = width;
         this.file = file;
+        this.image = image;
     }
 
     public static TextureLoader loadTexture(String file, int mode, boolean isClampEdge) {
@@ -97,7 +99,7 @@ public class TextureLoader {
 
         glBindTexture(GL_TEXTURE_2D,0);
 
-        return new TextureLoader(id,w,file);
+        return new TextureLoader(id,w,file, (ByteBuffer) buffer);
     }
 
     public String getFile() {
@@ -110,5 +112,10 @@ public class TextureLoader {
 
     public int getWidth() {
         return this.width;
+    }
+
+    public ByteBuffer getImage() {
+        image.flip();
+        return image;
     }
 }

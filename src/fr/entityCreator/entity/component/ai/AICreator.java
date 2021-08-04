@@ -19,7 +19,7 @@ public class AICreator implements ComponentCreator {
     public Component loadComponent(BufferedReader reader, Entity entity) {
         AIComponent ai = null;
         try{
-            AIProperties prop = JsonUtils.gsonInstance().fromJson(reader,AIProperties.class);
+            AIProperties prop = JsonUtils.gsonInstance(false).fromJson(reader,AIProperties.class);
             ai = new AIComponent(entity,prop);
         }catch(Exception e){
             Logger.err("Failled to load AI Component from " + entity.getModel().getName() + " ");

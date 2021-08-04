@@ -10,9 +10,10 @@ import java.io.InputStreamReader;
 
 public class JsonUtils {
 
-    public static Gson gsonInstance() {
+    public static Gson gsonInstance(boolean needToExcludeSomeFields) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setPrettyPrinting();
+        if (needToExcludeSomeFields)gsonBuilder.excludeFieldsWithoutExposeAnnotation();
         return gsonBuilder.create();
     }
 

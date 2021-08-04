@@ -53,7 +53,7 @@ public class ParticleCreator implements ComponentCreator {
             spawn.load(values);
             String line;
             if ((line = reader.readLine()) != ""){
-                ParticleTargetProperties prop = JsonUtils.gsonInstance().fromJson(line, ParticleTargetProperties.class);
+                ParticleTargetProperties prop = JsonUtils.gsonInstance(false).fromJson(line, ParticleTargetProperties.class);
                 system.setTarget(new ParticleTarget(prop,entity));
             }
         }catch(Exception e){

@@ -1,7 +1,15 @@
 package fr.entityCreator.core.resources;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import fr.entityCreator.graphics.textures.TextureLoader;
+import fr.entityCreator.toolBox.ToolDirectory;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.Objects;
 
 public class TextureProperties {
@@ -9,13 +17,28 @@ public class TextureProperties {
     private TextureLoader normalMapFile;
     private TextureLoader specularMapFile;
 
+
+    @Expose
+    @SerializedName("specularMap")
+    private String specularMapName;
+    @Expose
+    @SerializedName("normalMap")
+    private String normalMapName;
+
+    @Expose
     private float shineDamper;
+
+    @Expose
     private float reflectivity;
 
+    @Expose
     private int numbersOfRows;
 
+    @Expose
     private boolean isTransparency;
+    @Expose
     private boolean useFakeLighting;
+    @Expose
     private boolean isInverseNormal;
 
     public static final TextureProperties DEFAULT = new TextureProperties(null,null,0,0,1,false,false,false);
@@ -117,7 +140,31 @@ public class TextureProperties {
         return isInverseNormal;
     }
 
+    public void exportSpecular() throws IOException {
+        try(FileOutputStream fos = new FileOutputStream(
+                ToolDirectory.OUTPUT_FOLDER + "/textures/entities/specularMap/"+
+                        specularMapFile.getFile().split("/")[specularMapFile.getFile()
+                                .length()-1]);
+            FileChannel fc = fos.getChannel()){
+            fc.write(specularMapFile.getImage());
+        }
+    }
+
+    public void exportNormal() throws IOException {
+        try(FileOutputStream fos = new FileOutputStream(
+                ToolDirectory.OUTPUT_FOLDER + "/textures/entities/normal/"+
+                        normalMapFile.getFile().split("/")[normalMapFile.getFile()
+                                .length()-1]);
+            FileChannel fc = fos.getChannel()){
+            fc.write(normalMapFile.getImage());
+        }
+    }
+
     public boolean hasSpecularMap() {
         return specularMapFile != null;
+    }
+
+    public boolean hasNormalMap(){
+        return normalMapFile != null;
     }
 }

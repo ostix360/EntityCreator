@@ -77,7 +77,7 @@ public class AIComponent extends Component {
     public void export(FileOutputStream fos) {
         try(FileChannel fc = fos.getChannel()){
             fc.write(DataTransformer.casteString(this.getType().toString()));
-            fc.write(DataTransformer.casteString(JsonUtils.gsonInstance().toJson(properties)));
+            fc.write(DataTransformer.casteString(JsonUtils.gsonInstance(false).toJson(properties)));
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }

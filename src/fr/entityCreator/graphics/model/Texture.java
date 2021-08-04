@@ -2,9 +2,14 @@ package fr.entityCreator.graphics.model;
 
 import fr.entityCreator.core.resources.TextureProperties;
 import fr.entityCreator.graphics.textures.TextureLoader;
+import fr.entityCreator.toolBox.ToolDirectory;
 import org.lwjgl.opengl.GL11;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Texture {
@@ -143,4 +148,19 @@ public class Texture {
     }
 
 
+    public void exportDiffuse(String name) throws IOException {
+        File file = new File(ToolDirectory.OUTPUT_FOLDER + "/textures/entities/"+ name + "/" +
+                textureLoader.getFile().replace("\\","/").split("/")
+                        [textureLoader.getFile().replace("\\","/").
+                        split("/").length-1]);
+        if (!file.exists()){
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        }
+        try(FileOutputStream fos = new FileOutputStream(file);
+            FileChannel fc = fos.getChannel()){
+            fc.write(textureLoader.getImage());
+        }
+
+    }
 }

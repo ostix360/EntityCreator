@@ -66,7 +66,7 @@ public class ParticleComponent extends Component {
 
             this.system.getSpawn().export(fc);      //Write the kind of spwan
             if (system.getTarget() != null) {           //If target isn't null write it in the file data
-                fc.write(DataTransformer.casteString(JsonUtils.gsonInstance().toJson(system.getTarget().getProperties())));
+                fc.write(DataTransformer.casteString(JsonUtils.gsonInstance(false).toJson(system.getTarget().getProperties())));
             } else {
                 fc.write(DataTransformer.casteString("\n"));
             }

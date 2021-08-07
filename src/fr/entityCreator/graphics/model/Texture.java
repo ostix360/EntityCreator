@@ -5,6 +5,7 @@ import fr.entityCreator.graphics.textures.TextureLoader;
 import fr.entityCreator.toolBox.ToolDirectory;
 import org.lwjgl.opengl.GL11;
 
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -103,10 +104,6 @@ public class Texture {
         return properties.useFakeLighting();
     }
 
-    public boolean isInverseNormal() {
-        return properties.isInverseNormal();
-    }
-
     public boolean isTransparency() {
         return properties.isTransparency();
     }
@@ -157,10 +154,6 @@ public class Texture {
             file.getParentFile().mkdirs();
             file.createNewFile();
         }
-        try(FileOutputStream fos = new FileOutputStream(file);
-            FileChannel fc = fos.getChannel()){
-            fc.write(textureLoader.getImage());
-        }
-
+        ImageIO.write(textureLoader.getImage(),"png",file);
     }
 }

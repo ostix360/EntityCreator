@@ -6,6 +6,7 @@ import org.lwjgl.opengl.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -17,13 +18,13 @@ public class TextureLoader {
     private final int id;
     private final int width;
     private final String file;
-    private final ByteBuffer image;
+    private final RenderedImage img;
 
-    public TextureLoader(int id, int width, String file, ByteBuffer image) {
+    public TextureLoader(int id, int width, String file, RenderedImage img) {
         this.id = id;
         this.width = width;
         this.file = file;
-        this.image = image;
+        this.img = img;
     }
 
     public static TextureLoader loadTexture(String file, int mode, boolean isClampEdge) {
@@ -37,7 +38,6 @@ public class TextureLoader {
         assert image != null;
         int w = image.getWidth();
         int h = image.getHeight();
-
         int[] pixels = new int[w*h];
         image.getRGB(0,0,w,h,pixels,0,w);
 
@@ -99,7 +99,7 @@ public class TextureLoader {
 
         glBindTexture(GL_TEXTURE_2D,0);
 
-        return new TextureLoader(id,w,file, (ByteBuffer) buffer);
+        return new TextureLoader(id,w,file, image);
     }
 
     public String getFile() {
@@ -114,8 +114,7 @@ public class TextureLoader {
         return this.width;
     }
 
-    public ByteBuffer getImage() {
-        image.flip();
-        return image;
+    public RenderedImage getImage() {
+        return img;
     }
 }

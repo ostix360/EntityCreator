@@ -189,6 +189,7 @@ public class Entity {
             } else if (file.getName().endsWith(".obj")) {
                 OBJFileLoader.loadModel(file.getAbsolutePath(), this);
             }
+            ToolDirectory.MODEL_LOCATION = file;
         } else {
             new ErrorPopUp("impossible de charger le model");
         }
@@ -204,6 +205,11 @@ public class Entity {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        this.model.setName(name);
     }
 
     public enum MovementType {

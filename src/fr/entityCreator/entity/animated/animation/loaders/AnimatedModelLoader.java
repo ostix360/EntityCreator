@@ -25,17 +25,17 @@ public class AnimatedModelLoader {
      * the collada model data, stores the extracted data in a VAO, sets up the
      * joint heirarchy, and loads up the entity's texture.
      *
-     * @param modelFile - the file containing the data for the entity.
+     * @param modelPath - the file containing the data for the entity.
      * @return The animated entity (no animation applied though)
      */
-    public static AnimatedModel loadEntity(String modelFile, int maxWeights, Entity entity) {
-        AnimatedModelData entityData = ColladaLoader.loadColladaModel(modelFile ,maxWeights);
+    public static AnimatedModel loadEntity(String modelPath, int maxWeights, Entity entity) {
+        AnimatedModelData entityData = ColladaLoader.loadColladaModel(modelPath ,maxWeights);
         GLRequest request = new ModelLoaderRequest(entity,entityData.getMeshData(),true);
         GLRequestProcessor.sendRequest(request);
         SkeletonData skeletonData = entityData.getJointsData();
         Joint headJoint = createJoints(skeletonData.headJoint);
         Timer.waitForRequest(request);
-        return new AnimatedModel(modelFile, headJoint, skeletonData.jointCount);
+        return new AnimatedModel(entity.getName(), headJoint, skeletonData.jointCount);
     }
 
     /**

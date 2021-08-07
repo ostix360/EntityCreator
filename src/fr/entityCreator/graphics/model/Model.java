@@ -15,7 +15,9 @@ public class Model {
 
     private MeshModel meshModel;
     private Texture texture;
-    private final String name;
+    private String name;
+    protected File meshLocation;
+    private boolean isAnimated;
 
     public Model(MeshModel meshModel, Texture texture, String name) {
         this.meshModel = meshModel;
@@ -23,8 +25,9 @@ public class Model {
         this.name = name;
     }
 
-    public Model(String name) {
+    public Model(String name,boolean isAnimated) {
         this.name = name;
+        this.isAnimated = isAnimated;
     }
 
     public MeshModel getMeshModel() {
@@ -39,8 +42,30 @@ public class Model {
         String file = JsonUtils.gsonInstance(true).toJson(new TextureResources(name, "entities/" + name, texture.getProperties()));
         saveFile(file,true);
         exportAllTexture();
-        file = JsonUtils.gsonInstance(false).toJson(new ModelResources(name, "entities/" + name,name,this instanceof AnimatedModel));
+        file = JsonUtils.gsonInstance(false).toJson(new ModelResources(name,  name,name,isAnimated));
         saveFile(file,false);
+        exportModel();
+    }
+
+    private void exportModel() throws IOException {
+        File output = new File(ToolDirectory.OUTPUT_FOLDER +
+                "/models/entities/" + name + "/" + name + (isAnimated ? ".dae":".obj"));
+        if (!output.exists()){
+            output.getParentFile().mkdirs();
+            output.createNewFile();
+        }
+        try(FileInputStream fis = new FileInputStream(ToolDirectory.MODEL_LOCATION);
+            FileChannel fcReader = fis.getChannel();
+            FileOutputStream fos = new FileOutputStream(output);
+            FileChannel fcWriter = fos.getChannel();
+        ){
+            ByteBuffer buffer = ByteBuffer.allocate(1024);
+            while (fcReader.read(buffer) !=-1) {
+                buffer.flip();
+                fcWriter.write(buffer);
+                buffer.flip();
+            }
+        }
     }
 
     private void exportAllTexture() throws IOException {
@@ -53,17 +78,9 @@ public class Model {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Model model = (Model) o;
-        return Objects.equals(meshModel, model.meshModel) && Objects.equals(texture, model.texture) && Objects.equals(name, model.name);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(meshModel.getVertexCount(), texture, name);
+    public void setMeshLocation(File meshLocation) {
+        this.meshLocation = meshLocation;
     }
 
     public void saveFile(String fileContent, boolean isTexture) throws Exception {
@@ -96,5 +113,23 @@ public class Model {
 
     public void setMeshModel(MeshModel model) {
         this.meshModel = model;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Model model = (Model) o;
+        return Objects.equals(meshModel, model.meshModel) && Objects.equals(texture, model.texture) && Objects.equals(name, model.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(meshModel.getVertexCount(), texture, name);
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

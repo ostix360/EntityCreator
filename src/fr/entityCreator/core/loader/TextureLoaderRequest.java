@@ -20,7 +20,7 @@ public class TextureLoaderRequest extends GLRequest {
     }
 
     public TextureLoaderRequest(String file) {
-        this.file = file;
+        this.file = file.replaceAll("%20", " ");
         isForEntity = false;
     }
 

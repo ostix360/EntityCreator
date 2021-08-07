@@ -2,7 +2,6 @@ package fr.entityCreator.frame;
 
 import fr.entityCreator.entity.Entity;
 import fr.entityCreator.graphics.model.Texture;
-import fr.entityCreator.toolBox.ToolDirectory;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,6 +19,7 @@ public class TexturePanel extends JPanel {
 
     private Texture texture;
     private JLabel diffuseIcon;
+    private JLabel normalIcon;
     private JLabel extraIcon;
     private JCheckBox glows;
     private Entity e;
@@ -39,6 +39,36 @@ public class TexturePanel extends JPanel {
         gc.gridx = 1;
         gc.weightx = 4.0D;
         setUpSettingsPanel(gc, showGlow);
+        gc.gridx = 5;
+        gc.gridy = 0;
+        gc.weightx = 1.0D;
+        setUpNormalIconPanel(gc);
+    }
+
+    private void setUpNormalIconPanel(GridBagConstraints gc) {
+        JPanel iconPanel = new JPanel();
+        iconPanel.setLayout(new BorderLayout());
+        GridBagConstraints gc2 = new GridBagConstraints();
+        gc2.fill = 1;
+        gc2.gridx = 1;
+        gc2.gridy = 1;
+        gc2.weightx = 1.0D;
+        gc2.weighty = 1.0D;
+
+        String normal = this.texture.getNormalMapFile();
+        if (normal != null) {
+            try {
+                this.normalIcon = createIcon(new FileInputStream(normal), 3);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            this.normalIcon = createIcon(TexturePanel.class.getResourceAsStream("/res/NormalMap.png"), 3);
+        }
+        iconPanel.add(this.normalIcon, "East");
+        add(iconPanel, gc);
+
     }
 
     private boolean setUpIconPanel(GridBagConstraints gc) {
@@ -49,32 +79,31 @@ public class TexturePanel extends JPanel {
         gc2.gridx = 0;
         gc2.gridy = 0;
         gc2.weightx = 1.0D;
-
         gc2.weighty = 1.0D;
 
         String diffuseFile = this.texture.getTextureLoader().getFile();
 
         if (diffuseFile != null) {
             try {
-                this.diffuseIcon = createIcon(new FileInputStream(diffuseFile), true);
+                this.diffuseIcon = createIcon(new FileInputStream(diffuseFile), 1);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         } else {
-            this.diffuseIcon = createIcon(TexturePanel.class.getResourceAsStream("/res/DiffuseTexture.png"), true);
+            this.diffuseIcon = createIcon(TexturePanel.class.getResourceAsStream("/res/DiffuseTexture.png"), 1);
         }
         iconPanel.add(this.diffuseIcon, gc2);
         gc2.gridy = 1;
         String specularFile = this.texture.getSpecularMapFile();
         if (specularFile != null) {
             try {
-                this.extraIcon = createIcon(new FileInputStream(specularFile), false);
+                this.extraIcon = createIcon(new FileInputStream(specularFile), 2);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         } else {
-            this.extraIcon = createIcon(TexturePanel.class.getResourceAsStream("/res/ExtraMap.png"), false);
+            this.extraIcon = createIcon(TexturePanel.class.getResourceAsStream("/res/ExtraMap.png"), 2);
         }
         iconPanel.add(this.extraIcon, gc2);
         add(iconPanel, gc);
@@ -160,7 +189,7 @@ public class TexturePanel extends JPanel {
             });
         } else {
             slider.addChangeListener(new ChangeListener() {
-                public void stateChanged(ChangeEvent arg0){
+                public void stateChanged(ChangeEvent arg0) {
                     valueReading.setText(limitChars(Float.toString(slider.getActualValue()), 5));
                     texture.setReflectivity(convertReflectValue(slider.getActualValue()));
                 }
@@ -202,17 +231,31 @@ public class TexturePanel extends JPanel {
 
     }
 
-    public boolean setNewIcon(File image, boolean diffuse) {
+    public boolean setNewIcon(int id) {
         try {
-            BufferedImage myPicture = ImageIO.read(image);
-            ImageIcon original = new ImageIcon(myPicture);
-            ImageIcon resized = resizeImage(original);
-            if (diffuse) {
-                this.diffuseIcon.setIcon(resized);
-                this.texture.setNewDiffuse(image);
-            } else {
-                //this.glows.setVisible(true);
-                this.extraIcon.setIcon(resized);
+            BufferedImage myPicture;
+
+            ImageIcon original;
+            ImageIcon resized;
+            switch (id) {
+                case 2:
+                    myPicture = ImageIO.read(new File(texture.getSpecularMapFile()));
+                    original = new ImageIcon(myPicture);
+                    resized = resizeImage(original);
+                    this.extraIcon.setIcon(resized);
+                    break;
+                case 3:
+                    myPicture = ImageIO.read(new File(texture.getNormalMapFile()));
+                    original = new ImageIcon(myPicture);
+                    resized = resizeImage(original);
+                    this.normalIcon.setIcon(resized);
+                    break;
+                default:
+                    myPicture = ImageIO.read(texture.getNewDiffuse());
+                    original = new ImageIcon(myPicture);
+                    resized = resizeImage(original);
+                    this.diffuseIcon.setIcon(resized);
+                    break;
             }
             return true;
         } catch (Exception e) {
@@ -248,7 +291,7 @@ public class TexturePanel extends JPanel {
         return (float) Math.sqrt(value);
     }
 
-    private float reverseConvertShineValue(float shine){
+    private float reverseConvertShineValue(float shine) {
         float value = 100.0F - shine;
         value /= 100.0F;
         value = (float) Math.asin(value);
@@ -258,7 +301,7 @@ public class TexturePanel extends JPanel {
         return value;
     }
 
-    private JLabel createIcon(InputStream stream, boolean diffuse) {
+    private JLabel createIcon(InputStream stream, int id) {
 
         BufferedImage myPicture = null;
         try {
@@ -289,7 +332,7 @@ public class TexturePanel extends JPanel {
             }
 
             public void mouseReleased(MouseEvent arg0) {
-                new TextureChooseScreen(TexturePanel.this,e,diffuse);
+                new TextureChooseScreen(TexturePanel.this, e, id);
             }
         });
         icon.setPreferredSize(new Dimension(40, 40));

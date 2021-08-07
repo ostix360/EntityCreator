@@ -1,7 +1,6 @@
 package fr.entityCreator.frame;
 
 import fr.entityCreator.entity.Entity;
-import fr.entityCreator.graphics.model.MeshModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,13 +29,10 @@ public class MainSettingsPanel extends JPanel {
 //    }
 
     public void setEntity(Entity entity) {
-        if (this.isSetUp) {
-            updateFields(entity);
-        } else {
-            initialiseFields(entity);
-            updateFields(entity);
-            this.isSetUp = true;
-        }
+        initialiseFields(entity);
+        updateFields(entity);
+        this.isSetUp = true;
+
     }
 
     private void initialiseFields(Entity entity) {
@@ -45,12 +41,12 @@ public class MainSettingsPanel extends JPanel {
         gc.gridy = 0;
         gc.weightx = 1.0D;
         gc.weighty = 1.0D;
-        if (entity.getModel() == null){
-            new ModelChooseScreen(frame,entity,null,this);
-            new TextureChooseScreen(entity,this);
+        if (entity.getModel() == null) {
+            new ModelChooseScreen(frame, entity, null, this);
+            new TextureChooseScreen(entity, this);
         }
         this.standardInfo = new StandardInfoPanel((this.width - 10) / 2, this.height - 25, entity, frame);
-        add(this.standardInfo,gc);
+        add(this.standardInfo, gc);
         gc.gridx = 1;
 
 

@@ -5,11 +5,9 @@ import com.google.gson.annotations.SerializedName;
 import fr.entityCreator.graphics.textures.TextureLoader;
 import fr.entityCreator.toolBox.ToolDirectory;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import javax.imageio.ImageIO;
+import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.Objects;
 
 public class TextureProperties {
@@ -38,12 +36,10 @@ public class TextureProperties {
     private boolean isTransparency;
     @Expose
     private boolean useFakeLighting;
-    @Expose
-    private boolean isInverseNormal;
 
-    public static final TextureProperties DEFAULT = new TextureProperties(null,null,0,0,1,false,false,false);
+    public static final TextureProperties DEFAULT = new TextureProperties(null,null,0,0,1,false,false);
 
-    public TextureProperties(TextureLoader normalMapFile, TextureLoader specularMapFile, float shineDamper, float reflectivity, int numbersOfRows, boolean isTransparency, boolean useFakeLighting, boolean isInverseNormal) {
+    public TextureProperties(TextureLoader normalMapFile, TextureLoader specularMapFile, float shineDamper, float reflectivity, int numbersOfRows, boolean isTransparency, boolean useFakeLighting) {
         this.normalMapFile = normalMapFile;
         this.specularMapFile = specularMapFile;
         this.shineDamper = shineDamper;
@@ -51,29 +47,37 @@ public class TextureProperties {
         this.numbersOfRows = numbersOfRows;
         this.isTransparency = isTransparency;
         this.useFakeLighting = useFakeLighting;
-        this.isInverseNormal = isInverseNormal;
     }
 
+    public void setSpecularMapName(String specularMapName) {
+        this.specularMapName = specularMapName;
+    }
+
+    public void setNormalMapName(String normalMapName) {
+        this.normalMapName = normalMapName;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TextureProperties that = (TextureProperties) o;
-        return normalMapFile == that.normalMapFile && specularMapFile == that.specularMapFile && Float.compare(that.shineDamper, shineDamper) == 0 && Float.compare(that.reflectivity, reflectivity) == 0 && numbersOfRows == that.numbersOfRows && isTransparency == that.isTransparency && useFakeLighting == that.useFakeLighting && isInverseNormal == that.isInverseNormal;
+        return normalMapFile == that.normalMapFile && specularMapFile == that.specularMapFile && Float.compare(that.shineDamper, shineDamper) == 0 && Float.compare(that.reflectivity, reflectivity) == 0 && numbersOfRows == that.numbersOfRows && isTransparency == that.isTransparency && useFakeLighting == that.useFakeLighting;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(normalMapFile, specularMapFile, shineDamper, reflectivity, numbersOfRows, isTransparency, useFakeLighting, isInverseNormal);
+        return Objects.hash(normalMapFile, specularMapFile, shineDamper, reflectivity, numbersOfRows, isTransparency, useFakeLighting);
     }
 
-    public void setNormalMapFile(TextureLoader path) {
-        this.normalMapFile = path;
+    public void setNormalMapFile(TextureLoader normalMap) {
+        this.normalMapFile = normalMap;
+        this.normalMapName = new File(normalMap.getFile()).getName();
     }
 
     public void setSpecularMapFile(TextureLoader specularMapFile) {
         this.specularMapFile = specularMapFile;
+        this.specularMapName = new File(specularMapFile.getFile()).getName();
     }
 
     public void setShineDamper(float shineDamper) {
@@ -97,11 +101,10 @@ public class TextureProperties {
     }
 
     public void setInverseNormal(boolean inverseNormal) {
-        isInverseNormal = inverseNormal;
     }
 
     public String getNormalMapFile() {
-        return normalMapFile.getFile();
+        return normalMapFile == null ? null : normalMapFile.getFile();
     }
 
     public String getSpecularMapFile() {
@@ -136,28 +139,28 @@ public class TextureProperties {
         return useFakeLighting;
     }
 
-    public boolean isInverseNormal() {
-        return isInverseNormal;
-    }
-
     public void exportSpecular() throws IOException {
-        try(FileOutputStream fos = new FileOutputStream(
-                ToolDirectory.OUTPUT_FOLDER + "/textures/entities/specularMap/"+
-                        specularMapFile.getFile().split("/")[specularMapFile.getFile()
-                                .length()-1]);
-            FileChannel fc = fos.getChannel()){
-            fc.write(specularMapFile.getImage());
-        }
+            File file = new File(ToolDirectory.OUTPUT_FOLDER + "/textures/entities/specularMap/" +
+                    specularMapFile.getFile().replace("\\","/").split("/")
+                            [specularMapFile.getFile().replace("\\","/").
+                            split("/").length-1]);
+            if (!file.exists()){
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            ImageIO.write(specularMapFile.getImage(),"png",file);
     }
 
     public void exportNormal() throws IOException {
-        try(FileOutputStream fos = new FileOutputStream(
-                ToolDirectory.OUTPUT_FOLDER + "/textures/entities/normal/"+
-                        normalMapFile.getFile().split("/")[normalMapFile.getFile()
-                                .length()-1]);
-            FileChannel fc = fos.getChannel()){
-            fc.write(normalMapFile.getImage());
+        File file = new File(ToolDirectory.OUTPUT_FOLDER + "/textures/entities/normal/" +
+                normalMapFile.getFile().replace("\\","/").split("/")
+                        [normalMapFile.getFile().replace("\\","/").
+                        split("/").length-1]);
+        if (!file.exists()){
+            file.getParentFile().mkdirs();
+            file.createNewFile();
         }
+        ImageIO.write(normalMapFile.getImage(),"png",file);
     }
 
     public boolean hasSpecularMap() {

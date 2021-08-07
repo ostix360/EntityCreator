@@ -8,6 +8,8 @@ import fr.entityCreator.graphics.model.Model;
 import fr.entityCreator.graphics.model.Texture;
 import org.joml.Matrix4f;
 
+import java.io.File;
+
 
 /**
  * This class represents an entity in the world that can be animated. It
@@ -47,7 +49,7 @@ public class AnimatedModel extends Model {
      *                   this entity.
      */
     public AnimatedModel(String name, Joint rootJoint, int jointCount) {
-        super( name);
+        super( name ,true);
         // skin
         this.rootJoint = rootJoint;
         this.jointCount = jointCount;

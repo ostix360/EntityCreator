@@ -19,7 +19,7 @@ public class StandardInfoPanel extends JPanel {
 //    private JFormattedTextField visibility;
 //    private JFormattedTextField radiusField;
 //    private JCheckBox hasRefractionCheck;
-    private JTextField id;
+    private JTextField name;
     private Entity entity;
     private MainFrame frame;
 
@@ -61,7 +61,7 @@ public class StandardInfoPanel extends JPanel {
     private void initFields() {
         GridBagConstraints gc = new GridBagConstraints();
         gc.gridy = 0;
-       // initIDPanel(gc);
+        initIDPanel(gc);
         gc.gridy = 1;
         initModelButton(gc);
         gc.gridy = 2;
@@ -156,32 +156,32 @@ public class StandardInfoPanel extends JPanel {
         this.idPanel = new JPanel();
         add(this.idPanel, gc);
         this.idPanel.setLayout(new GridBagLayout());
-        JLabel label = new JLabel("ID: ");
+        JLabel label = new JLabel("Nom: ");
         label.setFont(MainFrame.MEDIUM_FONT);
         this.idPanel.add(label, gc2);
-        this.id = new JTextField(Integer.toString(10), 10);
-        this.id.setFont(MainFrame.MEDIUM_FONT);
+        this.name = new JTextField("", 10);
+        this.name.setFont(MainFrame.MEDIUM_FONT);
 //        ((AbstractDocument) this.id.getDocument()).setDocumentFilter(new MyDocumentFilter(9));
-//        this.id.getDocument().addDocumentListener(new DocumentListener() {
-//            public void changedUpdate(DocumentEvent e) {
-//                warn();
-//            }
-//            public void removeUpdate(DocumentEvent e) {
-//                warn();
-//            }
-//            public void insertUpdate(DocumentEvent e) {
-//                warn();
-//            }
-//            public void warn() {
-//                String text = removeLetters();
-//                if (text.equals("")) {
-//                    return;
-//                }
-//                entity.setID(Integer.parseInt(text));
-//            }
-//        });
+        this.name.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                warn();
+            }
+            public void removeUpdate(DocumentEvent e) {
+                warn();
+            }
+            public void insertUpdate(DocumentEvent e) {
+                warn();
+            }
+            public void warn() {
+                String text = name.getText();
+                if (text.equals("")) {
+                    return;
+                }
+                entity.setName(text);
+            }
+        });
         gc2.gridx = 1;
-        this.idPanel.add(this.id, gc2);
+        this.idPanel.add(this.name, gc2);
     }
 
 

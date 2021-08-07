@@ -5,16 +5,10 @@ import fr.entityCreator.core.loader.TextureLoaderRequest;
 import fr.entityCreator.core.resourcesProcessor.GLRequestProcessor;
 import fr.entityCreator.entity.Entity;
 import fr.entityCreator.graphics.textures.TextureLoader;
-import fr.entityCreator.toolBox.ToolDirectory;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TextureChooseScreen {
 
@@ -22,17 +16,17 @@ public class TextureChooseScreen {
     private TexturePanel panel;
     private Entity entity;
 
-    public TextureChooseScreen(TexturePanel texturePanel,Entity e, boolean diffuse) {
+    public TextureChooseScreen(TexturePanel texturePanel, Entity e, int id) {
         this.entity = e;
         this.panel = texturePanel;
         setup();
-        applyChoice(texturePanel,diffuse);
+        applyChoice(texturePanel, id);
     }
 
-    public TextureChooseScreen(Entity entity,JPanel parent) {
+    public TextureChooseScreen(Entity entity, JPanel parent) {
         this.entity = entity;
         setup();
-        applyChoice(parent,true);
+        applyChoice(parent, 1);
     }
 
     private void setup() {
@@ -47,22 +41,33 @@ public class TextureChooseScreen {
         chooser.setVisible(true);
     }
 
-    private void applyChoice(JPanel parent,boolean diffuse) {
+    private void applyChoice(JPanel parent, int id) {
         File tex = getFileChoosen(parent);
         TextureLoader texID;
+        TextureLoaderRequest request;
         assert tex != null;
-        if (diffuse) {
-            entity.setTexturedFile(tex);
-            entity.getModel().getTexture().setNewDiffuse(tex);
-        }else{
-            TextureLoaderRequest request = new TextureLoaderRequest(tex.getAbsolutePath());
-            GLRequestProcessor.sendRequest(request);
-            Timer.waitForRequest(request);
-            texID = request.getTexture();
-            entity.getModel().getTexture().setSpecularMap(texID);
+        switch (id) {
+            case 2:
+                request = new TextureLoaderRequest(tex.getAbsolutePath());
+                GLRequestProcessor.sendRequest(request);
+                Timer.waitForRequest(request);
+                texID = request.getTexture();
+                entity.getModel().getTexture().setSpecularMap(texID);
+                break;
+            case 3:
+                request = new TextureLoaderRequest(tex.getAbsolutePath());
+                GLRequestProcessor.sendRequest(request);
+                Timer.waitForRequest(request);
+                texID = request.getTexture();
+                entity.getModel().getTexture().setNormalMapFile(texID);
+                break;
+            default:
+                entity.setTexturedFile(tex);
+                entity.getModel().getTexture().setNewDiffuse(tex);
+                break;
         }
-        if (parent instanceof TexturePanel){
-            boolean success = panel.setNewIcon(diffuse ? entity.getModel().getTexture().getNewDiffuse() : new File(entity.getModel().getTexture().getSpecularMapFile()), diffuse);
+        if (parent instanceof TexturePanel) {
+            boolean success = panel.setNewIcon(id);
             if (success) {
                 this.chooser.setVisible(false);
             } else {
@@ -72,10 +77,10 @@ public class TextureChooseScreen {
         this.chooser.setVisible(false);
     }
 
-    private File getFileChoosen(JPanel parent){
-        if (this.chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION){
+    private File getFileChoosen(JPanel parent) {
+        if (this.chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
             return chooser.getSelectedFile();
-        }else{
+        } else {
             return null;
         }
     }

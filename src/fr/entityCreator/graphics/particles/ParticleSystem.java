@@ -11,12 +11,12 @@ import java.util.Random;
 
 public class ParticleSystem {
 
-    public static final ParticleSystem DEFAULT = new ParticleSystem(10,1,0,10,1);
-    private final float pps;
-    private final float averageSpeed;
-    private final float gravity;
-    private final float averageLifeLength;
-    private final float averageScale;
+    public static final ParticleSystem DEFAULT = new ParticleSystem(100,1.5f,0,60,5);
+    private float pps;
+    private float averageSpeed;
+    private float gravity;
+    private float averageLifeLength;
+    private float averageScale;
     private ParticleSpawn spawn = SpawnParticleType.POINT.getSpawn();
     private Vector3f positionOffset = new Vector3f(0, 0, 0);
     private ParticleTarget target = null;
@@ -69,7 +69,7 @@ public class ParticleSystem {
     }
 
     public void update(Vector3f pos, Vector3f rot, float scale) {
-        generateParticles(spawn.getParticleSpawnPosition(pos.x(), pos.y(), pos.z(),
+        if (this.texture != null)generateParticles(spawn.getParticleSpawnPosition(pos.x(), pos.y(), pos.z(),
                 rot.x(), rot.y(), rot.z(), scale));
     }
 
@@ -264,5 +264,25 @@ public class ParticleSystem {
         this.scaleError = error * averageScale;
     }
 
+    public void setPps(float pps) {
+        this.pps = pps;
+    }
+
+
+    public void setAverageSpeed(float averageSpeed) {
+        this.averageSpeed = averageSpeed;
+    }
+
+    public void setGravity(float gravity) {
+        this.gravity = gravity;
+    }
+
+    public void setAverageLifeLength(float averageLifeLength) {
+        this.averageLifeLength = averageLifeLength;
+    }
+
+    public void setAverageScale(float averageScale) {
+        this.averageScale = averageScale;
+    }
 }
 

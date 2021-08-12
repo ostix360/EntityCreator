@@ -15,6 +15,9 @@ public class MasterParticle {
     }
 
     public static void addParticle(Particle p) {
+        if (p.getTexture() == null){
+            return;
+        }
         List<Particle> list = particles.get(p.getTexture());
         if (list == null) {
             list = new ArrayList<>();

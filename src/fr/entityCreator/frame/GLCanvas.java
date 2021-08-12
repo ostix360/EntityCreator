@@ -1,8 +1,10 @@
 package fr.entityCreator.frame;
 
+import fr.entityCreator.core.loader.Loader;
 import fr.entityCreator.core.resourcesProcessor.GLRequestProcessor;
 import fr.entityCreator.entity.camera.Camera;
 import fr.entityCreator.graphics.MasterRenderer;
+import fr.entityCreator.graphics.particles.MasterParticle;
 import fr.entityCreator.toolBox.OpenGL.DisplayManager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.awt.AWTGLCanvas;
@@ -32,6 +34,8 @@ public class GLCanvas extends AWTGLCanvas {
         DisplayManager.setWidth(this.getWidth());
         render.init();
         render.setCam(cam);
+
+        MasterParticle.init(Loader.INSTANCE,MasterRenderer.getProjectionMatrix());
     }
 
     @Override
@@ -39,6 +43,8 @@ public class GLCanvas extends AWTGLCanvas {
 
         cam.move();
         render.renderScene();
+        MasterParticle.update(cam);
+        MasterParticle.render(cam);
         DisplayManager.setHeight(this.getHeight());
         DisplayManager.setWidth(this.getWidth());
         GL11.glViewport(0,0,getWidth(),getHeight());
@@ -57,6 +63,7 @@ public class GLCanvas extends AWTGLCanvas {
 
     public void doDisposeCanvas() {
         render.cleanUp();
+        MasterParticle.cleanUp();
         super.disposeCanvas();
     }
 }

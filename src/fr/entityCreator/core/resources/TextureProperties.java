@@ -15,6 +15,11 @@ public class TextureProperties {
     private TextureLoader normalMapFile;
     private TextureLoader specularMapFile;
 
+    @Expose
+    private boolean useAdditive;
+
+    @Expose
+    private boolean affectedByLighting;
 
     @Expose
     @SerializedName("specularMap")
@@ -37,6 +42,8 @@ public class TextureProperties {
     @Expose
     private boolean useFakeLighting;
 
+    public static final TextureProperties PARTICLE_DEFAULT_PROPERTIES = new TextureProperties(true,false,1);
+
     public static final TextureProperties DEFAULT = new TextureProperties(null,null,0,0,1,false,false);
 
     public TextureProperties(TextureLoader normalMapFile, TextureLoader specularMapFile, float shineDamper, float reflectivity, int numbersOfRows, boolean isTransparency, boolean useFakeLighting) {
@@ -47,6 +54,28 @@ public class TextureProperties {
         this.numbersOfRows = numbersOfRows;
         this.isTransparency = isTransparency;
         this.useFakeLighting = useFakeLighting;
+    }
+
+    public TextureProperties(boolean useAdditive, boolean affectedByLighting, int numbersOfRows) {
+        this.useAdditive = useAdditive;
+        this.affectedByLighting = affectedByLighting;
+        this.numbersOfRows = numbersOfRows;
+    }
+
+    public boolean isUseAdditive() {
+        return useAdditive;
+    }
+
+    public void setUseAdditive(boolean useAdditive) {
+        this.useAdditive = useAdditive;
+    }
+
+    public boolean isAffectedByLighting() {
+        return affectedByLighting;
+    }
+
+    public void setAffectedByLighting(boolean affectedByLighting) {
+        this.affectedByLighting = affectedByLighting;
     }
 
     public void setSpecularMapName(String specularMapName) {

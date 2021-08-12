@@ -12,7 +12,7 @@ public class ComponentListPanel extends JPanel {
     private final int width;
     private final int height;
     private final MainFrame frame;
-    private Map<Component, JButton> componentTabs = new HashMap<>();
+    private Map<Integer, JButton> componentTabs = new HashMap<>();
     private AddComponentPanel addComponentPanel;
 
     public ComponentListPanel(int width, int height, MainFrame frame) {
@@ -22,12 +22,16 @@ public class ComponentListPanel extends JPanel {
         setPreferredSize(new Dimension(width, height));
     }
 
+    public void setAddPanel(AddComponentPanel addComponentPanel) {
+        this.addComponentPanel = addComponentPanel;
+    }
+
     public void addComponent(Component component) {
         this.addComponentPanel.removeComponent(component.getType());
         JButton button = new JButton(component.getType().toString());
         button.setPreferredSize(new Dimension(this.width - 10, 25));
         button.setFont(MainFrame.SMALL_FONT);
-        this.componentTabs.put(component, button);
+        this.componentTabs.put(component.getType().getId(), button);
         add(button);
         button.setForeground(new Color(255, 100, 0));
         button.addActionListener((e) -> {
@@ -50,7 +54,7 @@ public class ComponentListPanel extends JPanel {
 //        for (Component dependentComponent : dependentComponents) {
 //            removeComponent(dependentComponent, false);
 //        }
-        JButton button = (JButton) this.componentTabs.remove(component);
+        JButton button = (JButton) this.componentTabs.remove(component.getType().getId());
         remove(button);
         this.addComponentPanel.returnComponentToList(component.getType());
         this.addComponentPanel.getCurrentEntity().getComponents().remove(component);

@@ -82,7 +82,7 @@ public class Maths {
     }
 
     public static Vector3f generateRandomUnitVector() {
-        Random random = new Random();
+        java.util.Random random = new Random();
         float theta = (float) (random.nextFloat() * 2.0F * java.lang.Math.PI);
         float z = random.nextFloat() * 2.0F - 1.0F;
         float rootOneMinusZSquared = (float) java.lang.Math.sqrt(1.0F - z * z);

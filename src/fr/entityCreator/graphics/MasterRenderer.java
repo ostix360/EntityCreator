@@ -94,6 +94,7 @@ public class MasterRenderer {
     }
 
     private void render(Light light, Camera cam) {
+        updateEntity();
         this.initFrame();
         shader.bind();
         if (light != null)shader.loadLight(light);
@@ -109,6 +110,12 @@ public class MasterRenderer {
         terrainRenderer.render(terrains);
         terrainShader.unBind();
 
+    }
+
+    private void updateEntity() {
+        for (Entity entity : entities) {
+            entity.update();
+        }
     }
 
     public void clearEntity(){

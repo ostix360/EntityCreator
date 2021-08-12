@@ -10,6 +10,7 @@ import fr.entityCreator.frame.ComponentListPanel;
 import fr.entityCreator.frame.ComponentPanel;
 import fr.entityCreator.graphics.particles.ParticleSystem;
 import fr.entityCreator.graphics.particles.ParticleTarget;
+import fr.entityCreator.graphics.particles.ParticleTexture;
 import org.joml.Vector3f;
 
 import java.io.FileOutputStream;
@@ -27,6 +28,7 @@ public class ParticleComponent extends Component {
     public ParticleComponent(ParticleSystem system, Entity e) {
         super(ComponentType.PARTICLE_COMPONENT, e);
         this.system = system;
+        this.system.setTexture(new ParticleTexture(0,1,false,false));
     }
 
     @Override
@@ -76,9 +78,13 @@ public class ParticleComponent extends Component {
 
     }
 
+    public ParticleSystem getParticleSystem() {
+        return this.system;
+    }
+
     @Override
     public ComponentPanel getComponentPanel(ComponentListPanel paramComponentListPanel) {
-        return null;
+        return new ParticleComponentPanel(this,paramComponentListPanel);
     }
 
     public void setOffset(Vector3f offset) {

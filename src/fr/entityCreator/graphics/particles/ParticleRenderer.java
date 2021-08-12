@@ -54,8 +54,14 @@ public class ParticleRenderer {
         Matrix4f viewMatrix = Maths.createViewMatrix(camera);
         prepare();
         for (ParticleTexture texture : particles.keySet()) {
+            if (texture.getTextureID() == 0 || texture == null){
+                continue;
+            }
             bindTexture(texture);
             List<Particle> particlesList = particles.get(texture);
+            if (particlesList == null){
+                continue;
+            }
             pointer = 0;
             float[] vboData = new float[particlesList.size() * INSTANCE_DATA_LENGTH];
             for (Particle p : particlesList) {

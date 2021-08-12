@@ -19,7 +19,7 @@ public class AddComponentPanel extends JPanel {
 
     public AddComponentPanel(int width, int height, ComponentListPanel listPanel) {
         this.listPanel = listPanel;
-        //listPanel.setAddPanel(this);
+        listPanel.setAddPanel(this);
         super.setPreferredSize(new Dimension(width, height));
         setLayout(new GridBagLayout());
         addComponentsMenu();
@@ -110,7 +110,6 @@ public class AddComponentPanel extends JPanel {
         addButton.setFont(MainFrame.SMALL_FONT);
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                System.out.println("add Component");
                 if (currentEntity != null) {
 
                     ((ComponentType) componentMenu.getSelectedItem()).createComponent(currentEntity, listPanel);

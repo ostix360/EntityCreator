@@ -18,7 +18,7 @@ public class Texture {
     private File newDiffuse;
     private final TextureLoader textureLoader;
     private final int size;
-    private final TextureProperties properties;
+    private TextureProperties properties;
 
     public Texture(TextureLoader textureID, TextureProperties properties) {
         this.textureID = textureID.getId();
@@ -26,6 +26,7 @@ public class Texture {
         this.size = textureID.getWidth();
         this.textureLoader = textureID;
     }
+
 
     public static void unBindTexture() {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);

@@ -12,10 +12,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public abstract class ComponentPanel extends JPanel {
-    private JPanel description;
-    private JPanel settings;
-    private ComponentListPanel componentList;
-    private Component component;
+    protected JPanel description;
+    protected JPanel settings;
+    protected ComponentListPanel componentList;
+    protected Component component;
     //private JLabel requiredBy;
 
 
@@ -70,7 +70,6 @@ public abstract class ComponentPanel extends JPanel {
         this.description.add(remove, getGC(0, 3));
         remove.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-
                componentList.removeComponent(component, true);
             }
         });

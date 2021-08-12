@@ -11,17 +11,20 @@ import fr.entityCreator.frame.ComponentListPanel;
 import java.io.BufferedReader;
 
 public enum ComponentType {
-    COLLISION_COMPONENT("Collision Component",new CollisionCreator()),
-    PARTICLE_COMPONENT("Particle Component", new ParticleCreator()),
-    AI_COMPONENT("AI Component", new AICreator()),
-    ANIMATED_COMPONENT("Animated Component", new AnimationCreator());
+    COLLISION_COMPONENT("Collision Component",new CollisionCreator(), 0),
+    PARTICLE_COMPONENT("Particle Component", new ParticleCreator(), 1),
+    AI_COMPONENT("AI Component", new AICreator(), 2),
+    ANIMATED_COMPONENT("Animated Component", new AnimationCreator(), 3);
     private final String name;
     private final ComponentCreator creator;
+    private final int id;
 
-    ComponentType(String name, ComponentCreator creator) {
+    ComponentType(String name, ComponentCreator creator, int id) {
         this.name = name;
         this.creator = creator;
+        this.id = id;
     }
+
 
     public Component loadComponent(BufferedReader reader ,Entity e){
         return this.creator.loadComponent(reader, e);
@@ -38,6 +41,11 @@ public enum ComponentType {
 
     public void createComponent(Entity currentEntity, ComponentListPanel panel) {
         Component component = this.creator.createComponent(currentEntity);
+        currentEntity.addComponent(component);
         panel.addComponent(component);
+    }
+
+    public int getId() {
+        return id;
     }
 }

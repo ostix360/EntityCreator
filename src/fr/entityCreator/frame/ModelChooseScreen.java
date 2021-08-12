@@ -33,7 +33,7 @@ public class ModelChooseScreen {
     }
 
     private void setup() {
-        chooser = new JFileChooser("D:\\Projet LWJGL\\3D\\Projet_1\\src\\main\\resources\\models");
+        chooser = new JFileChooser("D:\\Projet LWJGL\\2D\\Test003\\src\\main\\resources\\obj");
         chooser.setApproveButtonText("Ouvrir");
         chooser.setDialogTitle("Selectioner un model!");
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);

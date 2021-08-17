@@ -15,8 +15,6 @@ import fr.entityCreator.entity.animated.colladaParser.dataStructures.JointData;
 import fr.entityCreator.entity.animated.colladaParser.dataStructures.MeshData;
 import fr.entityCreator.entity.animated.colladaParser.dataStructures.SkeletonData;
 import fr.entityCreator.graphics.model.MeshModel;
-import fr.entityCreator.graphics.model.Texture;
-import fr.entityCreator.toolBox.ToolDirectory;
 
 public class AnimatedModelLoader {
 

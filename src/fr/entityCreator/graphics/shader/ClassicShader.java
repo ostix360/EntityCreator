@@ -28,12 +28,14 @@ public class ClassicShader extends ShaderProgram{
     public final MatrixUniformArray jointTransforms = new MatrixUniformArray("jointTransforms", 50);
     public final BooleanUniform isAnimated = new BooleanUniform("isAnimated");
     private final Vector3fUniform skyColor = new Vector3fUniform("skyColor");
+    public final Vector2fUniform offset = new Vector2fUniform("offset");
+    public final FloatUniform numberOfRows = new FloatUniform("numberOfRows");
 
     public ClassicShader() {
         super("shader");
         super.getAllUniformLocations(transformationMatrix, projectionMatrix, viewMatrix,
                 reflectivity, shine, skyColor, jointTransforms, isAnimated,useSpecularMap,
-                specularMap,diffuseMap,normalMap,useFakeLighting);
+                specularMap,diffuseMap,normalMap,useFakeLighting,offset,numberOfRows);
         super.getAllUniformLocations(lightPos);
         super.getAllUniformLocations(lightColor);
         super.getAllUniformLocations(lightAttenuation);

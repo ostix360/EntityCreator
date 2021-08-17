@@ -35,16 +35,14 @@ public class TextureProperties {
     private float reflectivity;
 
     @Expose
-    private int numbersOfRows;
+    private int numbersOfRows = 1;
 
     @Expose
     private boolean isTransparency;
     @Expose
     private boolean useFakeLighting;
 
-    public static final TextureProperties PARTICLE_DEFAULT_PROPERTIES = new TextureProperties(true,false,1);
 
-    public static final TextureProperties DEFAULT = new TextureProperties(null,null,0,0,1,false,false);
 
     public TextureProperties(TextureLoader normalMapFile, TextureLoader specularMapFile, float shineDamper, float reflectivity, int numbersOfRows, boolean isTransparency, boolean useFakeLighting) {
         this.normalMapFile = normalMapFile;
@@ -54,6 +52,14 @@ public class TextureProperties {
         this.numbersOfRows = numbersOfRows;
         this.isTransparency = isTransparency;
         this.useFakeLighting = useFakeLighting;
+    }
+
+    public static TextureProperties DEFAULT(){
+        return new TextureProperties(null,null,0,0,1,false,false);
+    }
+
+    public static TextureProperties PARTICLE_DEFAULT_PROPERTIES(){
+        return new TextureProperties(true,false,1);
     }
 
     public TextureProperties(boolean useAdditive, boolean affectedByLighting, int numbersOfRows) {

@@ -69,24 +69,25 @@ public class ParticleSystem {
     }
 
     public void update(Vector3f pos, Vector3f rot, float scale) {
-        if (this.texture != null)generateParticles(spawn.getParticleSpawnPosition(pos.x(), pos.y(), pos.z(),
-                rot.x(), rot.y(), rot.z(), scale));
+        if (this.texture != null)generateParticles(pos,rot,scale);
     }
 
     public void setSpawn(ParticleSpawn spawn) {
         this.spawn = spawn;
     }
 
-    public void generateParticles(Vector3f systemCenter) {
+    public void generateParticles(Vector3f pos, Vector3f rot, float scale) {
         float delta = 60;
         float particlesToCreate = pps / delta;
         int count = (int) Math.floor(particlesToCreate);
         float partialParticle = particlesToCreate % 60;
         for (int i = 0; i < count; i++) {
-            emitParticle(systemCenter);
+            emitParticle(spawn.getParticleSpawnPosition(pos.x(), pos.y(), pos.z(),
+                    rot.x(), rot.y(), rot.z(), scale));
         }
         if (Math.random() < partialParticle) {
-            emitParticle(systemCenter);
+            emitParticle(spawn.getParticleSpawnPosition(pos.x(), pos.y(), pos.z(),
+                    rot.x(), rot.y(), rot.z(), scale));
         }
     }
 
@@ -233,6 +234,10 @@ public class ParticleSystem {
     public void setDirection(Vector3f direction, float deviation) {
         this.direction = new Vector3f(direction);
         this.directionDeviation = (float) (deviation * Math.PI);
+    }
+
+    public Vector3f getOffset() {
+        return positionOffset;
     }
 
     public void setPositionOffset(Vector3f positionOffset) {

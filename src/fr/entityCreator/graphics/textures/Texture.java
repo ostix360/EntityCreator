@@ -1,16 +1,12 @@
-package fr.entityCreator.graphics.model;
+package fr.entityCreator.graphics.textures;
 
 import fr.entityCreator.core.resources.TextureProperties;
-import fr.entityCreator.graphics.textures.TextureLoader;
 import fr.entityCreator.toolBox.ToolDirectory;
 import org.lwjgl.opengl.GL11;
 
 import javax.imageio.ImageIO;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Texture {
@@ -59,6 +55,8 @@ public class Texture {
     public void setNewDiffuse(File newDiffuse) {
         this.newDiffuse = newDiffuse;
     }
+
+
 
     public TextureLoader getTextureLoader() {
         return textureLoader;

@@ -29,13 +29,19 @@ public class MainSettingsPanel extends JPanel {
 //    }
 
     public void setEntity(Entity entity) {
-        initialiseFields(entity);
-        updateFields(entity);
+        if(this.isSetUp){
+            remove(standardInfo);
+            remove(textureInfo);
+            validate();
+            repaint();
+        }
+        setupModelPanel(entity);
+        setupTexturePanel(entity);
         this.isSetUp = true;
 
     }
 
-    private void initialiseFields(Entity entity) {
+    private void setupModelPanel(Entity entity) {
         GridBagConstraints gc = new GridBagConstraints();
         gc.gridx = 0;
         gc.gridy = 0;
@@ -47,20 +53,12 @@ public class MainSettingsPanel extends JPanel {
         }
         this.standardInfo = new StandardInfoPanel((this.width - 10) / 2, this.height - 25, entity, frame);
         add(this.standardInfo, gc);
-        gc.gridx = 1;
-
-
-        this.textureInfo = new TexturePanel(entity, (this.WIDTH - 10) / 2, this.HEIGHT - 25);
-        this.textureInfo.setVisible(true);
-        add(this.textureInfo, gc);
     }
 
 
-    private void updateFields(Entity newEntity) {
-        this.standardInfo.setEntity(newEntity);
-        //remove(this.textureInfo);
+    private void setupTexturePanel(Entity newEntity) {
+       // this.standardInfo.setEntity(newEntity);
         GridBagConstraints gc = new GridBagConstraints();
-        gc.gridx = 1;
         gc.gridy = 0;
         gc.weightx = 1.0D;
         gc.weighty = 1.0D;

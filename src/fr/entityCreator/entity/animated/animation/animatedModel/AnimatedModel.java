@@ -1,14 +1,9 @@
 package fr.entityCreator.entity.animated.animation.animatedModel;
 
-import fr.entityCreator.entity.Entity;
 import fr.entityCreator.entity.animated.animation.animation.Animation;
 import fr.entityCreator.entity.animated.animation.animation.Animator;
-import fr.entityCreator.graphics.model.MeshModel;
 import fr.entityCreator.graphics.model.Model;
-import fr.entityCreator.graphics.model.Texture;
 import org.joml.Matrix4f;
-
-import java.io.File;
 
 
 /**

@@ -5,16 +5,16 @@ import fr.entityCreator.entity.Entity;
 import fr.entityCreator.entity.animated.animation.animatedModel.AnimatedModel;
 import fr.entityCreator.graphics.model.MeshModel;
 import fr.entityCreator.graphics.model.Model;
-import fr.entityCreator.graphics.model.Texture;
+import fr.entityCreator.graphics.textures.Texture;
 import fr.entityCreator.graphics.shader.ClassicShader;
 import fr.entityCreator.toolBox.OpenGL.OpenGlUtils;
 import fr.entityCreator.toolBox.OpenGL.VAO;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -59,17 +59,20 @@ public class EntityRenderer implements IRenderer {
         shader.loadSpecular(texture.getReflectivity(), texture.getShineDamper());
         shader.useSpecularMap.loadBooleanToUniform(texture.hasSpecularMap());
         shader.useFakeLighting.loadBooleanToUniform(texture.useFakeLighting());
+        shader.numberOfRows.loadFloatToUniform(texture.getNumbersOfRows());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         texture.bindTexture();
         GL13.glActiveTexture(GL13.GL_TEXTURE1);
         GL11.glBindTexture(GL_TEXTURE_2D,texture.getProperties().getSpecularMap());
         GL13.glActiveTexture(GL13.GL_TEXTURE2);
         GL11.glBindTexture(GL_TEXTURE_2D,texture.getProperties().getNormalMap());
+        if (texture.isTransparency())OpenGlUtils.cullBackFaces(false);
     }
 
     @Override
     public void prepareInstance(Entity entity) {
         shader.loadTransformationMatrix(entity.getTransform().getTransformation());
+        shader.offset.loadVector2fToUniform(new Vector2f(entity.getTextureXOffset(),entity.getTextureYOffset()));
     }
 
     @Override
@@ -79,6 +82,7 @@ public class EntityRenderer implements IRenderer {
 
         Texture texture = model.getTexture();
         shader.loadSpecular(texture.getReflectivity(), texture.getShineDamper());
+        shader.numberOfRows.loadFloatToUniform(texture.getNumbersOfRows());
         shader.useSpecularMap.loadBooleanToUniform(texture.hasSpecularMap());
         shader.useFakeLighting.loadBooleanToUniform(texture.useFakeLighting());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
@@ -87,6 +91,7 @@ public class EntityRenderer implements IRenderer {
         GL11.glBindTexture(GL_TEXTURE_2D,texture.getProperties().getSpecularMap());
         GL13.glActiveTexture(GL13.GL_TEXTURE2);
         GL11.glBindTexture(GL_TEXTURE_2D,texture.getProperties().getNormalMap());
+        if (texture.isTransparency())OpenGlUtils.cullBackFaces(false);
     }
 
 

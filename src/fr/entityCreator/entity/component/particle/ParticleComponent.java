@@ -89,6 +89,6 @@ public class ParticleComponent extends Component {
 
     public void setOffset(Vector3f offset) {
         this.offset = offset;
-        this.system.setPositionOffset(offset);
+        //this.system.setPositionOffset(offset);
     }
 }

@@ -11,6 +11,6 @@ public interface ICamera {
 
     Matrix4f getProjectionViewMatrix();
 
-    void move();
+    void move(float mouseDWheel);
 
 }

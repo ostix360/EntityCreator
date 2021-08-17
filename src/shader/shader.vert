@@ -15,8 +15,11 @@ uniform mat4 viewMatrix;
 
 uniform vec3 lightPos;
 uniform float isAnimated;
+uniform float useFakeLighting;
 
 uniform mat4 jointTransforms[MAX_JOINTS];
+uniform float numberOfRows;
+uniform vec2 offset;
 
 
 out vec2 passTextureCoords;
@@ -46,11 +49,14 @@ void main(){
         totalLocalPos = vec4(position, 1.0);
         totalNormal = vec4(normals, 0.0);
     }
+    if (useFakeLighting == 1){
+        totalNormal = vec4(0.0, 1.0, 0.0,0.0);
+    }
 
     vec4 worldPosition = transformationMatrix * totalLocalPos;
     vec4 relativePositionToCamera =  viewMatrix * worldPosition;
     gl_Position = projectionMatrix * relativePositionToCamera;
-    passTextureCoords = textureCoords;
+    passTextureCoords = (textureCoords/numberOfRows)+offset;
 
     vec3 surfaceNormals = (transformationMatrix * totalNormal).xyz;
 

@@ -3,7 +3,7 @@ package fr.entityCreator.graphics.model;
 import fr.entityCreator.core.loader.json.JsonUtils;
 import fr.entityCreator.core.resources.ModelResources;
 import fr.entityCreator.core.resources.TextureResources;
-import fr.entityCreator.entity.animated.animation.animatedModel.AnimatedModel;
+import fr.entityCreator.graphics.textures.Texture;
 import fr.entityCreator.toolBox.ToolDirectory;
 
 import javax.management.openmbean.OpenDataException;

@@ -2,7 +2,7 @@ package fr.entityCreator.graphics;
 
 
 import fr.entityCreator.graphics.model.MeshModel;
-import fr.entityCreator.graphics.model.Texture;
+import fr.entityCreator.graphics.textures.Texture;
 import fr.entityCreator.graphics.shader.TerrainShader;
 import fr.entityCreator.terrain.Terrain;
 import fr.entityCreator.terrain.texture.TerrainTexturePack;

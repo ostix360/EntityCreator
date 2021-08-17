@@ -9,6 +9,9 @@ import fr.entityCreator.toolBox.Maths;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
 
 public class Camera implements ICamera {
@@ -26,6 +29,8 @@ public class Camera implements ICamera {
     float elapsedMouseDY;
 
     private final Transform player;
+
+    private float mouseDWheel = 0;
 
     public Camera(Transform player) {
         this.player = player;
@@ -48,9 +53,9 @@ public class Camera implements ICamera {
         return projection.mul(getViewMatrix());
     }
 
-    public void move() {
-        this.terrainHeight = 0;
-        calculateZoom();
+    public void move(float mouseDWheel) {
+        this.terrainHeight = 1;
+        calculateZoom(mouseDWheel);
         calculateAngleAroundPlayerAndPitch();
         float horizontalDistance = calculateHorizontalDistance();
         float verticalDistance = calculateVerticalDistance();
@@ -75,8 +80,8 @@ public class Camera implements ICamera {
         return (float) (distanceFromPlayer * Math.sin(Math.toRadians(pitch)));
     }
 
-    private void calculateZoom() {
-        float zoomLevel = Input.getMouseDWhell();
+    private void calculateZoom(float mouseDWheel) {
+        float zoomLevel = mouseDWheel;
 
         distanceFromPlayer -= zoomLevel;
         if (distanceFromPlayer <= 3) {
@@ -105,9 +110,9 @@ public class Camera implements ICamera {
 
     private void calculateAngleAroundPlayerAndPitch() {
         if (Input.keysMouse[GLFW_MOUSE_BUTTON_1]) {
-            float angleChange = Input.mouseDX * 0.1f;
+            float angleChange = Input.mouseDX * -0.5f;
             angleAroundPlayer -= angleChange;
-            float pitchChange = Input.mouseDY * 0.1f;
+            float pitchChange = Input.mouseDY * -0.5f;
             pitch += pitchChange;
             if (pitch >= 90) {
                 pitch = 90;

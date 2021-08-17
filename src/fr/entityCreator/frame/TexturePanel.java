@@ -1,7 +1,7 @@
 package fr.entityCreator.frame;
 
 import fr.entityCreator.entity.Entity;
-import fr.entityCreator.graphics.model.Texture;
+import fr.entityCreator.graphics.textures.Texture;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -239,24 +239,26 @@ public class TexturePanel extends JPanel {
             ImageIcon resized;
             switch (id) {
                 case 2:
-                    myPicture = ImageIO.read(new File(texture.getSpecularMapFile()));
+                    myPicture = ImageIO.read(new File(e.getModel().getTexture().getSpecularMapFile()));
                     original = new ImageIcon(myPicture);
                     resized = resizeImage(original);
                     this.extraIcon.setIcon(resized);
                     break;
                 case 3:
-                    myPicture = ImageIO.read(new File(texture.getNormalMapFile()));
+                    myPicture = ImageIO.read(new File(e.getModel().getTexture().getNormalMapFile()));
                     original = new ImageIcon(myPicture);
                     resized = resizeImage(original);
                     this.normalIcon.setIcon(resized);
                     break;
                 default:
-                    myPicture = ImageIO.read(texture.getNewDiffuse());
+                    myPicture = ImageIO.read(e.getModel().getTexture().getNewDiffuse());
                     original = new ImageIcon(myPicture);
                     resized = resizeImage(original);
                     this.diffuseIcon.setIcon(resized);
                     break;
             }
+            validate();
+            repaint();
             return true;
         } catch (Exception e) {
             e.printStackTrace();

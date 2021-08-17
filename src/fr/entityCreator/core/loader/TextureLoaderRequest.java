@@ -3,7 +3,7 @@ package fr.entityCreator.core.loader;
 import fr.entityCreator.core.resources.TextureProperties;
 import fr.entityCreator.core.resourcesProcessor.GLRequest;
 import fr.entityCreator.entity.Entity;
-import fr.entityCreator.graphics.model.Texture;
+import fr.entityCreator.graphics.textures.Texture;
 import fr.entityCreator.graphics.textures.TextureLoader;
 
 public class TextureLoaderRequest extends GLRequest {
@@ -30,10 +30,11 @@ public class TextureLoaderRequest extends GLRequest {
 
     @Override
     public void execute() {
-        Texture tex;
         texture = Loader.INSTANCE.loadTexture(file);
-        tex = new Texture(texture, TextureProperties.DEFAULT);
-        if (isForEntity)e.getModel().setTexture(tex);
+        if (isForEntity){
+            Texture tex = new Texture(texture, TextureProperties.DEFAULT());
+            e.getModel().setTexture(tex);
+        }
         super.execute();
     }
 }

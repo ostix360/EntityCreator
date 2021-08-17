@@ -2,22 +2,17 @@ package fr.entityCreator.entity;
 
 
 import fr.entityCreator.core.Timer;
-import fr.entityCreator.core.loader.Loader;
 import fr.entityCreator.core.loader.OBJFileLoader;
 import fr.entityCreator.core.loader.TextureLoaderRequest;
 import fr.entityCreator.core.resources.collision.maths.Vector3;
 import fr.entityCreator.core.resourcesProcessor.GLRequest;
 import fr.entityCreator.core.resourcesProcessor.GLRequestProcessor;
-import fr.entityCreator.entity.animated.animation.animatedModel.AnimatedModel;
 import fr.entityCreator.entity.animated.animation.loaders.AnimatedModelLoader;
 import fr.entityCreator.entity.component.Component;
 import fr.entityCreator.entity.component.collision.CollisionComponent;
 import fr.entityCreator.entity.component.particle.ParticleComponent;
 import fr.entityCreator.frame.ErrorPopUp;
-import fr.entityCreator.graphics.model.MeshModel;
 import fr.entityCreator.graphics.model.Model;
-import fr.entityCreator.graphics.model.Texture;
-import fr.entityCreator.graphics.textures.TextureLoader;
 import fr.entityCreator.toolBox.ToolDirectory;
 import org.joml.Vector3f;
 
@@ -39,6 +34,7 @@ public class Entity {
     protected MovementType movement;
     private CollisionComponent collision;
     private String name;
+    private int textureIndex = 1;
 
     private final List<Component> components = new ArrayList<>();
 
@@ -103,6 +99,20 @@ public class Entity {
 
     public Model getModel() {
         return model;
+    }
+    public float getTextureXOffset() {
+        float column = textureIndex % model.getTexture().getNumbersOfRows();
+        return column / model.getTexture().getNumbersOfRows();
+    }
+
+    public float getTextureYOffset() {
+        float row = textureIndex / (float) model.getTexture().getNumbersOfRows();
+        return row / model.getTexture().getNumbersOfRows();
+    }
+
+
+    public void setTextureIndex(int textureIndex) {
+        this.textureIndex = textureIndex;
     }
 
     public Vector3f getPosition() {

@@ -2,9 +2,8 @@ package fr.entityCreator.entity.component.particle;
 
 import fr.entityCreator.core.resources.TextureProperties;
 import fr.entityCreator.frame.*;
-import fr.entityCreator.graphics.model.Texture;
+import fr.entityCreator.graphics.textures.Texture;
 import fr.entityCreator.graphics.particles.ParticleSystem;
-import fr.entityCreator.graphics.particles.ParticleTexture;
 import fr.entityCreator.graphics.particles.particleSpawn.Circle;
 import fr.entityCreator.graphics.particles.particleSpawn.Line;
 import fr.entityCreator.graphics.particles.particleSpawn.ParticleSpawn;
@@ -16,17 +15,17 @@ import org.joml.Vector3f;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static java.time.Clock.system;
-
 public class ParticleComponentPanel extends ComponentPanel {
 
     private final ParticleSystem particleSystem;
-//    private VectorPanel directionFields;
-//    private VectorPanel offsetFields;
+    private VectorPanel directionFields;
+    private VectorPanel offsetFields;
 //    private ParticleTargetPanel targetPanel;
     private Texture particleTexture;
     private JComboBox<Integer> index;
@@ -40,11 +39,12 @@ public class ParticleComponentPanel extends ComponentPanel {
         setUpTexturePanel();
         setupSpawnPanel();
         setupMainSettings();
+        setUpDirectionSettings();
     }
 
     private void setupMainSettings() {
 
-        final SliderWithError lifeSlider = new SliderWithError("Life:", this.particleSystem.getAverageLifeLength(), 30.0F, 300.0F, this.particleSystem.getAverageLifeLength(), true, false);
+        final SliderWithError lifeSlider = new SliderWithError("Life:", this.particleSystem.getAverageLifeLength(), 30.0F, 400.0F, this.particleSystem.getAverageLifeLength(), true, false);
 
         this.settings.add(lifeSlider, getGC(0, 3));
         lifeSlider.addSliderListener(new ChangeListener() {
@@ -54,7 +54,7 @@ public class ParticleComponentPanel extends ComponentPanel {
         });
         lifeSlider.addErrorListener(new ErrorListener() {
             public void onActionOccurred() {
-                particleSystem.setLifeError(lifeSlider.getErrorReading());
+                particleSystem.setLifeError(lifeSlider.getErrorReading()/100);
             }
         });
         final SliderWithError speedSlider = new SliderWithError("Speed", this.particleSystem.getAverageSpeed(), 0.0F, 20.0F, this.particleSystem.getSpeedError(), true, false);
@@ -65,7 +65,7 @@ public class ParticleComponentPanel extends ComponentPanel {
         });
         speedSlider.addErrorListener(new ErrorListener(){
             public void onActionOccurred() {
-                particleSystem.setSpeedError(speedSlider.getErrorReading());
+                particleSystem.setSpeedError(speedSlider.getErrorReading()/100);
             }
         });
         this.settings.add(speedSlider, getGC(0, 4));
@@ -81,7 +81,7 @@ public class ParticleComponentPanel extends ComponentPanel {
             }
         });
         this.settings.add(scaleSlider, getGC(0, 5));
-        final SliderWithError ppsSlider = new SliderWithError("PPS", this.particleSystem.getPps(), 1.0F, 5000.0F, 0.0F, false, false);
+        final SliderWithError ppsSlider = new SliderWithError("PPS", this.particleSystem.getPps(), 1.0F, 2000.0F, 0.0F, false, false);
         ppsSlider.addSliderListener(new ChangeListener() {
             public void stateChanged(ChangeEvent arg0) {
                 particleSystem.setPps(ppsSlider.getSliderReading());
@@ -138,7 +138,7 @@ public class ParticleComponentPanel extends ComponentPanel {
         textureSettings.setLayout(new GridBagLayout());
         this.index = null;
         this.textureChoose = null;
-        if (this.particleSystem.getTexture() == null){
+        if (this.particleSystem.getTexture().getTextureID() == 0){
             this.textureChoose = new JButton("Choisissez la texture de vos particules");
             this.textureChoose.setForeground(new Color(255, 0, 0));
         }
@@ -180,6 +180,122 @@ public class ParticleComponentPanel extends ComponentPanel {
         });
         this.settings.add(textureSettings,getGC(0,0));
     }
+    private void setUpDirectionSettings(){
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setPreferredSize(new Dimension(this.settings.getWidth() - 30, 60));
+        setUpDirectionLabels(panel);
+        setUpDirectionVectors(panel);
+        this.settings.add(panel, getGC(0, 2));
+    }
+
+    private void setUpDirectionLabels(JPanel wholePanel) {
+        JPanel labelPanel = new JPanel();
+        labelPanel.setPreferredSize(new Dimension(100, 50));
+        labelPanel.setLayout(new GridBagLayout());
+        JLabel offset = new JLabel("Offset:");
+        offset.setFont(MainFrame.SMALL_FONT);
+
+        labelPanel.add(offset, getGC(0, 0));
+
+        final JCheckBox hasDistance = new JCheckBox("Direction:");
+
+        hasDistance.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                if (hasDistance.isSelected()) {
+
+                    float x = Float.parseFloat(directionFields.getXField().getText().replaceAll(",", ""));
+
+                    float y = Float.parseFloat(directionFields.getYField().getText().replaceAll(",", ""));
+
+                    float z = Float.parseFloat(directionFields.getZField().getText().replaceAll(",", ""));
+
+
+                    Vector3f direction = new Vector3f(x, y, z);
+                    if (direction.lengthSquared() == 0.0F) {
+                        direction.y = 1.0F;
+                    }
+                    particleSystem.setDirection(direction);
+                } else {
+                    particleSystem.setDirection(new Vector3f());
+                }
+            }
+        });
+        hasDistance.setFont(MainFrame.SMALL_FONT);
+        hasDistance.setSelected(this.particleSystem.getDirection() != new Vector3f());
+        labelPanel.add(hasDistance, getGC(0, 1));
+        wholePanel.add(labelPanel, "West");
+    }
+
+    private void setUpDirectionVectors(JPanel wholePanel){
+        JPanel vectorsPanel = new JPanel();
+        vectorsPanel.setPreferredSize(new Dimension(280, 50));
+        vectorsPanel.setLayout(new GridBagLayout());
+        Vector3f offsetVector = this.particleSystem.getOffset();
+        this.offsetFields = new VectorPanel(280, 25, "", offsetVector.x, offsetVector.y, offsetVector.z);
+        this.offsetFields.addTotalListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void warn() {
+                if ((offsetFields.getXField().getText().equals("")) || (offsetFields.getYField().getText().equals("")) || (offsetFields.getZField().getText().equals(""))) {
+                    return;
+                }
+                float x = Float.parseFloat(offsetFields.getXField().getText().replaceAll(",", ""));
+
+                float y = Float.parseFloat(offsetFields.getYField().getText().replaceAll(",", ""));
+                float z = Float.parseFloat(offsetFields.getZField().getText().replaceAll(",", ""));
+                particleSystem.setPositionOffset(new Vector3f(x, y, z));
+
+            }
+        });
+
+        vectorsPanel.add(this.offsetFields, getGC(0, 0));
+
+        if (this.particleSystem.getDirection() != null) {
+            Vector3f direction = this.particleSystem.getDirection();
+            this.directionFields = new VectorPanel(280, 25, "", direction.x, direction.y, direction.z);
+        } else {
+            this.directionFields = new VectorPanel(280, 25, "", 0.0F, 0.0F, 0.0F);
+        }
+        this.directionFields.addTotalListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void warn() {
+                if ((directionFields.getXField().getText().equals("")) || (directionFields.getYField().getText().equals("")) || (directionFields.getZField().getText().equals(""))) {
+                    return;
+                }
+                float x = Float.parseFloat(directionFields.getXField().getText().replaceAll(",", ""));
+                float y = Float.parseFloat(directionFields.getYField().getText().replaceAll(",", ""));
+                float z = Float.parseFloat(directionFields.getZField().getText().replaceAll(",", ""));
+                if (particleSystem.getDirection() != null) {
+                    particleSystem.setDirection(new Vector3f(x, y, z));
+                }
+            }
+        });
+        vectorsPanel.add(this.directionFields, getGC(0, 1));
+        wholePanel.add(vectorsPanel, "East");
+    }
+
 
 
 
@@ -189,7 +305,7 @@ public class ParticleComponentPanel extends ComponentPanel {
     }
 
     public void setTexture(TextureLoader texID) {
-        particleTexture = new Texture(texID,TextureProperties.PARTICLE_DEFAULT_PROPERTIES);
+        particleTexture = new Texture(texID,TextureProperties.PARTICLE_DEFAULT_PROPERTIES());
         particleSystem.getTexture().setTexture(particleTexture.getTextureID());
     }
 

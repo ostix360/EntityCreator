@@ -43,7 +43,7 @@ public class VectorPanel extends JPanel {
 
     private JFormattedTextField setUpValueInput(float value, int gcX) {
         JFormattedTextField field = createTextField(5);
-        field.setText(Float.toString(value));
+        field.setText("0,0");
         add(field, getGC(gcX, 0));
         return field;
     }

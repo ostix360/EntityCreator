@@ -24,6 +24,7 @@ public class Circle implements ParticleSpawn {
     private Vector3f center = new Vector3f(1,1,1);
     private float radius = 1;
     private JPanel panel;
+    private final String name = "Circle";
 
     public Circle() {
         setUpPanel();
@@ -117,6 +118,11 @@ public class Circle implements ParticleSpawn {
         gc.weightx = 1.0D;
         panelSlider.add(valueReading, gc);
         return panelSlider;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
     private void addXFieldListener(final VectorPanel vectorPanel) {

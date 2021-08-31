@@ -13,9 +13,7 @@ import fr.entityCreator.graphics.particles.ParticleTarget;
 import fr.entityCreator.graphics.particles.ParticleTexture;
 import org.joml.Vector3f;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.channels.FileChannel;
 import java.util.Objects;
 
@@ -28,7 +26,7 @@ public class ParticleComponent extends Component {
     public ParticleComponent(ParticleSystem system, Entity e) {
         super(ComponentType.PARTICLE_COMPONENT, e);
         this.system = system;
-        this.system.setTexture(new ParticleTexture(0,1,false,false));
+        this.system.setTexture(new ParticleTexture(null, 1, false, false));
     }
 
     @Override
@@ -51,32 +49,38 @@ public class ParticleComponent extends Component {
     }
 
     @Override
-    public void export(FileOutputStream fos) {
-        try(FileChannel fc = fos.getChannel()){
-            fc.write(DataTransformer.casteString(this.getType().toString()));            //write ParticleSystem
+    public void export(FileChannel fc) throws IOException {
+        fc.write(DataTransformer.casteString(this.getType().toString()));            //write ParticleSystem
+        fc.write(DataTransformer.casteString("\n"));
+        fc.write(DataTransformer.casteString(this.system.getPps() + ";" + this.system.getAverageSpeed() + ";" + system.getGravity() //Write the data for the particle Constrctor
+                + ";" + this.system.getAverageLifeLength() + ";" + this.system.getAverageScale()));
+        fc.write(DataTransformer.casteString("\n"));
 
-            fc.write(DataTransformer.casteString(this.system.getPps() + ";" + this.system.getAverageSpeed() + ";" + system.getGravity() //Write the data for the particle Constrctor
-                    +  ";" + this.system.getAverageLifeLength()  + ";" + this.system.getAverageScale()));
+        fc.write(DataTransformer.casteString(this.system.isRandomRotation() + ";" + this.system.getLifeError() + ";" + this.system.getScaleError() + ";"  //Write the error of ParticleSystem
+                + this.system.getSpeedError()));
+        fc.write(DataTransformer.casteString("\n"));
 
-            fc.write(DataTransformer.casteString(this.system.isRandomRotation() + ";" + this.system.getLifeError() + ";" + this.system.getScaleError() + ";"  //Write the error of ParticleSystem
-                    + this.system.getSpeedError()));
+        fc.write(DataTransformer.casteString(offset.x() + ";" + offset.y() + ";" + offset.z()));   //Write the offset of the particle
+        fc.write(DataTransformer.casteString("\n"));
 
-            fc.write(DataTransformer.casteString(offset.x() + ";" + offset.y() + ";" + offset.z()));   //Write the offset of the particle
+        fc.write(DataTransformer.casteString(this.system.getDirection().x() + ";" +       //Write all stuff about the direction
+                this.system.getDirection().y() + ";" + this.system.getDirection().z() + ";" + this.system.getDirectionDeviation()));
+        fc.write(DataTransformer.casteString("\n"));
 
-            fc.write(DataTransformer.casteString(this.system.getDirection().x() + ";" +       //Write all stuff about the direction
-                    this.system.getDirection().y() + ";" + this.system.getDirection().z() + ";" + this.system.getDirectionDeviation()));
+        this.system.getSpawn().export(fc);      //Write the kind of spwan
+        fc.write(DataTransformer.casteString("\n"));
 
-            this.system.getSpawn().export(fc);      //Write the kind of spwan
-            if (system.getTarget() != null) {           //If target isn't null write it in the file data
-                fc.write(DataTransformer.casteString(JsonUtils.gsonInstance(false).toJson(system.getTarget().getProperties())));
-            } else {
-                fc.write(DataTransformer.casteString("\n"));
-            }
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
+        if (system.getTarget() != null) {           //If target isn't null write it in the file data
+            fc.write(DataTransformer.casteString(JsonUtils.gsonInstance(false).toJson(system.getTarget().getProperties())));
+        } else {
+            fc.write(DataTransformer.casteString("\n"));
         }
+        system.getTexture().export();
+        fc.write(DataTransformer.casteString(system.getTexture().getName()));
+        fc.write(DataTransformer.casteString("\n"));
 
     }
+
 
     public ParticleSystem getParticleSystem() {
         return this.system;
@@ -84,7 +88,7 @@ public class ParticleComponent extends Component {
 
     @Override
     public ComponentPanel getComponentPanel(ComponentListPanel paramComponentListPanel) {
-        return new ParticleComponentPanel(this,paramComponentListPanel);
+        return new ParticleComponentPanel(this, paramComponentListPanel);
     }
 
     public void setOffset(Vector3f offset) {

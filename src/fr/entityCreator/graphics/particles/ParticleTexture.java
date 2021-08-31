@@ -1,16 +1,32 @@
 package fr.entityCreator.graphics.particles;
 
 
+import com.google.gson.annotations.Expose;
+import fr.entityCreator.core.exporter.DataTransformer;
+import fr.entityCreator.core.loader.json.JsonUtils;
+import fr.entityCreator.graphics.textures.TextureLoader;
+import fr.entityCreator.toolBox.Config;
+
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.Objects;
 
 public class ParticleTexture {
 
-    private int texture;
+    private TextureLoader texture;
+    @Expose
+    private String name;
+    @Expose
     private int numberOfRows;
+    @Expose
     private boolean additive;
+    @Expose
     private boolean affectedByLighting;
 
-    public ParticleTexture(int texture, int numberOfRows, boolean additive, boolean affectedByLighting) {
+    public ParticleTexture(TextureLoader texture, int numberOfRows, boolean additive, boolean affectedByLighting) {
         this.additive = additive;
         this.texture = texture;
         this.numberOfRows = numberOfRows;
@@ -30,7 +46,41 @@ public class ParticleTexture {
         return Objects.hash(texture, numberOfRows, additive, affectedByLighting);
     }
 
-    public void setTexture(int texture) {
+
+    public void export() throws IOException {
+        this.name = texture.getFile().getName().replace(".png","");
+        String texProp = JsonUtils.gsonInstance(true).toJson(this);
+        try(FileOutputStream fos = openJson(); FileChannel fc = fos.getChannel()){
+            fc.write(DataTransformer.casteString(texProp));
+        }
+        File textureFile = openTexture();
+        ImageIO.write(texture.getImage(),"png",textureFile);
+    }
+
+    private FileOutputStream openJson() throws IOException {
+        File file = new File(Config.OUTPUT_FOLDER, "textures/particle/data/" + name + ".json");
+        if (!file.exists()){
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        }
+        return new FileOutputStream(file);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    private File openTexture() throws IOException {
+        File file = new File(Config.OUTPUT_FOLDER, "textures/particle/" + name + ".png");
+        if (!file.exists()){
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        }
+        return file;
+    }
+
+
+    public void setTexture(TextureLoader texture) {
         this.texture = texture;
     }
 
@@ -54,11 +104,12 @@ public class ParticleTexture {
         return additive;
     }
 
-    public int getTextureID() {
+    public TextureLoader getTextureID() {
         return texture;
     }
 
     public int getNumberOfRows() {
         return numberOfRows;
     }
+
 }

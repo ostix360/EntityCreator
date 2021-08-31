@@ -10,7 +10,7 @@ import java.io.BufferedReader;
 public class CollisionCreator implements ComponentCreator {
     @Override
     public Component createComponent(Entity entity) {
-        return null;
+        return new CollisionComponent(entity,new CollisionProperties(false,true));
     }
 
     @Override

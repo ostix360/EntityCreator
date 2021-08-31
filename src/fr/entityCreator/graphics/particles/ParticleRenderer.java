@@ -54,7 +54,7 @@ public class ParticleRenderer {
         Matrix4f viewMatrix = Maths.createViewMatrix(camera);
         prepare();
         for (ParticleTexture texture : particles.keySet()) {
-            if (texture.getTextureID() == 0 || texture == null){
+            if (texture.getTextureID() == null || texture == null){
                 continue;
             }
             bindTexture(texture);
@@ -89,7 +89,7 @@ public class ParticleRenderer {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
+        glBindTexture(GL_TEXTURE_2D, texture.getTextureID().getId());
         shader.loadNumberOfRows(texture.getNumberOfRows());
     }
 

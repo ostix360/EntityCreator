@@ -12,10 +12,7 @@ import fr.entityCreator.frame.ComponentPanel;
 import org.joml.Random;
 import org.joml.Vector3f;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.channels.DatagramChannel;
 import java.nio.channels.FileChannel;
 import java.util.Objects;
 
@@ -43,7 +40,7 @@ public class AIComponent extends Component {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.getType().toString(),properties);
+        return Objects.hash(this.getType().toString(), properties);
     }
 
     @Override
@@ -69,18 +66,16 @@ public class AIComponent extends Component {
         float dx = (float) (pos * Math.sin(Math.toRadians(e.getRotation().y())));
         float dz = (float) (pos * Math.cos(Math.toRadians(e.getRotation().y())));
         e.getTorque().set(new Vector3(0, rotY, 0));
-        e.increaseRotation(new Vector3f(0,rotY,0));
+        e.increaseRotation(new Vector3f(0, rotY, 0));
         e.getForceToCenter().add(new Vector3(dx, 0, dz));
     }
 
     @Override
-    public void export(FileOutputStream fos) {
-        try(FileChannel fc = fos.getChannel()){
-            fc.write(DataTransformer.casteString(this.getType().toString()));
-            fc.write(DataTransformer.casteString(JsonUtils.gsonInstance(false).toJson(properties)));
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
+    public void export(FileChannel fc) throws IOException {
+
+        fc.write(DataTransformer.casteString(this.getType().toString()));
+        fc.write(DataTransformer.casteString(JsonUtils.gsonInstance(false).toJson(properties)));
+
     }
 
     @Override

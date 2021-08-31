@@ -1,7 +1,6 @@
 package fr.entityCreator.entity.component.animation;
 
 
-
 import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.core.resources.ResourcePack;
 import fr.entityCreator.entity.Entity;
@@ -14,12 +13,8 @@ import fr.entityCreator.frame.ComponentPanel;
 import fr.entityCreator.toolBox.Logger;
 import org.joml.Random;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.channels.FileChannel;
-import java.util.HashMap;
-import java.util.List;
 
 public class AnimationComponent extends Component {
 
@@ -28,7 +23,6 @@ public class AnimationComponent extends Component {
         super(ComponentType.ANIMATED_COMPONENT, e);
         if (!(e.getModel() instanceof AnimatedModel)) {
             System.err.println("Your Model is not an AnimatedModel");
-            System.exit(-1);
         }
     }
 
@@ -57,12 +51,9 @@ public class AnimationComponent extends Component {
     }
 
     @Override
-    public void export(FileOutputStream fos) {
-        try(FileChannel fc = fos.getChannel()){
-            fc.write(DataTransformer.casteString(this.getType().toString()));
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
+    public void export(FileChannel fc) throws IOException {
+        fc.write(DataTransformer.casteString(this.getType().toString()));
+
     }
 
     @Override

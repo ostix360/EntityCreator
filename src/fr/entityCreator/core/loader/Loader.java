@@ -1,29 +1,18 @@
 package fr.entityCreator.core.loader;
 
 
-import fr.entityCreator.core.resourcesProcessor.GLRequest;
 import fr.entityCreator.graphics.model.MeshModel;
-import fr.entityCreator.graphics.textures.TextureData;
 import fr.entityCreator.graphics.textures.TextureLoader;
 import fr.entityCreator.graphics.textures.TextureUtils;
-import fr.entityCreator.toolBox.Logger;
 import fr.entityCreator.toolBox.OpenGL.VAO;
 import fr.entityCreator.toolBox.OpenGL.VBO;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
-import static fr.entityCreator.toolBox.ToolDirectory.RES_FOLDER;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
 
 public class Loader {
 

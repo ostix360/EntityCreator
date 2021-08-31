@@ -26,9 +26,21 @@
 package fr.entityCreator.core.resources.collision.shape;
 
 
+import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.core.resources.collision.maths.Matrix3x3;
 import fr.entityCreator.core.resources.collision.maths.ReactDefaults;
 import fr.entityCreator.core.resources.collision.maths.Vector3;
+import fr.entityCreator.frame.MainFrame;
+import fr.entityCreator.toolBox.Config;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.NumberFormatter;
+import java.awt.*;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.text.NumberFormat;
 
 /**
  * Represents a capsule collision shape that is defined around the Y axis. A capsule shape can be seen as the convex hull of two spheres. The capsule shape is defined by its radius (radius of the two
@@ -36,8 +48,8 @@ import fr.entityCreator.core.resources.collision.maths.Vector3;
  * and height of the shape. Therefore, there is no need to specify an object margin for a capsule shape.
  */
 public class CapsuleShape extends CollisionShape {
-    private final float mRadius;
-    private final float mHalfHeight;
+    private float mRadius;
+    private float mHalfHeight;
 
     /**
      * Constructs a new capsule shape from its radius and height.
@@ -46,7 +58,7 @@ public class CapsuleShape extends CollisionShape {
      * @param height The height
      */
     public CapsuleShape(float radius, float height) {
-        super(CollisionShapeType.CAPSULE, radius);
+        super(CollisionShapeType.CAPSULE, radius, Config.CAPSULE);
         mRadius = radius;
         mHalfHeight = height * 0.5f;
         if (radius <= 0) {
@@ -68,6 +80,14 @@ public class CapsuleShape extends CollisionShape {
         mHalfHeight = shape.mHalfHeight;
     }
 
+    public void setmRadius(float mRadius) {
+        this.mRadius = mRadius;
+    }
+
+    public void setmHalfHeight(float mHalfHeight) {
+        this.mHalfHeight = mHalfHeight;
+    }
+
     /**
      * Returns the radius of the spherical ends of the capsule.
      *
@@ -84,6 +104,20 @@ public class CapsuleShape extends CollisionShape {
      */
     public float getHeight() {
         return mHalfHeight + mHalfHeight;
+    }
+
+    @Override
+    protected void createPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.fill = 2;
+        gc.gridx = 1;
+        gc.gridy = 1;
+        panel.add(createErrorPanel(true), gc);
+        gc.gridy = 2;
+        panel.add(createErrorPanel(false), gc);
+        this.panel = panel;
     }
 
     @Override
@@ -152,5 +186,81 @@ public class CapsuleShape extends CollisionShape {
     public boolean isEqualTo(CollisionShape otherCollisionShape) {
         final CapsuleShape otherShape = (CapsuleShape) otherCollisionShape;
         return mRadius == otherShape.mRadius && mHalfHeight == otherShape.mHalfHeight;
+    }
+
+    @Override
+    public void export(FileChannel fc) throws IOException {
+        fc.write(DataTransformer.casteString(String.valueOf(mRadius) + String.valueOf(mHalfHeight * 2)));
+    }
+
+
+
+    private JPanel createErrorPanel(boolean isRadius) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        JLabel label = new JLabel(isRadius ? "Rayon : " : "Hauteur : ");
+        label.setFont(MainFrame.SMALL_FONT);
+        panel.add(label, "West");
+        JFormattedTextField field = createTextField(4);
+        field.setText("1,0");
+        field.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (field.getText().isEmpty()) {
+                    return;
+                }
+                if (isRadius) {
+                    setmRadius((Float) Float.parseFloat(field.getText().replaceAll(",", "")));
+                } else {
+                    setmHalfHeight((Float) Float.parseFloat(field.getText().replaceAll(",", "")) / 2);
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if (field.getText().isEmpty()) {
+                    return;
+                }
+                if (isRadius) {
+                    setmRadius((Float) Float.parseFloat(field.getText().replaceAll(",", "")));
+                } else {
+                    setmHalfHeight((Float) Float.parseFloat(field.getText().replaceAll(",", "")) / 2);
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (field.getText().isEmpty()) {
+                    return;
+                }
+                if (isRadius) {
+                    setmRadius((Float)Float.parseFloat(field.getText().replaceAll(",", "")));
+                } else {
+                    setmHalfHeight((Float) Float.parseFloat(field.getText().replaceAll(",", "")) / 2);
+                }
+            }
+        });
+        panel.add(field, "East");
+        return panel;
+    }
+
+
+    private JFormattedTextField createTextField(int columns) {
+        NumberFormat floatFormat = NumberFormat.getNumberInstance();
+        floatFormat.setMinimumFractionDigits(1);
+        floatFormat.setMaximumFractionDigits(5);
+        NumberFormatter numberFormatter = new NumberFormatter(floatFormat);
+        numberFormatter.setValueClass(Float.class);
+        numberFormatter.setAllowsInvalid(false);
+        //numberFormatter.setMinimum(0);
+        JFormattedTextField text = new JFormattedTextField(numberFormatter);
+        text.setColumns(columns);
+        text.setFont(MainFrame.SMALL_FONT);
+        text.setHorizontalAlignment(0);
+        return text;
+    }
+
+    public String toString() {
+        return "Capsule";
     }
 }

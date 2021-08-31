@@ -29,11 +29,18 @@ package fr.entityCreator.core.resources.collision.shape;
 import fr.entityCreator.core.resources.collision.maths.Matrix3x3;
 import fr.entityCreator.core.resources.collision.maths.Transform;
 import fr.entityCreator.core.resources.collision.maths.Vector3;
+import fr.entityCreator.entity.BoundingModel;
+import fr.entityCreator.graphics.model.MeshModel;
+
+import javax.swing.*;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 /**
  * Represents the collision shape associated with a body that is used during the narrow-phase collision detection.
  */
-public abstract class CollisionShape {
+public abstract class CollisionShape extends BoundingModel {
+    protected JPanel panel;
     protected final CollisionShapeType mType;
     private int mNbSimilarCreatedShapes;
     protected final float mMargin;
@@ -43,11 +50,15 @@ public abstract class CollisionShape {
      *
      * @param type The type of the collision shape
      */
-    protected CollisionShape(CollisionShapeType type, float margin) {
+    protected CollisionShape(CollisionShapeType type, float margin, MeshModel m) {
+        super(m);
+        this.createPanel();
         mType = type;
         mNbSimilarCreatedShapes = 0;
         mMargin = margin;
     }
+
+    protected abstract void createPanel();
 
     /**
      * Copy constructor.
@@ -55,6 +66,7 @@ public abstract class CollisionShape {
      * @param shape The shape to copy
      */
     protected CollisionShape(CollisionShape shape) {
+        super(shape.getModel());
         mType = shape.mType;
         mNbSimilarCreatedShapes = shape.mNbSimilarCreatedShapes;
         mMargin = shape.mMargin;
@@ -195,6 +207,12 @@ public abstract class CollisionShape {
         } finally {
             super.finalize();
         }
+    }
+
+    public abstract void export(FileChannel fc) throws IOException;
+
+    public JPanel getPanel(){
+        return panel;
     }
 
     /**

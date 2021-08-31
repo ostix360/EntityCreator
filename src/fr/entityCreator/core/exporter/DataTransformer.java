@@ -8,6 +8,7 @@ public class DataTransformer {
         byte[] bytes = data.getBytes();
         ByteBuffer buffer = ByteBuffer.allocate(bytes.length);
         buffer.put(bytes);
+        buffer.flip();
         return buffer;
     }
 }

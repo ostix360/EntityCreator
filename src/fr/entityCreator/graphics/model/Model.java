@@ -4,7 +4,7 @@ import fr.entityCreator.core.loader.json.JsonUtils;
 import fr.entityCreator.core.resources.ModelResources;
 import fr.entityCreator.core.resources.TextureResources;
 import fr.entityCreator.graphics.textures.Texture;
-import fr.entityCreator.toolBox.ToolDirectory;
+import fr.entityCreator.toolBox.Config;
 
 import javax.management.openmbean.OpenDataException;
 import java.io.*;
@@ -48,13 +48,13 @@ public class Model {
     }
 
     private void exportModel() throws IOException {
-        File output = new File(ToolDirectory.OUTPUT_FOLDER +
+        File output = new File(Config.OUTPUT_FOLDER +
                 "/models/entities/" + name + "/" + name + (isAnimated ? ".dae":".obj"));
         if (!output.exists()){
             output.getParentFile().mkdirs();
             output.createNewFile();
         }
-        try(FileInputStream fis = new FileInputStream(ToolDirectory.MODEL_LOCATION);
+        try(FileInputStream fis = new FileInputStream(Config.MODEL_LOCATION);
             FileChannel fcReader = fis.getChannel();
             FileOutputStream fos = new FileOutputStream(output);
             FileChannel fcWriter = fos.getChannel();
@@ -84,7 +84,7 @@ public class Model {
     }
 
     public void saveFile(String fileContent, boolean isTexture) throws Exception {
-        File file = new File(ToolDirectory.OUTPUT_FOLDER, isTexture ?
+        File file = new File(Config.OUTPUT_FOLDER, isTexture ?
                 "/textures/entities/data/" + name + ".json" : "models/entities/data/" + name + ".json");
         if (!file.exists()){
             file.getParentFile().mkdirs();

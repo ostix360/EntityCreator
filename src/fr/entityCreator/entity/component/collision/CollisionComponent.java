@@ -2,6 +2,8 @@ package fr.entityCreator.entity.component.collision;
 
 
 import fr.entityCreator.core.exporter.DataTransformer;
+import fr.entityCreator.core.resources.CollisionShapeResource;
+import fr.entityCreator.entity.BoundingModel;
 import fr.entityCreator.entity.Entity;
 import fr.entityCreator.entity.component.Component;
 import fr.entityCreator.entity.component.ComponentType;
@@ -27,17 +29,19 @@ public class CollisionComponent extends Component {
     }
 
     @Override
-    public void export(FileOutputStream fos) {
-        try(FileChannel fc = fos.getChannel()){
+    public void export(FileChannel fc) throws IOException {
             fc.write(DataTransformer.casteString(this.getType().toString()));
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
+            for(CollisionShapeResource csr : properties.getCollisionShape()){
+                csr.export(fc);
+            }
+            for (BoundingModel bm : properties.getBoundingModels()){
+                bm.export(fc);
+            }
     }
 
     @Override
-    public ComponentPanel getComponentPanel(ComponentListPanel paramComponentListPanel) {
-        return null;
+    public ComponentPanel getComponentPanel(ComponentListPanel listPanel) {
+        return new CollisionPanel(this,listPanel);
     }
 
     public CollisionProperties getProperties() {

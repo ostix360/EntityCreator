@@ -54,7 +54,10 @@ public class ParticleComponentPanel extends ComponentPanel {
         });
         lifeSlider.addErrorListener(new ErrorListener() {
             public void onActionOccurred() {
-                particleSystem.setLifeError(lifeSlider.getErrorReading()/100);
+                particleSystem.setLifeError(
+                        lifeSlider.
+                                getErrorReading()
+                        /100);
             }
         });
         final SliderWithError speedSlider = new SliderWithError("Speed", this.particleSystem.getAverageSpeed(), 0.0F, 20.0F, this.particleSystem.getSpeedError(), true, false);
@@ -112,8 +115,9 @@ public class ParticleComponentPanel extends ComponentPanel {
         this.settings.add(shapesPanel, getGC(0, 1));
 
         ParticleSpawn[] possibleShapes = {new Circle(), new Line(), new Point(), new Sphere()};
-        final JComboBox<ParticleSpawn> shapes = new JComboBox(possibleShapes);
+        final JComboBox<ParticleSpawn> shapes = new JComboBox();
         GridBagConstraints gc = getGC(0, 0);
+        shapes.setModel(new DefaultComboBoxModel<>(possibleShapes));
         shapes.setSelectedIndex(this.particleSystem.getSpawn() == null ? 0 : this.particleSystem.getSpawn().getID());
         this.currentShapesPanel = this.particleSystem.getSpawn().getSettingsPanel();
         shapesPanel.add(this.currentShapesPanel, getGC(0, 1));
@@ -138,7 +142,7 @@ public class ParticleComponentPanel extends ComponentPanel {
         textureSettings.setLayout(new GridBagLayout());
         this.index = null;
         this.textureChoose = null;
-        if (this.particleSystem.getTexture().getTextureID() == 0){
+        if (this.particleSystem.getTexture().getTextureID() == null){
             this.textureChoose = new JButton("Choisissez la texture de vos particules");
             this.textureChoose.setForeground(new Color(255, 0, 0));
         }
@@ -254,7 +258,7 @@ public class ParticleComponentPanel extends ComponentPanel {
 
                 float y = Float.parseFloat(offsetFields.getYField().getText().replaceAll(",", ""));
                 float z = Float.parseFloat(offsetFields.getZField().getText().replaceAll(",", ""));
-                particleSystem.setPositionOffset(new Vector3f(x, y, z));
+                particleSystem.setPositionOffset(new Vector3f(x/10, y/10, z/10));
 
             }
         });
@@ -288,7 +292,7 @@ public class ParticleComponentPanel extends ComponentPanel {
                 float y = Float.parseFloat(directionFields.getYField().getText().replaceAll(",", ""));
                 float z = Float.parseFloat(directionFields.getZField().getText().replaceAll(",", ""));
                 if (particleSystem.getDirection() != null) {
-                    particleSystem.setDirection(new Vector3f(x, y, z));
+                    particleSystem.setDirection(new Vector3f(x/10, y/10, z/10));
                 }
             }
         });
@@ -305,8 +309,8 @@ public class ParticleComponentPanel extends ComponentPanel {
     }
 
     public void setTexture(TextureLoader texID) {
-        particleTexture = new Texture(texID,TextureProperties.PARTICLE_DEFAULT_PROPERTIES());
-        particleSystem.getTexture().setTexture(particleTexture.getTextureID());
+        particleTexture = new Texture(texID,new TextureProperties());
+        particleSystem.getTexture().setTexture(texID);
     }
 
 

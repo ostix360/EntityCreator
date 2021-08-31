@@ -147,4 +147,9 @@ public class Sphere implements ParticleSpawn {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "Sphere";
+    }
+
 }

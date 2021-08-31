@@ -36,6 +36,9 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 
+import javax.swing.*;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +79,7 @@ public class ConvexMeshShape extends CollisionShape {
      * @param margin The collision margin
      */
     public ConvexMeshShape(float[] arrayVertices, int nbVertices, int stride, float margin) {
-        super(CollisionShapeType.CONVEX_MESH, margin);
+        super(CollisionShapeType.CONVEX_MESH, margin,null);
         mNbVertices = nbVertices;
         mMinBounds = new Vector3(0, 0, 0);
         mMaxBounds = new Vector3(0, 0, 0);
@@ -113,7 +116,7 @@ public class ConvexMeshShape extends CollisionShape {
      * @param margin The collision margin
      */
     public ConvexMeshShape(float margin) {
-        super(CollisionShapeType.CONVEX_MESH, margin);
+        super(CollisionShapeType.CONVEX_MESH, margin,null);
         mNbVertices = 0;
         mMinBounds = new Vector3(0, 0, 0);
         mMaxBounds = new Vector3(0, 0, 0);
@@ -242,6 +245,11 @@ public class ConvexMeshShape extends CollisionShape {
     }
 
     @Override
+    protected void createPanel() {
+
+    }
+
+    @Override
     public Vector3 getLocalSupportPointWithMargin(Vector3 direction) {
         final Vector3 supportPoint = getLocalSupportPointWithoutMargin(direction);
         final Vector3 unitDirection = new Vector3(direction);
@@ -331,5 +339,14 @@ public class ConvexMeshShape extends CollisionShape {
     public boolean isEqualTo(CollisionShape otherCollisionShape) {
         final ConvexMeshShape otherShape = (ConvexMeshShape) otherCollisionShape;
         return mNbVertices == otherShape.mNbVertices && !mIsEdgesInformationUsed && mVertices.equals(otherShape.mVertices) && mEdgesAdjacencyList.equals(otherShape.mVertices);
+    }
+
+    @Override
+    public void export(FileChannel fc) throws IOException {
+    }
+
+    @Override
+    public JPanel getPanel() {
+        return null;
     }
 }

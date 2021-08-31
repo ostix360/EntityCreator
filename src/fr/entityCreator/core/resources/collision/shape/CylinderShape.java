@@ -26,9 +26,21 @@
 package fr.entityCreator.core.resources.collision.shape;
 
 
+import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.core.resources.collision.maths.Matrix3x3;
 import fr.entityCreator.core.resources.collision.maths.ReactDefaults;
 import fr.entityCreator.core.resources.collision.maths.Vector3;
+import fr.entityCreator.frame.MainFrame;
+import fr.entityCreator.toolBox.Config;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.NumberFormatter;
+import java.awt.*;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.text.NumberFormat;
 
 /**
  * Represents a cylinder collision shape around the Y axis and centered at the origin. The cylinder is defined by its height and the radius of its base. The "transform" of the corresponding rigid body
@@ -37,8 +49,8 @@ import fr.entityCreator.core.resources.collision.maths.Vector3;
  * "margin" parameter in the constructor of the cylinder shape. Otherwise, it is recommended to use the default margin distance by not using the "margin" parameter in the constructor.
  */
 public class CylinderShape extends CollisionShape {
-    private final float mRadius;
-    private final float mHalfHeight;
+    private float mRadius;
+    private float mHalfHeight;
 
     /**
      * Constructs a new cylinder from the radius of the base and the height.
@@ -58,7 +70,7 @@ public class CylinderShape extends CollisionShape {
      * @param margin The margin
      */
     public CylinderShape(float radius, float height, float margin) {
-        super(CollisionShapeType.CYLINDER, margin);
+        super(CollisionShapeType.CYLINDER, margin, Config.CYLINDER);
         mRadius = radius;
         mHalfHeight = height / 2;
         if (mRadius <= 0) {
@@ -99,6 +111,20 @@ public class CylinderShape extends CollisionShape {
      */
     public float getHeight() {
         return mHalfHeight + mHalfHeight;
+    }
+
+    @Override
+    protected void createPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.fill = 2;
+        gc.gridx = 1;
+        gc.gridy = 1;
+        panel.add(createErrorPanel(true), gc);
+        gc.gridy = 2;
+        panel.add(createErrorPanel(false), gc);
+        this.panel = panel;
     }
 
     @Override
@@ -166,5 +192,80 @@ public class CylinderShape extends CollisionShape {
     public boolean isEqualTo(CollisionShape otherCollisionShape) {
         final CylinderShape otherShape = (CylinderShape) otherCollisionShape;
         return mRadius == otherShape.mRadius && mHalfHeight == otherShape.mHalfHeight;
+    }
+
+    public void export(FileChannel fc) throws IOException {
+        fc.write(DataTransformer.casteString(String.valueOf(mRadius) + ";" + String.valueOf(mHalfHeight * 2)));
+    }
+
+
+
+    private JPanel createErrorPanel(boolean isRadius) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        JLabel label = new JLabel(isRadius ? "Rayon : " : "Hauteur : ");
+        label.setFont(MainFrame.SMALL_FONT);
+        panel.add(label, "West");
+        JFormattedTextField field = createTextField(4);
+        field.setText("1,0");
+        field.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (field.getText().isEmpty()) {
+                    return;
+                }
+                if (isRadius) {
+                    mRadius = ((Float) Float.parseFloat(field.getText()));
+                } else {
+                    mHalfHeight = ((Float) Float.parseFloat(field.getText()) / 2);
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if (field.getText().isEmpty()) {
+                    return;
+                }
+                if (isRadius) {
+                    mRadius = ((Float) Float.parseFloat(field.getText()));
+                } else {
+                    mHalfHeight = ((Float) Float.parseFloat(field.getText()) / 2);
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (field.getText().isEmpty()) {
+                    return;
+                }
+                if (isRadius) {
+                    mRadius = ((Float) Float.parseFloat(field.getText()));
+                } else {
+                    mHalfHeight = ((Float) Float.parseFloat(field.getText()) / 2);
+                }
+            }
+        });
+        panel.add(field, "East");
+        return panel;
+    }
+
+
+    private JFormattedTextField createTextField(int columns) {
+        NumberFormat floatFormat = NumberFormat.getNumberInstance();
+        floatFormat.setMinimumFractionDigits(1);
+        floatFormat.setMaximumFractionDigits(5);
+        NumberFormatter numberFormatter = new NumberFormatter(floatFormat);
+        numberFormatter.setValueClass(Float.class);
+        numberFormatter.setAllowsInvalid(false);
+        //numberFormatter.setMinimum(0);
+        JFormattedTextField text = new JFormattedTextField(numberFormatter);
+        text.setColumns(columns);
+        text.setFont(MainFrame.SMALL_FONT);
+        text.setHorizontalAlignment(0);
+        return text;
+    }
+
+    public String toString() {
+        return "Cylindre";
     }
 }

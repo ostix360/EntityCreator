@@ -4,7 +4,7 @@ package fr.entityCreator.core.loader;
 import fr.entityCreator.entity.animated.animation.animation.Animation;
 import fr.entityCreator.entity.animated.animation.loaders.AnimationLoader;
 import fr.entityCreator.toolBox.FileType;
-import fr.entityCreator.toolBox.ToolDirectory;
+import fr.entityCreator.toolBox.Config;
 
 public class LoadAnimation {
 
@@ -13,7 +13,7 @@ public class LoadAnimation {
 
     public static void loadAnimatedModel(String animationFile) {
 
-        animation = AnimationLoader.loadAnimation(ToolDirectory.RES_FOLDER + animationFile + FileType.COLLADA.getExtension());
+        animation = AnimationLoader.loadAnimation(Config.RES_FOLDER + animationFile + FileType.COLLADA.getExtension());
 
     }
 

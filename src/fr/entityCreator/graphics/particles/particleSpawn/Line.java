@@ -68,6 +68,11 @@ public class Line implements ParticleSpawn {
     }
 
     @Override
+    public String toString() {
+        return "Line";
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(axis, length);
     }

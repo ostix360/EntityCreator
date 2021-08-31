@@ -157,6 +157,8 @@ public class ParticleSystem {
         }
     }
 
+
+
     private Vector3f generateRandomUnitVector() {
         float theta = (float) (random.nextFloat() * 2f * Math.PI);
         float z = (random.nextFloat() * 2) - 1;

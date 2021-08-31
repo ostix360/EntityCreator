@@ -4,7 +4,7 @@ package fr.entityCreator.graphics.font.meshCreator;
 
 
 import fr.entityCreator.toolBox.OpenGL.DisplayManager;
-import fr.entityCreator.toolBox.ToolDirectory;
+import fr.entityCreator.toolBox.Config;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -128,7 +128,7 @@ public class MetaFile {
 	 */
 	private void openFile(String file) {
 		try {
-			reader = new BufferedReader(new FileReader(ToolDirectory.RES_FOLDER+"/font/" + file + ".fnt"));
+			reader = new BufferedReader(new FileReader(Config.RES_FOLDER+"/font/" + file + ".fnt"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("Couldn't read font meta file!");

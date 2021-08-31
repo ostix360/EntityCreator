@@ -6,7 +6,9 @@ import fr.entityCreator.frame.ComponentListPanel;
 import fr.entityCreator.frame.ComponentPanel;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.channels.FileChannel;
 
 public abstract class Component {
     private final ComponentType type;
@@ -20,7 +22,7 @@ public abstract class Component {
 
     public abstract void update();
 
-    public abstract void export(FileOutputStream fos);
+    public abstract void export(FileChannel fc) throws IOException;
 
     public ComponentType getType() {
         return this.type;

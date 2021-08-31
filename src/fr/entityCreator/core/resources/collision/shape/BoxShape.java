@@ -26,9 +26,18 @@
 package fr.entityCreator.core.resources.collision.shape;
 
 
+import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.core.resources.collision.maths.Matrix3x3;
 import fr.entityCreator.core.resources.collision.maths.ReactDefaults;
 import fr.entityCreator.core.resources.collision.maths.Vector3;
+import fr.entityCreator.frame.VectorPanel;
+import fr.entityCreator.toolBox.Config;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 /**
  * Represents a 3D box shape. Those axis are unit length. The three extents are half-lengths of the box along the three x, y, z local axes. The "transform" of the corresponding rigid body will give an
@@ -37,7 +46,8 @@ import fr.entityCreator.core.resources.collision.maths.Vector3;
  * in the constructor of the box shape. Otherwise, it is recommended to use the default margin distance by not using the "margin" parameter in the constructor.
  */
 public class BoxShape extends CollisionShape {
-    private final Vector3 mExtent = new Vector3();
+    private Vector3 mExtent = new Vector3();
+
 
     /**
      * Constructs a box shape from the components of its extents which is half the vector between the two opposing corners that are the furthest away.
@@ -66,7 +76,7 @@ public class BoxShape extends CollisionShape {
      * @param margin The margin
      */
     public BoxShape(Vector3 extent, float margin) {
-        super(CollisionShapeType.BOX, margin);
+        super(CollisionShapeType.BOX, margin, Config.BOX);
         mExtent.set(Vector3.subtract(extent, new Vector3(margin, margin, margin)));
         if (extent.getX() <= 0 || extent.getX() <= margin) {
             throw new IllegalArgumentException("Extent x coordinate must be greater than 0 and the margin");
@@ -92,6 +102,10 @@ public class BoxShape extends CollisionShape {
         mExtent.set(shape.mExtent);
     }
 
+    public void setmExtent(Vector3 mExtent) {
+        this.mExtent = mExtent;
+    }
+
     /**
      * Gets the extent vector, which is half the vector between the two opposing corners that are the furthest away.
      *
@@ -99,6 +113,37 @@ public class BoxShape extends CollisionShape {
      */
     public Vector3 getExtent() {
         return Vector3.add(mExtent, new Vector3(mMargin, mMargin, mMargin));
+    }
+
+    @Override
+    protected void createPanel() {
+        JPanel panel = new JPanel();
+        VectorPanel rotPanel = new VectorPanel(280,25,"Echelle ",1,1,1);
+        panel.add(rotPanel);
+        rotPanel.addTotalListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void warn() {
+                if ((rotPanel.getXField().getText().equals("")) || (rotPanel.getYField().getText().equals("")) || (rotPanel.getZField().getText().equals(""))) {
+                    return;
+                }
+                float x = Float.parseFloat(rotPanel.getXField().getText().replaceAll(",", ""));
+                float y = Float.parseFloat(rotPanel.getYField().getText().replaceAll(",", ""));
+                float z = Float.parseFloat(rotPanel.getZField().getText().replaceAll(",", ""));
+                setmExtent(new Vector3(x, y, z));
+            }
+        });
+        this.panel = panel;
     }
 
     @Override
@@ -148,5 +193,15 @@ public class BoxShape extends CollisionShape {
     public boolean isEqualTo(CollisionShape otherCollisionShape) {
         final BoxShape otherShape = (BoxShape) otherCollisionShape;
         return mExtent.equals(otherShape.mExtent);
+    }
+
+    public void export(FileChannel fc) throws IOException {
+        fc.write(DataTransformer.casteString(String.valueOf(mExtent.getX()) + ";" +
+                String.valueOf(mExtent.getY()) + ";"+String.valueOf(mExtent.getZ())));
+    }
+
+
+    public String toString() {
+        return "Boite";
     }
 }

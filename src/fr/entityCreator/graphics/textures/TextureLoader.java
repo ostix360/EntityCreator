@@ -17,10 +17,10 @@ public class TextureLoader {
 
     private final int id;
     private final int width;
-    private final String file;
+    private final File file;
     private final RenderedImage img;
 
-    public TextureLoader(int id, int width, String file, RenderedImage img) {
+    public TextureLoader(int id, int width, File file, RenderedImage img) {
         this.id = id;
         this.width = width;
         this.file = file;
@@ -28,9 +28,10 @@ public class TextureLoader {
     }
 
     public static TextureLoader loadTexture(String file, int mode, boolean isClampEdge) {
+        File theFile = new File(file);
         BufferedImage image = null;
         try {
-            image = ImageIO.read(new File( file));
+            image = ImageIO.read(theFile);
         } catch (IOException e) {
             Logger.err("impossible de lire " + file);
             e.printStackTrace();
@@ -99,10 +100,10 @@ public class TextureLoader {
 
         glBindTexture(GL_TEXTURE_2D,0);
 
-        return new TextureLoader(id,w,file, image);
+        return new TextureLoader(id,w,theFile, image);
     }
 
-    public String getFile() {
+    public File getFile() {
         return file;
     }
 

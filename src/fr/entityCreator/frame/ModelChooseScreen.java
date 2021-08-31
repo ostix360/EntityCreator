@@ -1,6 +1,7 @@
 package fr.entityCreator.frame;
 
 import fr.entityCreator.entity.Entity;
+import fr.entityCreator.entity.component.collision.CollisionObjectPanel;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -9,17 +10,26 @@ import java.io.File;
 
 public class ModelChooseScreen {
     private JFileChooser chooser;
-    private final Entity entity;
-    private final JButton button;
+    private Entity entity;
+    private JButton button;
     private JButton open;
     private JList<FileInList> files;
-    private boolean isForAnimatedModel = false;
 
     public ModelChooseScreen(MainFrame frame, Entity entity, JButton button, JPanel parent) {
         this.entity = entity;
         this.button = button;
         setup();
         applyChoice(parent, frame);
+    }
+
+    public ModelChooseScreen(CollisionObjectPanel parent){
+        setup();
+        applySimpleChoice(parent);
+    }
+
+    private void applySimpleChoice(CollisionObjectPanel p) {
+        p.setObjectFile(getFileChoosen(p));
+        this.chooser.setVisible(false);
     }
 
     private void applyChoice(JPanel parent, MainFrame frame) {
@@ -47,9 +57,6 @@ public class ModelChooseScreen {
 
     private File getFileChoosen(JPanel parent) {
         if (this.chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
-            if (this.chooser.getSelectedFile().getName().endsWith("dae")) {
-                isForAnimatedModel = true;
-            }
             return chooser.getSelectedFile();
         } else {
             return null;

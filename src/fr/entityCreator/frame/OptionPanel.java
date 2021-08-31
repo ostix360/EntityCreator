@@ -1,6 +1,6 @@
 package fr.entityCreator.frame;
 
-import fr.entityCreator.toolBox.ToolDirectory;
+import fr.entityCreator.toolBox.Config;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +14,7 @@ public class OptionPanel {
         setupFrame();
         addButton();
         this.frame.setVisible(true);
+        this.frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     private void addButton() {
@@ -29,7 +30,7 @@ public class OptionPanel {
             while (output.showOpenDialog(frame) != JFileChooser.APPROVE_OPTION) {
                 System.out.println("not selected");
             }
-            ToolDirectory.OUTPUT_FOLDER = output.getSelectedFile();
+            Config.OUTPUT_FOLDER = output.getSelectedFile();
             output.setVisible(false);
         });
         this.frame.add(outputFolder);

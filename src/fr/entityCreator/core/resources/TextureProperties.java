@@ -3,7 +3,7 @@ package fr.entityCreator.core.resources;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import fr.entityCreator.graphics.textures.TextureLoader;
-import fr.entityCreator.toolBox.ToolDirectory;
+import fr.entityCreator.toolBox.Config;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -14,12 +14,7 @@ public class TextureProperties {
 
     private TextureLoader normalMapFile;
     private TextureLoader specularMapFile;
-
-    @Expose
-    private boolean useAdditive;
-
-    @Expose
-    private boolean affectedByLighting;
+    
 
     @Expose
     @SerializedName("specularMap")
@@ -58,30 +53,9 @@ public class TextureProperties {
         return new TextureProperties(null,null,0,0,1,false,false);
     }
 
-    public static TextureProperties PARTICLE_DEFAULT_PROPERTIES(){
-        return new TextureProperties(true,false,1);
-    }
 
-    public TextureProperties(boolean useAdditive, boolean affectedByLighting, int numbersOfRows) {
-        this.useAdditive = useAdditive;
-        this.affectedByLighting = affectedByLighting;
-        this.numbersOfRows = numbersOfRows;
-    }
+    public TextureProperties() {
 
-    public boolean isUseAdditive() {
-        return useAdditive;
-    }
-
-    public void setUseAdditive(boolean useAdditive) {
-        this.useAdditive = useAdditive;
-    }
-
-    public boolean isAffectedByLighting() {
-        return affectedByLighting;
-    }
-
-    public void setAffectedByLighting(boolean affectedByLighting) {
-        this.affectedByLighting = affectedByLighting;
     }
 
     public void setSpecularMapName(String specularMapName) {
@@ -107,12 +81,12 @@ public class TextureProperties {
 
     public void setNormalMapFile(TextureLoader normalMap) {
         this.normalMapFile = normalMap;
-        this.normalMapName = new File(normalMap.getFile()).getName();
+        this.normalMapName = normalMap.getFile().getName();
     }
 
     public void setSpecularMapFile(TextureLoader specularMapFile) {
         this.specularMapFile = specularMapFile;
-        this.specularMapName = new File(specularMapFile.getFile()).getName();
+        this.specularMapName = specularMapFile.getFile().getName();
     }
 
     public void setShineDamper(float shineDamper) {
@@ -139,11 +113,11 @@ public class TextureProperties {
     }
 
     public String getNormalMapFile() {
-        return normalMapFile == null ? null : normalMapFile.getFile();
+        return normalMapFile == null ? null : normalMapFile.getFile().getAbsolutePath();
     }
 
     public String getSpecularMapFile() {
-        return specularMapFile == null ? null : specularMapFile.getFile();
+        return specularMapFile == null ? null : specularMapFile.getFile().getAbsolutePath();
     }
 
     public int getSpecularMap(){
@@ -175,10 +149,8 @@ public class TextureProperties {
     }
 
     public void exportSpecular() throws IOException {
-            File file = new File(ToolDirectory.OUTPUT_FOLDER + "/textures/entities/specularMap/" +
-                    specularMapFile.getFile().replace("\\","/").split("/")
-                            [specularMapFile.getFile().replace("\\","/").
-                            split("/").length-1]);
+            File file = new File(Config.OUTPUT_FOLDER + "/textures/entities/specularMap/" +
+                    specularMapFile.getFile().getName());
             if (!file.exists()){
                 file.getParentFile().mkdirs();
                 file.createNewFile();
@@ -187,10 +159,8 @@ public class TextureProperties {
     }
 
     public void exportNormal() throws IOException {
-        File file = new File(ToolDirectory.OUTPUT_FOLDER + "/textures/entities/normal/" +
-                normalMapFile.getFile().replace("\\","/").split("/")
-                        [normalMapFile.getFile().replace("\\","/").
-                        split("/").length-1]);
+        File file = new File(Config.OUTPUT_FOLDER + "/textures/entities/normal/" +
+                normalMapFile.getFile().getName());
         if (!file.exists()){
             file.getParentFile().mkdirs();
             file.createNewFile();

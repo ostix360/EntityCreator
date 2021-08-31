@@ -3,19 +3,30 @@ package fr.entityCreator.graphics.model;
 
 import fr.entityCreator.toolBox.OpenGL.VAO;
 
+import java.io.File;
+
 public class MeshModel {
 
-    private final VAO vaoID;
+    private final VAO vao;
+    private File modelFile;
 
     public MeshModel(VAO vaoID) {
-        this.vaoID = vaoID;
+        this.vao = vaoID;
     }
 
     public VAO getVAO() {
-        return vaoID;
+        return vao;
+    }
+
+    public File getModelFile() {
+        return modelFile;
+    }
+
+    public void setModelFile(File modelFile) {
+        this.modelFile = modelFile;
     }
 
     public int getVertexCount() {
-        return vaoID.getVertexCount();
+        return vao.getVertexCount();
     }
 }

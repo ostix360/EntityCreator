@@ -1,6 +1,6 @@
 package fr.entityCreator.audio;
 
-import fr.entityCreator.toolBox.ToolDirectory;
+import fr.entityCreator.toolBox.Config;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.*;
 import org.lwjgl.stb.STBVorbisInfo;
@@ -67,7 +67,7 @@ public class AudioManager {
     private static ByteBuffer loadOggSound(String path, STBVorbisInfo info) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer error = stack.mallocInt(1);
-            long decoder = stb_vorbis_open_filename(ToolDirectory.RES_FOLDER + "/sounds/" + path + ".ogg", error, null);
+            long decoder = stb_vorbis_open_filename(Config.RES_FOLDER + "/sounds/" + path + ".ogg", error, null);
             if (decoder == NULL) {
                 throw new RuntimeException("Failed to open Ogg Vorbis file. Error: " + error.get(0));
             }

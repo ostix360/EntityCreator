@@ -13,10 +13,11 @@ import fr.entityCreator.entity.component.collision.CollisionComponent;
 import fr.entityCreator.entity.component.particle.ParticleComponent;
 import fr.entityCreator.frame.ErrorPopUp;
 import fr.entityCreator.graphics.model.Model;
-import fr.entityCreator.toolBox.ToolDirectory;
+import fr.entityCreator.toolBox.Config;
 import org.joml.Vector3f;
 
 import java.io.*;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -152,9 +153,10 @@ public class Entity {
     }
 
     public void exportAllComponents() throws IOException {
-        try(FileOutputStream fos = openSave()) {
+        try(FileOutputStream fos = openSave();
+        FileChannel fc = fos.getChannel()) {
             for (Component c : components) {
-                c.export(fos);
+                c.export(fc);
             }
         }
     }
@@ -164,7 +166,7 @@ public class Entity {
     }
 
     private FileOutputStream openSave() throws IOException {
-        File file = new File(ToolDirectory.OUTPUT_FOLDER + "/component/"
+        File file = new File(Config.OUTPUT_FOLDER + "/component/"
                 ,hashCode() + ".component");
         if (!file.exists()){
             file.getParentFile().mkdirs();
@@ -199,7 +201,7 @@ public class Entity {
             } else if (file.getName().endsWith(".obj")) {
                 OBJFileLoader.loadModel(file.getAbsolutePath(), this);
             }
-            ToolDirectory.MODEL_LOCATION = file;
+            Config.MODEL_LOCATION = file;
         } else {
             new ErrorPopUp("impossible de charger le model");
         }

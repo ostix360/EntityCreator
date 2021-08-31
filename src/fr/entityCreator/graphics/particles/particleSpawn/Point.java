@@ -31,6 +31,11 @@ public class Point implements ParticleSpawn {
     }
 
     @Override
+    public String toString() {
+        return "Point";
+    }
+
+    @Override
     public void load(String[] values) {
 
     }

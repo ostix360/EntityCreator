@@ -81,7 +81,7 @@ public class TexturePanel extends JPanel {
         gc2.weightx = 1.0D;
         gc2.weighty = 1.0D;
 
-        String diffuseFile = this.texture.getTextureLoader().getFile();
+        String diffuseFile = this.texture.getTextureLoader().getFile().getAbsolutePath();
 
         if (diffuseFile != null) {
             try {

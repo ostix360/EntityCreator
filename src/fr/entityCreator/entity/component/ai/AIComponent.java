@@ -3,7 +3,7 @@ package fr.entityCreator.entity.component.ai;
 
 import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.core.loader.json.JsonUtils;
-import fr.entityCreator.core.resources.collision.maths.Vector3;
+import fr.entityCreator.core.collision.maths.Vector3;
 import fr.entityCreator.entity.Entity;
 import fr.entityCreator.entity.component.Component;
 import fr.entityCreator.entity.component.ComponentType;

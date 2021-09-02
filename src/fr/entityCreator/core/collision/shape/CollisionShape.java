@@ -23,12 +23,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fr.entityCreator.core.resources.collision.shape;
+package fr.entityCreator.core.collision.shape;
 
 
-import fr.entityCreator.core.resources.collision.maths.Matrix3x3;
-import fr.entityCreator.core.resources.collision.maths.Transform;
-import fr.entityCreator.core.resources.collision.maths.Vector3;
+import fr.entityCreator.core.collision.maths.Matrix3x3;
+import fr.entityCreator.core.collision.maths.Transform;
+import fr.entityCreator.core.collision.maths.Vector3;
 import fr.entityCreator.entity.BoundingModel;
 import fr.entityCreator.graphics.model.MeshModel;
 
@@ -130,12 +130,6 @@ public abstract class CollisionShape extends BoundingModel {
     @Override
     public abstract CollisionShape clone();
 
-    /**
-     * Tests equality between two collision shapes of the same type (same derived classes).
-     *
-     * @param otherCollisionShape The shape to test for equality
-     */
-    public abstract boolean isEqualTo(CollisionShape otherCollisionShape);
 
     /**
      * Update the AABB of a body using its collision shape.
@@ -185,17 +179,7 @@ public abstract class CollisionShape extends BoundingModel {
         mNbSimilarCreatedShapes--;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof CollisionShape)) {
-            return false;
-        }
-        final CollisionShape that = (CollisionShape) o;
-        return mMargin == that.mMargin && mType == that.mType && that.isEqualTo(this);
-    }
+
 
     @Override
     protected void finalize() throws Throwable {
@@ -219,11 +203,22 @@ public abstract class CollisionShape extends BoundingModel {
      * An enumeration of the possible collision shape (box, sphere, cone and cylinder).
      */
     public enum CollisionShapeType {
-        BOX,
-        SPHERE,
-        CONE,
-        CYLINDER,
-        CAPSULE,
-        CONVEX_MESH
+        BOX("Box"),
+        SPHERE("Sphere"),
+        CONE("Cone"),
+        CYLINDER("Cylinder"),
+        CAPSULE("Capsule"),
+        CONVEX_MESH("Convex");
+
+        private String name;
+
+        CollisionShapeType(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
     }
 }

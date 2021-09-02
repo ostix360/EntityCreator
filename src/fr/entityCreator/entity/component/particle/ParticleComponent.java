@@ -22,6 +22,7 @@ public class ParticleComponent extends Component {
 
     private final ParticleSystem system;
     private Vector3f offset = new Vector3f();
+    private ParticleComponentPanel panel;
 
     public ParticleComponent(ParticleSystem system, Entity e) {
         super(ComponentType.PARTICLE_COMPONENT, e);
@@ -88,7 +89,8 @@ public class ParticleComponent extends Component {
 
     @Override
     public ComponentPanel getComponentPanel(ComponentListPanel paramComponentListPanel) {
-        return new ParticleComponentPanel(this, paramComponentListPanel);
+        if (panel == null)panel = new ParticleComponentPanel(this, paramComponentListPanel);
+        return panel;
     }
 
     public void setOffset(Vector3f offset) {

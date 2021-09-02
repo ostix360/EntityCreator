@@ -3,14 +3,13 @@ package fr.entityCreator.entity.component.collision;
 import fr.entityCreator.core.Timer;
 import fr.entityCreator.core.loader.ModelLoaderRequest;
 import fr.entityCreator.core.loader.OBJFileLoader;
-import fr.entityCreator.core.resources.collision.shape.*;
-import fr.entityCreator.core.resourcesProcessor.GLRequest;
+import fr.entityCreator.core.collision.shape.*;
 import fr.entityCreator.core.resourcesProcessor.GLRequestProcessor;
 import fr.entityCreator.entity.BoundingModel;
 import fr.entityCreator.frame.ErrorPopUp;
 import fr.entityCreator.frame.MainFrame;
 import fr.entityCreator.frame.ModelChooseScreen;
-import fr.entityCreator.graphics.model.MeshModel;
+import fr.entityCreator.graphics.CollisionObjectRenderer;
 import fr.entityCreator.graphics.model.ModelData;
 
 import javax.swing.*;
@@ -33,6 +32,7 @@ public class CollisionObjectPanel extends JPanel{
     public CollisionObjectPanel(CollisionPanel collisionPanel, JPanel settingsPanel, CollisionComponent collisionComponent) {
         super();
         setLayout(new GridBagLayout());
+        CollisionObjectRenderer.boundingModels.clear();
         this.cc = collisionComponent;
         this.settings = settingsPanel;
 
@@ -42,7 +42,31 @@ public class CollisionObjectPanel extends JPanel{
         removeButton.setFont(MainFrame.SMALL_FONT);
         add(removeButton, getGC(0, 2, 1));
         removeButton.addActionListener((e) ->{
-            this.boundingModelJComboBox.removeItem(boundingModelJComboBox.getSelectedIndex());
+            this.actualModel = (BoundingModel) boundingModelJComboBox.getSelectedItem();
+            CollisionObjectRenderer.boundingModels.remove(actualModel);
+            cc.getProperties().getBoundingModels().remove(actualModel);
+            this.boundingModelJComboBox.removeItem(boundingModelJComboBox.getSelectedItem());
+            if (boundingModelJComboBox.getItemCount() == 0){
+                this.actualModel = null;
+                this.remove(actualTransformPanel);
+                this.remove(actualShapePanel);
+                actualTransformPanel = null;
+                actualShapePanel = null;
+                beforeModel = null;
+                removeButton.setVisible(false);
+                boundingModelJComboBox.repaint();
+                this.validate();
+                this.repaint();
+                settings.validate();
+                settings.repaint();
+                return;
+            }
+            this.actualModel = boundingModelJComboBox.getItemAt(0);
+            boundingModelJComboBox.repaint();
+            this.validate();
+            this.repaint();
+            settings.validate();
+            settings.repaint();
         });
 
         addPersButton = new JButton("Ajouter votre objet personalisé");
@@ -58,6 +82,8 @@ public class CollisionObjectPanel extends JPanel{
                 this.remove(actualShapePanel);
             }
             boundingModelJComboBox.setSelectedItem(this.actualModel);
+            CollisionObjectRenderer.boundingModels.add(actualModel);
+            cc.getProperties().getBoundingModels().add(actualModel);
             this.addSettingPanel();
             removeButton.setVisible(true);
         });
@@ -73,6 +99,8 @@ public class CollisionObjectPanel extends JPanel{
             this.actualModel = (BoundingModel) collisionShapeJComboBox.getSelectedItem();
             this.addSettingPanel();
             this.addSpefSettingPanel();
+            CollisionObjectRenderer.boundingModels.add(actualModel);
+            cc.getProperties().getBoundingModels().add(actualModel);
             removeButton.setVisible(true);
         });
         add(addButton, getGC(1, 0, 1));
@@ -101,7 +129,7 @@ public class CollisionObjectPanel extends JPanel{
         boundingModelJComboBox.addActionListener((e) ->{
             beforeModel = actualModel;
             actualModel = (BoundingModel) boundingModelJComboBox.getSelectedItem();
-            if (!actualModel.equals(beforeModel)){
+            if (actualModel != null && !actualModel.equals(beforeModel)){
                 this.addSettingPanel();
                 if (actualShapePanel != null){
                     this.remove(actualShapePanel);

@@ -21,14 +21,15 @@ import java.text.NumberFormat;
 public class Transform {
     private Vector3f position;
     private Vector3f rotation;
-    private float scale;
+    private Vector3f scale;
     private Matrix3f rotationMatrix;
     private JPanel panel;
+    private float realScale = 1;
 
     public Transform(Vector3f position, Vector3f rotation, float scale) {
         this.position = position;
         this.rotation = rotation;
-        this.scale = scale;
+        this.scale = new Vector3f(scale);
         setupPanel();
     }
 
@@ -58,9 +59,9 @@ public class Transform {
                 if ((posPanel.getXField().getText().equals("")) || (posPanel.getYField().getText().equals("")) || (posPanel.getZField().getText().equals(""))) {
                     return;
                 }
-                float x = Float.parseFloat(posPanel.getXField().getText().replaceAll(",", ""));
-                float y = Float.parseFloat(posPanel.getYField().getText().replaceAll(",", ""));
-                float z = Float.parseFloat(posPanel.getZField().getText().replaceAll(",", ""));
+                float x = Float.parseFloat(posPanel.getXField().getText().replaceAll(",", "."));
+                float y = Float.parseFloat(posPanel.getYField().getText().replaceAll(",", "."));
+                float z = Float.parseFloat(posPanel.getZField().getText().replaceAll(",", "."));
                 setPosition(new Vector3f(x, y, z));
             }
         });
@@ -84,9 +85,9 @@ public class Transform {
                 if ((rotPanel.getXField().getText().equals("")) || (rotPanel.getYField().getText().equals("")) || (rotPanel.getZField().getText().equals(""))) {
                     return;
                 }
-                float x = Float.parseFloat(rotPanel.getXField().getText().replaceAll(",", ""));
-                float y = Float.parseFloat(rotPanel.getYField().getText().replaceAll(",", ""));
-                float z = Float.parseFloat(rotPanel.getZField().getText().replaceAll(",", ""));
+                float x = Float.parseFloat(rotPanel.getXField().getText().replaceAll(",", "."));
+                float y = Float.parseFloat(rotPanel.getYField().getText().replaceAll(",", "."));
+                float z = Float.parseFloat(rotPanel.getZField().getText().replaceAll(",", "."));
                 setRotation(new Vector3f(x, y, z));
             }
         });
@@ -95,16 +96,16 @@ public class Transform {
         this.panel = panel;
     }
 
-    public Transform(float x, float y, float z, float rotX, float rotY, float rotZ, float scale) {
+    public Transform(float x, float y, float z, float rotX, float rotY, float rotZ, float scaleX,float scaleY,float scaleZ) {
         this.position = new Vector3f(x, y, z);
         this.rotation = new Vector3f(rotX, rotY, rotZ);
-        this.scale = scale;
+        this.scale = new Vector3f (scaleX,scaleY,scaleZ);
     }
 
     public void export(FileChannel fc) throws IOException {
         fc.write(DataTransformer.casteString(
                 position.x() + ";" + position.y() + ";" + position.z() + ";" +
-                        rotation.x() + ";" + rotation.y() + ";" + rotation.z() + ";" + scale));
+                        rotation.x() + ";" + rotation.y() + ";" + rotation.z() + ";" + realScale + "\n"));
     }
 
     public void setPosition(Vector3f position) {
@@ -112,7 +113,7 @@ public class Transform {
     }
 
     public void setScale(float scale) {
-        this.scale = scale;
+        this.scale = new Vector3f(scale);
     }
 
     public void setRotation(Vector3f rotation) {
@@ -162,7 +163,7 @@ public class Transform {
         return rotation.z();
     }
 
-    public float getScale() {
+    public Vector3f getScale() {
         return scale;
     }
 
@@ -198,7 +199,8 @@ public class Transform {
                 if (field.getText().equals("")) {
                     return;
                 }
-                setScale((Float) Float.parseFloat(field.getText().replaceAll(",","")));
+                setScale((Float) Float.parseFloat(field.getText().replaceAll(",",".")));
+                realScale = Float.parseFloat(field.getText().replaceAll(",","."));
             }
         });
         panel.add(field, "East");

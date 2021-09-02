@@ -23,10 +23,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fr.entityCreator.core.resources.collision.shape;
+package fr.entityCreator.core.collision.shape;
 
 
-import fr.entityCreator.core.resources.collision.maths.Vector3;
+import fr.entityCreator.core.collision.maths.Vector3;
 
 /**
  * Represents a bounding volume of type "Axis Aligned Bounding Box". It's a box where all the edges are always aligned with the world coordinate system. The AABB is defined by the minimum and maximum

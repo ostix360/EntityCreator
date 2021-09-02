@@ -23,13 +23,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fr.entityCreator.core.resources.collision.shape;
+package fr.entityCreator.core.collision.shape;
 
 
 import fr.entityCreator.core.exporter.DataTransformer;
-import fr.entityCreator.core.resources.collision.maths.Matrix3x3;
-import fr.entityCreator.core.resources.collision.maths.ReactDefaults;
-import fr.entityCreator.core.resources.collision.maths.Vector3;
+import fr.entityCreator.core.collision.maths.Matrix3x3;
+import fr.entityCreator.core.collision.maths.ReactDefaults;
+import fr.entityCreator.core.collision.maths.Vector3;
 import fr.entityCreator.frame.MainFrame;
 import fr.entityCreator.toolBox.Config;
 
@@ -58,7 +58,7 @@ public class CapsuleShape extends CollisionShape {
      * @param height The height
      */
     public CapsuleShape(float radius, float height) {
-        super(CollisionShapeType.CAPSULE, radius, Config.CAPSULE);
+        super(CollisionShapeType.CAPSULE, radius, Config.SPHERE);
         mRadius = radius;
         mHalfHeight = height * 0.5f;
         if (radius <= 0) {
@@ -182,15 +182,10 @@ public class CapsuleShape extends CollisionShape {
         return new CapsuleShape(this);
     }
 
-    @Override
-    public boolean isEqualTo(CollisionShape otherCollisionShape) {
-        final CapsuleShape otherShape = (CapsuleShape) otherCollisionShape;
-        return mRadius == otherShape.mRadius && mHalfHeight == otherShape.mHalfHeight;
-    }
 
     @Override
     public void export(FileChannel fc) throws IOException {
-        fc.write(DataTransformer.casteString(String.valueOf(mRadius) + String.valueOf(mHalfHeight * 2)));
+        fc.write(DataTransformer.casteString(String.valueOf(mRadius)+";" + String.valueOf(mHalfHeight * 2) + "\n"));
     }
 
 
@@ -206,38 +201,29 @@ public class CapsuleShape extends CollisionShape {
         field.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if (field.getText().isEmpty()) {
-                    return;
-                }
-                if (isRadius) {
-                    setmRadius((Float) Float.parseFloat(field.getText().replaceAll(",", "")));
-                } else {
-                    setmHalfHeight((Float) Float.parseFloat(field.getText().replaceAll(",", "")) / 2);
-                }
+                warn();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if (field.getText().isEmpty()) {
-                    return;
-                }
-                if (isRadius) {
-                    setmRadius((Float) Float.parseFloat(field.getText().replaceAll(",", "")));
-                } else {
-                    setmHalfHeight((Float) Float.parseFloat(field.getText().replaceAll(",", "")) / 2);
-                }
+                warn();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void warn(){
                 if (field.getText().isEmpty()) {
                     return;
                 }
                 if (isRadius) {
-                    setmRadius((Float)Float.parseFloat(field.getText().replaceAll(",", "")));
+                    mRadius = ((Float) Float.parseFloat(field.getText().replaceAll(",",".")));
                 } else {
-                    setmHalfHeight((Float) Float.parseFloat(field.getText().replaceAll(",", "")) / 2);
+                    mHalfHeight = ((Float) Float.parseFloat(field.getText().replaceAll(",",".")) / 2);
                 }
+                CapsuleShape.this.getRelativeTransform().getScale().set(mRadius, mHalfHeight*2, mRadius);
             }
         });
         panel.add(field, "East");

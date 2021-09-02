@@ -23,7 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fr.entityCreator.core.resources.collision.maths;
+package fr.entityCreator.core.collision.maths;
 
 /**
  * This class contains static utilities. It was added for the port to implement some C++ code in Java.

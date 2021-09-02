@@ -4,7 +4,7 @@ package fr.entityCreator.entity;
 import fr.entityCreator.core.Timer;
 import fr.entityCreator.core.loader.OBJFileLoader;
 import fr.entityCreator.core.loader.TextureLoaderRequest;
-import fr.entityCreator.core.resources.collision.maths.Vector3;
+import fr.entityCreator.core.collision.maths.Vector3;
 import fr.entityCreator.core.resourcesProcessor.GLRequest;
 import fr.entityCreator.core.resourcesProcessor.GLRequestProcessor;
 import fr.entityCreator.entity.animated.animation.loaders.AnimatedModelLoader;
@@ -16,11 +16,15 @@ import fr.entityCreator.graphics.model.Model;
 import fr.entityCreator.toolBox.Config;
 import org.joml.Vector3f;
 
+import javax.management.openmbean.OpenDataException;
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static fr.entityCreator.core.exporter.EntityExporter.exportEntity;
 
 
 public class Entity {
@@ -102,8 +106,11 @@ public class Entity {
         return model;
     }
     public float getTextureXOffset() {
-        float column = textureIndex % model.getTexture().getNumbersOfRows();
-        return column / model.getTexture().getNumbersOfRows();
+        if (model != null) {
+            float column = textureIndex % model.getTexture().getNumbersOfRows();
+            return column / model.getTexture().getNumbersOfRows();
+        }
+        return 1;
     }
 
     public float getTextureYOffset() {
@@ -222,6 +229,34 @@ public class Entity {
     public void setName(String name) {
         this.name = name;
         this.model.setName(name);
+    }
+
+    public void export() throws Exception {
+        model.export();
+        exportAllComponents();
+        exportEntity();
+    }
+
+    public void exportEntity() throws Exception {
+        StringBuilder fileContent = new StringBuilder();
+        fileContent.append(model.getName()).append(";").append(hashCode());
+        File file = new File(Config.OUTPUT_FOLDER,
+                "/entities/data/" + name + ".json" );
+        if (!file.exists()){
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        }
+        if (!file.canWrite()){
+            throw new OpenDataException("the file " + file.getAbsolutePath() + " can't to be writed");
+        }
+        try (FileOutputStream fos = new FileOutputStream(file);
+             FileChannel fc = fos.getChannel()) {
+            byte[] data = fileContent.toString().getBytes();
+            ByteBuffer bytes = ByteBuffer.allocate(data.length);
+            bytes.put(data);
+            bytes.flip();
+            fc.write(bytes);
+        }
     }
 
     public enum MovementType {

@@ -22,6 +22,7 @@ import fr.entityCreator.terrain.texture.TerrainTexturePack;
 import fr.entityCreator.toolBox.Color;
 import fr.entityCreator.toolBox.Config;
 import org.joml.Vector3f;
+import org.lwjgl.opengl.GL;
 
 import javax.swing.*;
 import java.io.File;
@@ -36,7 +37,7 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         MasterRenderer renderer = new MasterRenderer();
-        Transform playerTransform = new Transform(200,0,200,0,0,0,1);
+        Transform playerTransform = new Transform(200,0,200,0,0,0,1,1,1);
         Camera cam = new Camera(playerTransform);
         Workspace workspace = new Workspace();
         Thread main = Thread.currentThread();
@@ -67,27 +68,28 @@ public class Main {
     }
 
     private static void setupMesh() {
-//        ModelData data = OBJFileLoader.loadModel(new File(Main.class.getResource("Box.obj").getFile()));
-//        ModelLoaderRequest boxRequest = new ModelLoaderRequest(data);
-//        GLRequestProcessor.sendRequest(boxRequest);
-//        data = OBJFileLoader.loadModel(new File(Main.class.getResource("Capsule.obj").getFile()));
-//        ModelLoaderRequest capsuleRequest = new ModelLoaderRequest(data);
-//        GLRequestProcessor.sendRequest(capsuleRequest);
-//        data = OBJFileLoader.loadModel(new File(Main.class.getResource("Con.obj").getFile()));
-//        ModelLoaderRequest conRequest = new ModelLoaderRequest(data);
-//        GLRequestProcessor.sendRequest(conRequest);
-//        data = OBJFileLoader.loadModel(new File(Main.class.getResource("Cylinder.obj").getFile()));
-//        ModelLoaderRequest cylinderRequest = new ModelLoaderRequest(data);
-//        GLRequestProcessor.sendRequest(cylinderRequest);
-//        data = OBJFileLoader.loadModel(new File(Main.class.getResource("Sphere.obj").getFile()));
-//        ModelLoaderRequest sphereRequest = new ModelLoaderRequest(data);
-//        GLRequestProcessor.sendRequest(sphereRequest);
-//        Timer.waitForRequest(sphereRequest);
-//        Config.BOX = boxRequest.getModel();
-//        Config.CAPSULE = capsuleRequest.getModel();
-//        Config.CONE = conRequest.getModel();
-//        Config.CYLINDER = cylinderRequest.getModel();
-//        Config.SPHERE = sphereRequest.getModel();
+        TextureLoaderRequest textureRequest = new TextureLoaderRequest(Main.class.getResource("/white.png").getFile());
+        GLRequestProcessor.sendRequest(textureRequest);
+        ModelData data = OBJFileLoader.loadModel(new File(Main.class.getResource("/model/cube.obj")
+                .getFile().replaceAll("%20", " ")));
+        ModelLoaderRequest boxRequest = new ModelLoaderRequest(data);
+        GLRequestProcessor.sendRequest(boxRequest);
+        data = OBJFileLoader.loadModel(new File(Main.class.getResource("/model/cone.obj").getFile().replaceAll("%20", " ")));
+        ModelLoaderRequest conRequest = new ModelLoaderRequest(data);
+        GLRequestProcessor.sendRequest(conRequest);
+        data = OBJFileLoader.loadModel(new File(Main.class.getResource("/model/cylinder.obj").getFile().replaceAll("%20", " ")));
+        ModelLoaderRequest cylinderRequest = new ModelLoaderRequest(data);
+        GLRequestProcessor.sendRequest(cylinderRequest);
+        data = OBJFileLoader.loadModel(new File(Main.class.getResource("/model/sphere.obj").getFile().replaceAll("%20", " ")));
+        ModelLoaderRequest sphereRequest = new ModelLoaderRequest(data);
+        GLRequestProcessor.sendRequest(sphereRequest);
+
+        Timer.waitForRequest(sphereRequest);
+        Config.BOX = boxRequest.getModel();
+        Config.CONE = conRequest.getModel();
+        Config.CYLINDER = cylinderRequest.getModel();
+        Config.SPHERE = sphereRequest.getModel();
+        Config.WHITE = textureRequest.getTexture();
     }
 
 }

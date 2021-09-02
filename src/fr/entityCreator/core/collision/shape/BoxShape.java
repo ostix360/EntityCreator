@@ -23,13 +23,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fr.entityCreator.core.resources.collision.shape;
+package fr.entityCreator.core.collision.shape;
 
 
 import fr.entityCreator.core.exporter.DataTransformer;
-import fr.entityCreator.core.resources.collision.maths.Matrix3x3;
-import fr.entityCreator.core.resources.collision.maths.ReactDefaults;
-import fr.entityCreator.core.resources.collision.maths.Vector3;
+import fr.entityCreator.core.collision.maths.Matrix3x3;
+import fr.entityCreator.core.collision.maths.ReactDefaults;
+import fr.entityCreator.core.collision.maths.Vector3;
 import fr.entityCreator.frame.VectorPanel;
 import fr.entityCreator.toolBox.Config;
 
@@ -137,10 +137,11 @@ public class BoxShape extends CollisionShape {
                 if ((rotPanel.getXField().getText().equals("")) || (rotPanel.getYField().getText().equals("")) || (rotPanel.getZField().getText().equals(""))) {
                     return;
                 }
-                float x = Float.parseFloat(rotPanel.getXField().getText().replaceAll(",", ""));
-                float y = Float.parseFloat(rotPanel.getYField().getText().replaceAll(",", ""));
-                float z = Float.parseFloat(rotPanel.getZField().getText().replaceAll(",", ""));
+                float x = Float.parseFloat(rotPanel.getXField().getText().replaceAll(",", "."));
+                float y = Float.parseFloat(rotPanel.getYField().getText().replaceAll(",", "."));
+                float z = Float.parseFloat(rotPanel.getZField().getText().replaceAll(",", "."));
                 setmExtent(new Vector3(x, y, z));
+                BoxShape.this.getRelativeTransform().getScale().set(x,y,z);
             }
         });
         this.panel = panel;
@@ -189,15 +190,11 @@ public class BoxShape extends CollisionShape {
         return new BoxShape(this);
     }
 
-    @Override
-    public boolean isEqualTo(CollisionShape otherCollisionShape) {
-        final BoxShape otherShape = (BoxShape) otherCollisionShape;
-        return mExtent.equals(otherShape.mExtent);
-    }
+
 
     public void export(FileChannel fc) throws IOException {
         fc.write(DataTransformer.casteString(String.valueOf(mExtent.getX()) + ";" +
-                String.valueOf(mExtent.getY()) + ";"+String.valueOf(mExtent.getZ())));
+                String.valueOf(mExtent.getY()) + ";"+String.valueOf(mExtent.getZ())+ "\n"));
     }
 
 

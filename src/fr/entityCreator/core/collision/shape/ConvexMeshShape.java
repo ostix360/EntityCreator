@@ -23,13 +23,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fr.entityCreator.core.resources.collision.shape;
+package fr.entityCreator.core.collision.shape;
 
 
 
-import fr.entityCreator.core.resources.collision.maths.Matrix3x3;
-import fr.entityCreator.core.resources.collision.maths.ReactDefaults;
-import fr.entityCreator.core.resources.collision.maths.Vector3;
+import fr.entityCreator.core.collision.maths.Matrix3x3;
+import fr.entityCreator.core.collision.maths.ReactDefaults;
+import fr.entityCreator.core.collision.maths.Vector3;
 import gnu.trove.iterator.TIntIterator;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -335,11 +335,6 @@ public class ConvexMeshShape extends CollisionShape {
         return new ConvexMeshShape(this);
     }
 
-    @Override
-    public boolean isEqualTo(CollisionShape otherCollisionShape) {
-        final ConvexMeshShape otherShape = (ConvexMeshShape) otherCollisionShape;
-        return mNbVertices == otherShape.mNbVertices && !mIsEdgesInformationUsed && mVertices.equals(otherShape.mVertices) && mEdgesAdjacencyList.equals(otherShape.mVertices);
-    }
 
     @Override
     public void export(FileChannel fc) throws IOException {

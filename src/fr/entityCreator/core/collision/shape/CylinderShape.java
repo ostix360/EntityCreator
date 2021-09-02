@@ -23,13 +23,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fr.entityCreator.core.resources.collision.shape;
+package fr.entityCreator.core.collision.shape;
 
 
 import fr.entityCreator.core.exporter.DataTransformer;
-import fr.entityCreator.core.resources.collision.maths.Matrix3x3;
-import fr.entityCreator.core.resources.collision.maths.ReactDefaults;
-import fr.entityCreator.core.resources.collision.maths.Vector3;
+import fr.entityCreator.core.collision.maths.Matrix3x3;
+import fr.entityCreator.core.collision.maths.ReactDefaults;
+import fr.entityCreator.core.collision.maths.Vector3;
 import fr.entityCreator.frame.MainFrame;
 import fr.entityCreator.toolBox.Config;
 
@@ -43,48 +43,45 @@ import java.nio.channels.FileChannel;
 import java.text.NumberFormat;
 
 /**
- * Represents a cone collision shape centered at the origin and aligned with the Y axis. The cone is defined by its height and by the radius of its base. The center of the cone is at the half of the
- * height. The "transform" of the corresponding rigid body gives an orientation and a position to the cone. This collision shape uses an extra margin distance around it for collision detection
- * purpose. The default margin is 4cm (if your units are meters, which is recommended). In case, you want to simulate small objects (smaller than the margin distance), you might want to reduce the
- * margin by specifying your own margin distance using the "margin" parameter in the constructor of the cone shape. Otherwise, it is recommended to use the default margin distance by not using the
- * "margin" parameter in the constructor.
+ * Represents a cylinder collision shape around the Y axis and centered at the origin. The cylinder is defined by its height and the radius of its base. The "transform" of the corresponding rigid body
+ * gives an orientation and a position to the cylinder. This collision shape uses an extra margin distance around it for collision detection purpose. The default margin is 4cm (if your units are
+ * meters, which is recommended). In case, you want to simulate small objects (smaller than the margin distance), you might want to reduce the margin by specifying your own margin distance using the
+ * "margin" parameter in the constructor of the cylinder shape. Otherwise, it is recommended to use the default margin distance by not using the "margin" parameter in the constructor.
  */
-public class ConeShape extends CollisionShape {
+public class CylinderShape extends CollisionShape {
     private float mRadius;
     private float mHalfHeight;
-    private float mSinTheta;
 
     /**
-     * Constructs a new cone shape from the radius of the base and the height.
+     * Constructs a new cylinder from the radius of the base and the height.
      *
      * @param radius The radius of the base
      * @param height The height
      */
-    public ConeShape(float radius, float height) {
+    public CylinderShape(float radius, float height) {
         this(radius, height, ReactDefaults.OBJECT_MARGIN);
     }
 
     /**
-     * Constructs a new cone shape from the radius of the base and the height and the AABB margin.
+     * Constructs a new cylinder from the radius of the base and the height and the AABB margin.
      *
      * @param radius The radius of the base
      * @param height The height
      * @param margin The margin
      */
-    public ConeShape(float radius, float height, float margin) {
-        super(CollisionShapeType.CONE, margin, Config.CONE);
+    public CylinderShape(float radius, float height, float margin) {
+        super(CollisionShapeType.CYLINDER, margin, Config.CYLINDER);
         mRadius = radius;
-        mHalfHeight = height * 0.5f;
+        mHalfHeight = height / 2;
         if (mRadius <= 0) {
             throw new IllegalArgumentException("Radius must be greater than zero");
         }
-        if (mHalfHeight <= 0) {
+        if (height <= 0) {
             throw new IllegalArgumentException("Height must be greater than zero");
         }
         if (margin <= 0) {
             throw new IllegalArgumentException("Margin must be greater than 0");
         }
-        mSinTheta = mRadius / (float) Math.sqrt(mRadius * mRadius + height * height);
     }
 
     /**
@@ -92,11 +89,10 @@ public class ConeShape extends CollisionShape {
      *
      * @param shape The shape to copy
      */
-    public ConeShape(ConeShape shape) {
+    public CylinderShape(CylinderShape shape) {
         super(shape);
         mRadius = shape.mRadius;
         mHalfHeight = shape.mHalfHeight;
-        mSinTheta = shape.mSinTheta;
     }
 
     /**
@@ -109,7 +105,7 @@ public class ConeShape extends CollisionShape {
     }
 
     /**
-     * Gets the height of the cone.
+     * Gets the height of the cylinder.
      *
      * @return The height
      */
@@ -138,7 +134,7 @@ public class ConeShape extends CollisionShape {
         if (direction.lengthSquare() > ReactDefaults.MACHINE_EPSILON * ReactDefaults.MACHINE_EPSILON) {
             unitVec = direction.getUnit();
         } else {
-            unitVec = new Vector3(0, -1, 0);
+            unitVec = new Vector3(0, 1, 0);
         }
         supportPoint.add(Vector3.multiply(unitVec, mMargin));
         return supportPoint;
@@ -146,18 +142,22 @@ public class ConeShape extends CollisionShape {
 
     @Override
     public Vector3 getLocalSupportPointWithoutMargin(Vector3 direction) {
-        final Vector3 v = direction;
-        final float sinThetaTimesLengthV = mSinTheta * v.length();
-        final Vector3 supportPoint;
-        if (v.getY() > sinThetaTimesLengthV) {
-            supportPoint = new Vector3(0, mHalfHeight, 0);
-        } else {
-            final float projectedLength = (float) Math.sqrt(v.getX() * v.getX() + v.getZ() * v.getZ());
-            if (projectedLength > ReactDefaults.MACHINE_EPSILON) {
-                final float d = mRadius / projectedLength;
-                supportPoint = new Vector3(v.getX() * d, -mHalfHeight, v.getZ() * d);
+        final Vector3 supportPoint = new Vector3(0, 0, 0);
+        final float uDotv = direction.getY();
+        final Vector3 w = new Vector3(direction.getX(), 0, direction.getZ());
+        final float lengthW = (float) Math.sqrt(direction.getX() * direction.getX() + direction.getZ() * direction.getZ());
+        if (lengthW > ReactDefaults.MACHINE_EPSILON) {
+            if (uDotv < 0.0) {
+                supportPoint.setY(-mHalfHeight);
             } else {
-                supportPoint = new Vector3(0, -mHalfHeight, 0);
+                supportPoint.setY(mHalfHeight);
+            }
+            supportPoint.add(Vector3.multiply(mRadius / lengthW, w));
+        } else {
+            if (uDotv < 0.0) {
+                supportPoint.setY(-mHalfHeight);
+            } else {
+                supportPoint.setY(mHalfHeight);
             }
         }
         return supportPoint;
@@ -175,29 +175,25 @@ public class ConeShape extends CollisionShape {
 
     @Override
     public void computeLocalInertiaTensor(Matrix3x3 tensor, float mass) {
-        final float rSquare = mRadius * mRadius;
-        final float diagXZ = 0.15f * mass * (rSquare + mHalfHeight);
+        final float height = 2 * mHalfHeight;
+        final float diag = (1f / 12) * mass * (3 * mRadius * mRadius + height * height);
         tensor.setAllValues(
-                diagXZ, 0, 0,
-                0, 0.3f * mass * rSquare, 0,
-                0, 0, diagXZ);
+                diag, 0, 0,
+                0, 0.5f * mass * mRadius * mRadius, 0,
+                0, 0, diag);
     }
 
     @Override
-    public ConeShape clone() {
-        return new ConeShape(this);
+    public CylinderShape clone() {
+        return new CylinderShape(this);
     }
 
-    @Override
-    public boolean isEqualTo(CollisionShape otherCollisionShape) {
-        final ConeShape otherShape = (ConeShape) otherCollisionShape;
-        return mRadius == otherShape.mRadius && mHalfHeight == otherShape.mHalfHeight;
-    }
 
-    @Override
+
     public void export(FileChannel fc) throws IOException {
-        fc.write(DataTransformer.casteString(String.valueOf(mRadius) + String.valueOf(mHalfHeight * 2)));
+        fc.write(DataTransformer.casteString(String.valueOf(mRadius) + ";" + String.valueOf(mHalfHeight * 2) + "\n"));
     }
+
 
 
     private JPanel createErrorPanel(boolean isRadius) {
@@ -211,41 +207,29 @@ public class ConeShape extends CollisionShape {
         field.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if (field.getText().isEmpty()) {
-                    return;
-                }
-                if (isRadius) {
-                    mRadius = ((Float) Float.parseFloat(field.getText().replaceAll(",", "")));
-                } else {
-                    mHalfHeight = ((Float) Float.parseFloat(field.getText().replaceAll(",", "")) / 2);
-                }
-                mSinTheta = mRadius / (float) Math.sqrt(mRadius * mRadius + (mHalfHeight * 2) * (mHalfHeight * 2));
+                warn();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if (field.getText().isEmpty()) {
-                    return;
-                }
-                if (isRadius) {
-                    mRadius = ((Float) Float.parseFloat(field.getText().replaceAll(",", "")));
-                } else {
-                    mHalfHeight = ((Float) Float.parseFloat(field.getText().replaceAll(",", "")) / 2);
-                }
-                mSinTheta = mRadius / (float) Math.sqrt(mRadius * mRadius + (mHalfHeight * 2) * (mHalfHeight * 2));
+                warn();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void warn(){
                 if (field.getText().isEmpty()) {
                     return;
                 }
                 if (isRadius) {
-                    mRadius = ((Float) Float.parseFloat(field.getText().replaceAll(",", "")));
+                    mRadius = ((Float) Float.parseFloat(field.getText().replaceAll(",",".")));
                 } else {
-                    mHalfHeight = ((Float) Float.parseFloat(field.getText()) / 2);
+                    mHalfHeight = ((Float) Float.parseFloat(field.getText().replaceAll(",",".")) / 2);
                 }
-                mSinTheta = mRadius / (float) Math.sqrt(mRadius * mRadius + (mHalfHeight * 2) * (mHalfHeight * 2));
+                CylinderShape.this.getRelativeTransform().getScale().set(mRadius, mHalfHeight*2, mRadius);
             }
         });
         panel.add(field, "East");
@@ -269,6 +253,6 @@ public class ConeShape extends CollisionShape {
     }
 
     public String toString() {
-        return "Cone";
+        return "Cylindre";
     }
 }

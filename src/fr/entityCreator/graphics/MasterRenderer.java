@@ -1,10 +1,8 @@
 package fr.entityCreator.graphics;
 
-import fr.entityCreator.core.loader.Loader;
 import fr.entityCreator.entity.Entity;
 import fr.entityCreator.entity.Light;
 import fr.entityCreator.entity.camera.Camera;
-import fr.entityCreator.graphics.model.Model;
 import fr.entityCreator.graphics.shader.ClassicShader;
 import fr.entityCreator.graphics.shader.TerrainShader;
 import fr.entityCreator.terrain.Terrain;
@@ -14,9 +12,7 @@ import fr.entityCreator.toolBox.OpenGL.OpenGlUtils;
 import org.joml.Matrix4f;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -33,6 +29,7 @@ public class MasterRenderer {
 
     private TerrainRenderer terrainRenderer;
     private TerrainShader terrainShader;
+    private CollisionObjectRenderer collisionObjectRenderer;
 
     private Terrain terrains;
     private static Matrix4f projectionMatrix;
@@ -46,7 +43,7 @@ public class MasterRenderer {
     public MasterRenderer() {
     }
 
-    public void init(){
+    public void init() {
 
         OpenGlUtils.cullBackFaces(true);
         projectionMatrix = createProjectionMatrix();
@@ -55,6 +52,7 @@ public class MasterRenderer {
         this.terrainShader = new TerrainShader();
         this.entityRenderer = new EntityRenderer(shader, projectionMatrix);
         this.terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+        this.collisionObjectRenderer = new CollisionObjectRenderer(shader, projectionMatrix);
     }
 
 
@@ -67,12 +65,13 @@ public class MasterRenderer {
 
 
     private void processEntity(Entity e) {
-            entities.add(e);
+        entities.clear();
+        entities.add(e);
     }
 
     public void initToRender(List<Entity> entities, Terrain terrains, Light light, Camera camera) {
         for (Entity entity : entities) {
-            if (entity == null){
+            if (entity == null) {
                 continue;
             }
             processEntity(entity);
@@ -88,7 +87,7 @@ public class MasterRenderer {
 
     }
 
-    public void setTheEntity(Entity e){
+    public void setTheEntity(Entity e) {
         this.theEntity = e;
         processEntity(e);
     }
@@ -97,15 +96,16 @@ public class MasterRenderer {
         updateEntity();
         this.initFrame();
         shader.bind();
-        if (light != null)shader.loadLight(light);
+        if (light != null) shader.loadLight(light);
         shader.loadSkyColor(skyColor);
         shader.loadViewMatrix(cam);
         entityRenderer.render(entities);
+        collisionObjectRenderer.render(theEntity);
         shader.unBind();
 
         terrainShader.bind();
         terrainShader.loadSkyColour(skyColor);
-        if (light != null)terrainShader.loadLight(light);
+        if (light != null) terrainShader.loadLight(light);
         terrainShader.loadViewMatrix(cam);
         terrainRenderer.render(terrains);
         terrainShader.unBind();
@@ -118,7 +118,7 @@ public class MasterRenderer {
         }
     }
 
-    public void clearEntity(){
+    public void clearEntity() {
         entities.clear();
     }
 

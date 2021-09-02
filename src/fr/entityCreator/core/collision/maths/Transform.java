@@ -23,7 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fr.entityCreator.core.resources.collision.maths;
+package fr.entityCreator.core.collision.maths;
 
 /**
  * Represents a position and an orientation in 3D. It can also be seen as representing a translation and a rotation.

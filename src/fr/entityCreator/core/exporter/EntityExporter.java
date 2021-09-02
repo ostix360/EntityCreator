@@ -5,7 +5,6 @@ import fr.entityCreator.entity.Entity;
 public class EntityExporter {
 
     public static void exportEntity(Entity e) throws Exception{
-        e.getModel().export();
-        e.exportAllComponents();
+        e.export();
     }
 }

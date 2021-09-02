@@ -87,8 +87,8 @@ public class Camera implements ICamera {
         if (distanceFromPlayer <= 3) {
             distanceFromPlayer = 3;
         }
-        if (distanceFromPlayer >= 105) {
-            distanceFromPlayer = 105;
+        if (distanceFromPlayer >= 150) {
+            distanceFromPlayer = 150;
         }
     }
 

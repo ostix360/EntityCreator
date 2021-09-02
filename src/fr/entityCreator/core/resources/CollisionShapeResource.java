@@ -2,8 +2,8 @@ package fr.entityCreator.core.resources;
 
 
 import fr.entityCreator.core.exporter.DataTransformer;
-import fr.entityCreator.core.resources.collision.maths.Vector3;
-import fr.entityCreator.core.resources.collision.shape.*;
+import fr.entityCreator.core.collision.maths.Vector3;
+import fr.entityCreator.core.collision.shape.*;
 import fr.entityCreator.entity.Transform;
 import org.joml.Vector3f;
 

@@ -1,6 +1,7 @@
 package fr.entityCreator.toolBox;
 
 import fr.entityCreator.graphics.model.MeshModel;
+import fr.entityCreator.graphics.textures.TextureLoader;
 
 import java.io.File;
 
@@ -14,5 +15,6 @@ public class Config {
     public static MeshModel CONE;
     public static MeshModel CYLINDER;
     public static MeshModel SPHERE;
+    public static TextureLoader WHITE;
 
 }

@@ -1,5 +1,6 @@
 package fr.entityCreator.entity;
 
+import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.graphics.model.MeshModel;
 import fr.entityCreator.toolBox.Config;
 import org.joml.Vector3f;
@@ -39,6 +40,7 @@ public class BoundingModel {
 
     public void export(FileChannel fc) throws IOException {
         relativeTransform.export(fc);
+        fc.write(DataTransformer.casteString(m.getModelFile().getName()));
         exportModel();
     }
 

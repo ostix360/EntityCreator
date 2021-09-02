@@ -23,38 +23,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fr.entityCreator.core.resources.collision.maths;
+package fr.entityCreator.core.collision.maths;
 
 /**
- * Represents a 4D vector in space.
+ * Represents a 3D vector in space.
  */
-public class Vector4 {
+public class Vector3 {
     /**
-     * X_AXIS, represents the x axis in the vector. Value of 0.
+     * X_AXIS, represents the x axis in the vector. Value of 0
      */
     public static final int X_AXIS = 0;
     /**
-     * Y_AXIS, represents the y axis in the vector. Value of 1.
+     * Y_AXIS, represents the y axis in the vector. Value of 1
      */
     public static final int Y_AXIS = 1;
     /**
-     * Z_AXIS, represents the z axis in the vector. Value of 2.
+     * Z_AXIS, represents the z axis in the vector. Value of 2
      */
     public static final int Z_AXIS = 2;
-    /**
-     * W_AXIS, represents the w axis in the vector. Value of 3.
-     */
-    public static final int W_AXIS = 3;
     private float x;
     private float y;
     private float z;
-    private float w;
 
     /**
-     * Default constructor. All values are 0.
+     * Default constructor. All values are 0.0F
      */
-    public Vector4() {
-        this(0, 0, 0, 0);
+    public Vector3() {
+        this(0, 0, 0);
     }
 
     /**
@@ -62,8 +57,8 @@ public class Vector4 {
      *
      * @param vector to copy
      */
-    public Vector4(Vector4 vector) {
-        this(vector.getX(), vector.getY(), vector.getZ(), vector.getW());
+    public Vector3(Vector3 vector) {
+        this(vector.getX(), vector.getY(), vector.getZ());
     }
 
     /**
@@ -72,10 +67,9 @@ public class Vector4 {
      * @param x value
      * @param y value
      * @param z value
-     * @param w value
      */
-    public Vector4(float x, float y, float z, float w) {
-        setAllValues(x, y, z, w);
+    public Vector3(float x, float y, float z) {
+        setAllValues(x, y, z);
     }
 
     /**
@@ -106,36 +100,25 @@ public class Vector4 {
     }
 
     /**
-     * Sets the w value of the vector
-     *
-     * @param w value to set
-     */
-    public void setW(float w) {
-        this.w = w;
-    }
-
-    /**
      * Sets all values of the vector
      *
      * @param x value to set
      * @param y value to set
      * @param z value to set
-     * @param w value to set
      */
-    public final void setAllValues(float x, float y, float z, float w) {
+    public final void setAllValues(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.w = w;
     }
 
     /**
-     * Sets the values of this vector4 to those of the provided vector4.
+     * Sets the values of this vector3 to those of the provided vector3.
      *
-     * @param vector The vector4 to copy the values from
+     * @param vector The vector3 to copy the values from
      */
-    public Vector4 set(Vector4 vector) {
-        setAllValues(vector.getX(), vector.getY(), vector.getZ(), vector.getW());
+    public Vector3 set(Vector3 vector) {
+        setAllValues(vector.getX(), vector.getY(), vector.getZ());
         return this;
     }
 
@@ -167,19 +150,10 @@ public class Vector4 {
     }
 
     /**
-     * Gets the w value of the vector
-     *
-     * @return {@link float} w value
-     */
-    public float getW() {
-        return w;
-    }
-
-    /**
-     * Sets the x, y, z and w values to zero.
+     * Sets the x, y and z values to zero.
      */
     public void setToZero() {
-        setAllValues(0, 0, 0, 0);
+        setAllValues(0, 0, 0);
     }
 
     /**
@@ -188,7 +162,7 @@ public class Vector4 {
      * @return {@link float} length of the vector
      */
     public float length() {
-        return (float) Math.sqrt(x * x + y * y + z * z + w * w);
+        return (float) Math.sqrt(x * x + y * y + z * z);
     }
 
     /**
@@ -197,7 +171,7 @@ public class Vector4 {
      * @return {@link float} square length of the vector
      */
     public float lengthSquare() {
-        return x * x + y * y + z * z + w * w;
+        return x * x + y * y + z * z;
     }
 
     /**
@@ -206,20 +180,7 @@ public class Vector4 {
      * @return {@link int} axis with minimal value
      */
     public int getMinAxis() {
-        float value = x;
-        int axis = 0;
-        if (y < value) {
-            value = y;
-            axis = 1;
-        }
-        if (z < value) {
-            value = z;
-            axis = 2;
-        }
-        if (w < value) {
-            axis = 3;
-        }
-        return axis;
+        return x < y ? (x < z ? X_AXIS : Z_AXIS) : (y < z ? Y_AXIS : Z_AXIS);
     }
 
     /**
@@ -228,20 +189,7 @@ public class Vector4 {
      * @return {@link int} axis with maximum value
      */
     public int getMaxAxis() {
-        float value = x;
-        int axis = 0;
-        if (y > value) {
-            value = y;
-            axis = 1;
-        }
-        if (z > value) {
-            value = z;
-            axis = 2;
-        }
-        if (w > value) {
-            axis = 3;
-        }
-        return axis;
+        return x < y ? (y < z ? Z_AXIS : Y_AXIS) : (x < z ? Z_AXIS : X_AXIS);
     }
 
     /**
@@ -265,15 +213,35 @@ public class Vector4 {
     /**
      * Return the corresponding unit vector. Creates a new vector.
      *
-     * @return new unit {@link Vector4} corresponding to this vector
+     * @return new unit {@link Vector3} corresponding to this vector
      */
-    public Vector4 getUnit() {
+    public Vector3 getUnit() {
         final float lengthVector = length();
         if (lengthVector <= ReactDefaults.MACHINE_EPSILON) {
             throw new IllegalArgumentException("Cannot normalize the zero vector");
         }
         final float lengthInv = 1 / lengthVector;
-        return new Vector4(x * lengthInv, y * lengthInv, z * lengthInv, w * lengthInv);
+        return new Vector3(x * lengthInv, y * lengthInv, z * lengthInv);
+    }
+
+    /**
+     * Return an orthogonal vector of this vector
+     *
+     * @return an orthogonal {@link Vector3} of the current vector
+     */
+    public Vector3 getOneUnitOrthogonalVector() {
+        if (length() <= ReactDefaults.MACHINE_EPSILON) {
+            throw new IllegalArgumentException("Cannot normalize the zero vector");
+        }
+        final Vector3 vectorAbs = new Vector3(Math.abs(x), Math.abs(y), Math.abs(z));
+        final int minElement = vectorAbs.getMinAxis();
+        if (minElement == 0) {
+            return new Vector3(0, -z, y).divide((float) Math.sqrt(y * y + z * z));
+        } else if (minElement == 1) {
+            return new Vector3(-z, 0, x).divide((float) Math.sqrt(x * x + z * z));
+        } else {
+            return new Vector3(-y, x, 0).divide((float) Math.sqrt(x * x + y * y));
+        }
     }
 
     /**
@@ -281,7 +249,7 @@ public class Vector4 {
      *
      * @return This vector after normalization
      */
-    public Vector4 normalize() {
+    public Vector3 normalize() {
         final float l = length();
         if (l <= ReactDefaults.MACHINE_EPSILON) {
             throw new IllegalArgumentException("Cannot normalize the zero vector");
@@ -289,21 +257,19 @@ public class Vector4 {
         x /= l;
         y /= l;
         z /= l;
-        w /= l;
         return this;
     }
 
     /**
      * Return the corresponding absolute value vector. Creates a new vector.
      *
-     * @return new {@link Vector4} absolute value vector
+     * @return new {@link Vector3} absolute value vector
      */
-    public Vector4 getAbsoluteVector() {
-        return new Vector4(
+    public Vector3 getAbsoluteVector() {
+        return new Vector3(
                 Math.abs(x),
                 Math.abs(y),
-                Math.abs(z),
-                Math.abs(w));
+                Math.abs(z));
     }
 
     /**
@@ -312,8 +278,21 @@ public class Vector4 {
      * @param vector to compute scalar product with
      * @return {@link float} scalar product
      */
-    public float dot(Vector4 vector) {
-        return x * vector.getX() + y * vector.getY() + z * vector.getZ() + w * vector.getW();
+    public float dot(Vector3 vector) {
+        return x * vector.getX() + y * vector.getY() + z * vector.getZ();
+    }
+
+    /**
+     * Crosses a vector3 with this vector. Creates a new vector.
+     *
+     * @param vector to compute the cross product with
+     * @return a new vector, result of the cross product
+     */
+    public Vector3 cross(Vector3 vector) {
+        return new Vector3(
+                y * vector.getZ() - z * vector.getY(),
+                z * vector.getX() - x * vector.getZ(),
+                x * vector.getY() - y * vector.getX());
     }
 
     /**
@@ -322,11 +301,10 @@ public class Vector4 {
      * @param vector to add to this one
      * @return this vector, after addition is finished
      */
-    public Vector4 add(Vector4 vector) {
+    public Vector3 add(Vector3 vector) {
         x += vector.getX();
         y += vector.getY();
         z += vector.getZ();
-        w += vector.getW();
         return this;
     }
 
@@ -335,8 +313,8 @@ public class Vector4 {
      *
      * @return this vector, after negation is finished
      */
-    public Vector4 negate() {
-        setAllValues(-x, -y, -z, -w);
+    public Vector3 negate() {
+        setAllValues(-x, -y, -z);
         return this;
     }
 
@@ -346,11 +324,10 @@ public class Vector4 {
      * @param vector to subtract from this one
      * @return the difference of this vector and the other vector
      */
-    public Vector4 subtract(Vector4 vector) {
+    public Vector3 subtract(Vector3 vector) {
         x -= vector.getX();
         y -= vector.getY();
         z -= vector.getZ();
-        w -= vector.getW();
         return this;
     }
 
@@ -360,11 +337,10 @@ public class Vector4 {
      * @param value to multiply by
      * @return this vector, after multiplication is finished
      */
-    public Vector4 multiply(float value) {
+    public Vector3 multiply(float value) {
         x *= value;
         y *= value;
         z *= value;
-        w *= value;
         return this;
     }
 
@@ -374,21 +350,21 @@ public class Vector4 {
      * @param value to multiply by
      * @return this vector, after division is finished
      */
-    public Vector4 divide(float value) {
+    public Vector3 divide(float value) {
         if (value <= ReactDefaults.MACHINE_EPSILON) {
             throw new IllegalArgumentException("Cannot divide by zero");
         }
         x /= value;
         y /= value;
         z /= value;
-        w /= value;
         return this;
     }
 
     /**
-     * Gets the corresponding float value from this vector based on the requested axis.<br><br> <p> Valid axis are:<br> {@link #X_AXIS}<br> {@link #Y_AXIS}<br> {@link #Z_AXIS}<br> {@link #W_AXIS}
+     * Gets the corresponding float value from this vector based on the requested axis.<br><br> <p> Valid axis are:<br> {@link Vector3#X_AXIS}<br> {@link Vector3#Y_AXIS}<br> {@link
+     * Vector3#Z_AXIS}<br>
      *
-     * @param axis to set; {@link #X_AXIS} OR {@link #Y_AXIS} OR {@link #Z_AXIS} OR {@link #W_AXIS}
+     * @param axis to get; {@link Vector3#X_AXIS} OR {@link Vector3#Y_AXIS} OR {@link Vector3#Z_AXIS}
      * @return {@link float} value of the axis
      */
     public float get(int axis) {
@@ -399,16 +375,15 @@ public class Vector4 {
                 return y;
             case Z_AXIS:
                 return z;
-            case W_AXIS:
-                return w;
         }
-        throw new UnsupportedOperationException("Must specify 0, 1, 2 or 3 as an axis. (Vector3.X_AXIS, Vector3.Y_AXIS, Vector3.Z_AXIS or Vector3.W_AXIS)");
+        throw new UnsupportedOperationException("Must specify 0, 1, or 2 as an axis. (Vector3.X_AXIS, Vector3.Y_AXIS, Vector3.Z_AXIS");
     }
 
     /**
-     * Sets the corresponding float value from this vector based on the requested axis.<br><br> <p> Valid axis are:<br> {@link #X_AXIS}<br> {@link #Y_AXIS}<br> {@link #Z_AXIS}<br> {@link #W_AXIS}
+     * Sets the corresponding float value from this vector based on the requested axis.<br><br> <p> Valid axis are:<br> {@link Vector3#X_AXIS}<br> {@link Vector3#Y_AXIS}<br> {@link
+     * Vector3#Z_AXIS}<br>
      *
-     * @param axis to set; {@link #X_AXIS} OR {@link #Y_AXIS} OR {@link #Z_AXIS} OR {@link #W_AXIS}
+     * @param axis to set; {@link Vector3#X_AXIS} OR {@link Vector3#Y_AXIS} OR {@link Vector3#Z_AXIS}
      * @param value {@link float} value for the axis
      */
     public void set(int axis, float value) {
@@ -422,11 +397,8 @@ public class Vector4 {
             case Z_AXIS:
                 z = value;
                 return;
-            case W_AXIS:
-                w = value;
-                return;
         }
-        throw new UnsupportedOperationException("Must specify 0, 1, 2 or 3 as an axis. (Vector3.X_AXIS, Vector3.Y_AXIS, Vector3.Z_AXIS or Vector3.W_AXIS)");
+        throw new UnsupportedOperationException("Must specify 0, 1, or 2 as an axis. (Vector3.X_AXIS, Vector3.Y_AXIS, Vector3.Z_AXIS");
     }
 
     @Override
@@ -436,7 +408,6 @@ public class Vector4 {
         result = prime * result + Float.floatToIntBits(x);
         result = prime * result + Float.floatToIntBits(y);
         result = prime * result + Float.floatToIntBits(z);
-        result = prime * result + Float.floatToIntBits(w);
         return result;
     }
 
@@ -445,40 +416,36 @@ public class Vector4 {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof Vector4)) {
+        if (!(obj instanceof Vector3)) {
             return false;
         }
-        Vector4 other = (Vector4) obj;
+        Vector3 other = (Vector3) obj;
         if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x)) {
             return false;
         }
         if (Float.floatToIntBits(y) != Float.floatToIntBits(other.y)) {
             return false;
         }
-        if (Float.floatToIntBits(z) != Float.floatToIntBits(other.z)) {
-            return false;
-        }
-        return Float.floatToIntBits(w) == Float.floatToIntBits(other.w);
+        return Float.floatToIntBits(z) == Float.floatToIntBits(other.z);
     }
 
     @Override
     public String toString() {
-        return "(" + x + ", " + y + ", " + z + ", " + w + ")";
+        return "(" + x + ", " + y + ", " + z + ")";
     }
 
     /**
-     * Adds a vector4 to another vector4. Creates a new vector.
+     * Adds a vector3 to another vector3. Creates a new vector.
      *
      * @param vector1 the first vector
      * @param vector2 the second vector
      * @return the sum of the two vectors
      */
-    public static Vector4 add(Vector4 vector1, Vector4 vector2) {
-        return new Vector4(
+    public static Vector3 add(Vector3 vector1, Vector3 vector2) {
+        return new Vector3(
                 vector1.getX() + vector2.getX(),
                 vector1.getY() + vector2.getY(),
-                vector1.getZ() + vector2.getZ(),
-                vector1.getW() + vector2.getW());
+                vector1.getZ() + vector2.getZ());
     }
 
     /**
@@ -487,27 +454,25 @@ public class Vector4 {
      * @param vector the vector to negate
      * @return the negative vector for this vector
      */
-    public static Vector4 negate(Vector4 vector) {
-        return new Vector4(
+    public static Vector3 negate(Vector3 vector) {
+        return new Vector3(
                 -vector.getX(),
                 -vector.getY(),
-                -vector.getZ(),
-                -vector.getW());
+                -vector.getZ());
     }
 
     /**
-     * Subtracts a vector4 from another vector4. Creates a new vector.
+     * Subtracts a vector3 from another vector3. Creates a new vector.
      *
      * @param vector1 the first vector
      * @param vector2 the second vector
      * @return the difference of the two vectors
      */
-    public static Vector4 subtract(Vector4 vector1, Vector4 vector2) {
-        return new Vector4(
+    public static Vector3 subtract(Vector3 vector1, Vector3 vector2) {
+        return new Vector3(
                 vector1.getX() - vector2.getX(),
                 vector1.getY() - vector2.getY(),
-                vector1.getZ() - vector2.getZ(),
-                vector1.getW() - vector2.getW());
+                vector1.getZ() - vector2.getZ());
     }
 
     /**
@@ -517,7 +482,7 @@ public class Vector4 {
      * @param vector the vector
      * @return the product of the value and the vector
      */
-    public static Vector4 multiply(float value, Vector4 vector) {
+    public static Vector3 multiply(float value, Vector3 vector) {
         return multiply(vector, value);
     }
 
@@ -528,12 +493,11 @@ public class Vector4 {
      * @param value the value
      * @return the product of the vector and the value
      */
-    public static Vector4 multiply(Vector4 vector, float value) {
-        return new Vector4(
+    public static Vector3 multiply(Vector3 vector, float value) {
+        return new Vector3(
                 vector.getX() * value,
                 vector.getY() * value,
-                vector.getZ() * value,
-                vector.getW() * value);
+                vector.getZ() * value);
     }
 
     /**
@@ -541,16 +505,15 @@ public class Vector4 {
      *
      * @param vector the vector
      * @param value the value
-     * @return the quotient (vector4) of the vector and the value
+     * @return the quotient (vector3) of the vector and the value
      */
-    public static Vector4 divide(Vector4 vector, float value) {
+    public static Vector3 divide(Vector3 vector, float value) {
         if (value <= ReactDefaults.MACHINE_EPSILON) {
             throw new IllegalArgumentException("Cannot divide by zero");
         }
-        return new Vector4(
+        return new Vector3(
                 vector.getX() / value,
                 vector.getY() / value,
-                vector.getZ() / value,
-                vector.getW() / value);
+                vector.getZ() / value);
     }
 }

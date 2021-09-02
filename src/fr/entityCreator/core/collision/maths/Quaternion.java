@@ -23,7 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fr.entityCreator.core.resources.collision.maths;
+package fr.entityCreator.core.collision.maths;
 
 /**
  * Represents a quaternion. The notation q = (x*i, y*j, z*k, w) is used to represent the quaternion.

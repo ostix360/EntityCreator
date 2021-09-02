@@ -23,14 +23,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fr.entityCreator.core.resources.collision.shape;
+package fr.entityCreator.core.collision.shape;
 
 
 import fr.entityCreator.core.exporter.DataTransformer;
-import fr.entityCreator.core.resources.collision.maths.Matrix3x3;
-import fr.entityCreator.core.resources.collision.maths.ReactDefaults;
-import fr.entityCreator.core.resources.collision.maths.Transform;
-import fr.entityCreator.core.resources.collision.maths.Vector3;
+import fr.entityCreator.core.collision.maths.Matrix3x3;
+import fr.entityCreator.core.collision.maths.ReactDefaults;
+import fr.entityCreator.core.collision.maths.Transform;
+import fr.entityCreator.core.collision.maths.Vector3;
 import fr.entityCreator.frame.MainFrame;
 import fr.entityCreator.toolBox.Config;
 
@@ -135,7 +135,7 @@ public class SphereShape extends CollisionShape {
 
     @Override
     public void export(FileChannel fc) throws IOException {
-        fc.write(DataTransformer.casteString(String.valueOf(mRadius)));
+        fc.write(DataTransformer.casteString(String.valueOf(mRadius)+ "\n"));
     }
 
 
@@ -150,26 +150,24 @@ public class SphereShape extends CollisionShape {
         field.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if (field.getText().isEmpty()) {
-                    return;
-                }
-                mRadius = ((Float) Float.parseFloat(field.getText()));
+                warn();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if (field.getText().isEmpty()) {
-                    return;
-                }
-                mRadius = ((Float) Float.parseFloat(field.getText()));
+                warn();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
+                warn();
+            }
+            public void warn(){
                 if (field.getText().isEmpty()) {
                     return;
                 }
                 mRadius = ((Float) Float.parseFloat(field.getText()));
+                SphereShape.super.getRelativeTransform().setScale(mRadius);
             }
         });
         panel.add(field, "East");
@@ -197,11 +195,6 @@ public class SphereShape extends CollisionShape {
         return new SphereShape(this);
     }
 
-    @Override
-    public boolean isEqualTo(CollisionShape otherCollisionShape) {
-        final SphereShape otherShape = (SphereShape) otherCollisionShape;
-        return mRadius == otherShape.mRadius;
-    }
 
     public String toString() {
         return "Sphere";

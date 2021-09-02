@@ -1,7 +1,5 @@
 package fr.entityCreator.entity.component.collision;
 
-import fr.entityCreator.core.resources.CollisionShapeResource;
-import fr.entityCreator.core.resources.collision.shape.CollisionShape;
 import fr.entityCreator.frame.ComponentListPanel;
 import fr.entityCreator.frame.ComponentPanel;
 

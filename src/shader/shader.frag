@@ -7,7 +7,7 @@ in vec3 toLightVector;
 in float visibility;
 
 uniform sampler2D textureSampler;
-uniform sampler2D normalMapTexture;
+uniform sampler2D normalMap;
 uniform sampler2D specularMap;
 
 uniform float useSpecularMap;
@@ -24,7 +24,7 @@ uniform vec3 skyColor;
 out vec4 out_Color;
 
 void main(){
-    vec4 normalMapValue = 2 * texture(normalMapTexture, passTextureCoords)-1.0;
+    vec4 normalMapValue = 2 * texture(normalMap, passTextureCoords)-1.0;
     vec3 unitNormals = unitNormal;
     if (normalMapValue.a > 5){
         unitNormals = normalize(normalMapValue.rgb);

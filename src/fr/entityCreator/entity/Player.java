@@ -2,7 +2,7 @@ package fr.entityCreator.entity;
 
 
 import fr.entityCreator.core.Input;
-import fr.entityCreator.core.resources.collision.maths.Vector3;
+import fr.entityCreator.core.collision.maths.Vector3;
 import fr.entityCreator.graphics.model.Model;
 import org.joml.Vector3f;
 

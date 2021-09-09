@@ -10,6 +10,7 @@ import fr.entityCreator.entity.component.Component;
 import fr.entityCreator.entity.component.ComponentType;
 import fr.entityCreator.frame.ComponentListPanel;
 import fr.entityCreator.frame.ComponentPanel;
+import fr.entityCreator.toolBox.Config;
 import fr.entityCreator.toolBox.Logger;
 import org.joml.Random;
 
@@ -34,7 +35,7 @@ public class AnimationComponent extends Component {
     @Override
     public void update() {
         AnimatedModel model = (AnimatedModel) e.getModel();
-        Animation a = ResourcePack.getAnimationByName().get(model).get(e.getMovement().getId());
+        Animation a = Config.CURRENT_ANIMATION;
         if (a == null) {
             if (new Random().nextInt(5) == 0)
                 Logger.warn("The animation, " + e.getMovement().getId() + " for the model " + " is not available");
@@ -58,6 +59,11 @@ public class AnimationComponent extends Component {
 
     @Override
     public ComponentPanel getComponentPanel(ComponentListPanel paramComponentListPanel) {
-        return null;
+        return new ComponentPanel(paramComponentListPanel,this) {
+            @Override
+            public void cleanUp() {
+
+            }
+        };
     }
 }

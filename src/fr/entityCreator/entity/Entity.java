@@ -2,9 +2,10 @@ package fr.entityCreator.entity;
 
 
 import fr.entityCreator.core.Timer;
+import fr.entityCreator.core.collision.maths.Vector3;
+import fr.entityCreator.core.loader.LoadAnimation;
 import fr.entityCreator.core.loader.OBJFileLoader;
 import fr.entityCreator.core.loader.TextureLoaderRequest;
-import fr.entityCreator.core.collision.maths.Vector3;
 import fr.entityCreator.core.resourcesProcessor.GLRequest;
 import fr.entityCreator.core.resourcesProcessor.GLRequestProcessor;
 import fr.entityCreator.entity.animated.animation.loaders.AnimatedModelLoader;
@@ -17,14 +18,14 @@ import fr.entityCreator.toolBox.Config;
 import org.joml.Vector3f;
 
 import javax.management.openmbean.OpenDataException;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static fr.entityCreator.core.exporter.EntityExporter.exportEntity;
 
 
 public class Entity {
@@ -36,7 +37,7 @@ public class Entity {
     protected Vector3f rotation;
     protected float scale;
     private Transform transform;
-    protected MovementType movement;
+    protected MovementType movement = MovementType.FORWARD;
     private CollisionComponent collision;
     private String name;
     private int textureIndex = 1;
@@ -105,8 +106,9 @@ public class Entity {
     public Model getModel() {
         return model;
     }
+
     public float getTextureXOffset() {
-        if (model != null) {
+        if (model != null && model.getTexture() != null) {
             float column = textureIndex % model.getTexture().getNumbersOfRows();
             return column / model.getTexture().getNumbersOfRows();
         }
@@ -114,8 +116,11 @@ public class Entity {
     }
 
     public float getTextureYOffset() {
-        float row = textureIndex / (float) model.getTexture().getNumbersOfRows();
-        return row / model.getTexture().getNumbersOfRows();
+        if (model != null && model.getTexture() != null) {
+            float row = textureIndex / (float) model.getTexture().getNumbersOfRows();
+            return row / model.getTexture().getNumbersOfRows();
+        }
+        return 1;
     }
 
 
@@ -160,8 +165,8 @@ public class Entity {
     }
 
     public void exportAllComponents() throws IOException {
-        try(FileOutputStream fos = openSave();
-        FileChannel fc = fos.getChannel()) {
+        try (FileOutputStream fos = openSave();
+             FileChannel fc = fos.getChannel()) {
             for (Component c : components) {
                 c.export(fc);
             }
@@ -174,8 +179,8 @@ public class Entity {
 
     private FileOutputStream openSave() throws IOException {
         File file = new File(Config.OUTPUT_FOLDER + "/component/"
-                ,hashCode() + ".component");
-        if (!file.exists()){
+                , hashCode() + ".component");
+        if (!file.exists()) {
             file.getParentFile().mkdirs();
             file.createNewFile();
         }
@@ -204,7 +209,8 @@ public class Entity {
     public void setModelFile(File file) {
         if (file.exists() && file.canRead()) {
             if (file.getName().endsWith(".dae")) {
-                AnimatedModelLoader.loadEntity(file.getAbsolutePath(), 5, this);
+                this.model = AnimatedModelLoader.loadEntity(file.getAbsolutePath(), 5, this);
+                Config.CURRENT_ANIMATION = LoadAnimation.loadAnimatedModel(file.getAbsolutePath());
             } else if (file.getName().endsWith(".obj")) {
                 OBJFileLoader.loadModel(file.getAbsolutePath(), this);
             }
@@ -241,12 +247,12 @@ public class Entity {
         StringBuilder fileContent = new StringBuilder();
         fileContent.append(model.getName()).append(";").append(hashCode());
         File file = new File(Config.OUTPUT_FOLDER,
-                "/entities/data/" + name + ".json" );
-        if (!file.exists()){
+                "/entities/data/" + name + ".json");
+        if (!file.exists()) {
             file.getParentFile().mkdirs();
             file.createNewFile();
         }
-        if (!file.canWrite()){
+        if (!file.canWrite()) {
             throw new OpenDataException("the file " + file.getAbsolutePath() + " can't to be writed");
         }
         try (FileOutputStream fos = new FileOutputStream(file);

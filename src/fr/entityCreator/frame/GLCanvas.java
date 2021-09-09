@@ -76,13 +76,13 @@ public class GLCanvas extends AWTGLCanvas implements MouseWheelListener, MouseLi
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        mouseDWheel = e.getWheelRotation() * e.getScrollAmount();
+        mouseDWheel = e.getWheelRotation() * -e.getScrollAmount();
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {
-            Input.keysMouse[GLFW_MOUSE_BUTTON_1] = true;
+            Input.keysMouse[GLFW_MOUSE_BUTTON_1] = false;
         }else{
             Input.keysMouse[GLFW_MOUSE_BUTTON_1] = false;
         }

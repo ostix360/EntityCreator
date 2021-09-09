@@ -1,5 +1,6 @@
 package fr.entityCreator.toolBox;
 
+import fr.entityCreator.entity.animated.animation.animation.Animation;
 import fr.entityCreator.graphics.model.MeshModel;
 import fr.entityCreator.graphics.textures.TextureLoader;
 
@@ -16,5 +17,6 @@ public class Config {
     public static MeshModel CYLINDER;
     public static MeshModel SPHERE;
     public static TextureLoader WHITE;
+    public static Animation CURRENT_ANIMATION;
 
 }

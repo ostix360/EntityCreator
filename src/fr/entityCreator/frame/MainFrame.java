@@ -191,6 +191,9 @@ public class MainFrame {
     }
 
     public void setComponentPanel(ComponentPanel panel) {
+        if (panel == null){
+            return;
+        }
         if (this.currentComponentPanel != null) {
             this.currentComponentPanel.destroy();
             this.settingsPanel.remove(this.currentComponentPanel);

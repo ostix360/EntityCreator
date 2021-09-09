@@ -1,21 +1,71 @@
-#version 330
+#version 330 core
 
-const vec2 lightBias = vec2(0.7, 0.6);//just indicates the balance between diffuse and ambient lighting
+in vec2 passTextureCoords;
+in vec3 unitNormal;
+in vec3 unitVectorToCamera;
+in vec3 toLightVector;
+in float visibility;
 
-in vec2 pass_textureCoords;
-in vec3 pass_normal;
-in vec4 pass_Color;
+uniform sampler2D textureSampler;
+uniform sampler2D normalMap;
+uniform sampler2D specularMap;
 
-out vec4 out_colour;
+uniform float useSpecularMap;
 
-uniform sampler2D diffuseMap;
-uniform vec3 lightDirection;
+uniform vec3 lightColor;
+uniform vec3 attenuation;
+uniform float lightPower;
+uniform float reflectivity;
+uniform float shine;
 
-void main(void){
+uniform vec3 skyColor;
 
-    vec4 diffuseColour = texture(diffuseMap, pass_textureCoords);
-    vec3 unitNormal = normalize(pass_normal);
-    float diffuseLight = max(dot(-lightDirection, unitNormal), 0.0) * lightBias.x + lightBias.y;
-    out_colour = diffuseColour;
+out vec4 out_Color;
 
+void main(){
+    vec4 normalMapValue = 2 * texture(normalMap, passTextureCoords)-1.0;
+    vec3 unitNormals = unitNormal;
+    if (normalMapValue.a > 5){
+        unitNormals = normalize(normalMapValue.rgb);
+    }
+
+    vec3 totalDiffuse = vec3(0.0);
+    vec3 totalSpecular= vec3(0.0);
+    float distance = length(toLightVector);
+    float attenuationFactor = max(attenuation.x + (attenuation.y * distance) + (attenuation.z * distance * distance), 1.0);
+
+    vec3 unitLightVector = normalize(toLightVector);
+
+    float nDotl = dot(unitNormals, unitLightVector);
+
+    float brightness = max(nDotl, 0.0);
+
+    vec3 lightDirection = -unitLightVector;
+    vec3 reflectedLightDirection = reflect(lightDirection, unitNormals);
+
+    float specularFactor = dot(reflectedLightDirection, unitVectorToCamera);
+    specularFactor = max(specularFactor, 0.0);
+    float dampedFactor = pow(specularFactor, shine);
+    vec3 specular = dampedFactor * lightColor * reflectivity;
+
+    totalDiffuse = totalDiffuse + (brightness * lightColor * lightPower)/attenuationFactor;
+    totalSpecular = totalSpecular + max(vec3(0.), (dampedFactor * lightColor * reflectivity))/attenuationFactor;
+
+
+    if (useSpecularMap > 0.5){
+        vec4 mapinfo = texture(specularMap, passTextureCoords);
+        totalSpecular *= mapinfo.r;
+        if (mapinfo.g > 0.5){
+            totalDiffuse = vec3(1.0);
+        }
+    }
+
+    vec4 textureColor = texture(textureSampler, passTextureCoords);
+    if (textureColor.a < 0.8){
+        discard;
+    }
+    totalDiffuse = clamp(totalDiffuse, 0.15, 1.1);
+
+    out_Color =  vec4(totalDiffuse, 1.0) * textureColor + vec4(totalSpecular, 1.0);
+    out_Color =  mix(vec4(skyColor, 1.0), out_Color, visibility);
 }

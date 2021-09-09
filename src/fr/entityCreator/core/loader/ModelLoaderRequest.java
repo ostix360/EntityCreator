@@ -2,6 +2,7 @@ package fr.entityCreator.core.loader;
 
 import fr.entityCreator.core.resourcesProcessor.GLRequest;
 import fr.entityCreator.entity.Entity;
+import fr.entityCreator.entity.animated.animation.animatedModel.AnimatedModel;
 import fr.entityCreator.graphics.model.MeshModel;
 import fr.entityCreator.graphics.model.Model;
 import fr.entityCreator.graphics.model.ModelData;
@@ -16,7 +17,10 @@ public class ModelLoaderRequest extends GLRequest {
         this.e = e;
         this.data = data;
         this.isAnimated = isAnimated;
-        if (e.getModel() == null)e.setModel(new Model(e.getName(),isAnimated));
+        if (e.getModel() == null || e.getModel().isAnimated() != isAnimated){
+             e.setModel(new Model(e.getName(),isAnimated));
+        }
+
     }
 
     public ModelLoaderRequest(ModelData data) {

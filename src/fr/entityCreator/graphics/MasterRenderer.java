@@ -3,6 +3,7 @@ package fr.entityCreator.graphics;
 import fr.entityCreator.entity.Entity;
 import fr.entityCreator.entity.Light;
 import fr.entityCreator.entity.camera.Camera;
+import fr.entityCreator.graphics.shader.AnimatedModelShader;
 import fr.entityCreator.graphics.shader.ClassicShader;
 import fr.entityCreator.graphics.shader.TerrainShader;
 import fr.entityCreator.terrain.Terrain;
@@ -29,7 +30,11 @@ public class MasterRenderer {
 
     private TerrainRenderer terrainRenderer;
     private TerrainShader terrainShader;
+
     private CollisionObjectRenderer collisionObjectRenderer;
+
+    private AnimatedModelRenderer animatedRender;
+    private AnimatedModelShader animatedShader;
 
     private Terrain terrains;
     private static Matrix4f projectionMatrix;
@@ -50,9 +55,11 @@ public class MasterRenderer {
         System.out.println("init");
         this.shader = new ClassicShader();
         this.terrainShader = new TerrainShader();
+        this.animatedShader = new AnimatedModelShader();
         this.entityRenderer = new EntityRenderer(shader, projectionMatrix);
         this.terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
         this.collisionObjectRenderer = new CollisionObjectRenderer(shader, projectionMatrix);
+        this.animatedRender = new AnimatedModelRenderer(animatedShader);
     }
 
 
@@ -89,7 +96,7 @@ public class MasterRenderer {
 
     public void setTheEntity(Entity e) {
         this.theEntity = e;
-        processEntity(e);
+        if (!e.getModel().isAnimated()) processEntity(e);
     }
 
     private void render(Light light, Camera cam) {
@@ -102,6 +109,16 @@ public class MasterRenderer {
         entityRenderer.render(entities);
         collisionObjectRenderer.render(theEntity);
         shader.unBind();
+
+        if (theEntity != null && theEntity.getModel().isAnimated()) {
+            animatedShader.bind();
+            if (light != null) animatedShader.loadLight(light);
+            animatedShader.loadSkyColor(skyColor);
+            animatedShader.projectionMatrix.loadMatrixToUniform(cam.getProjectionMatrix());
+            animatedShader.viewMatrix.loadMatrixToUniform(cam.getViewMatrix());
+            animatedRender.render(theEntity);
+            animatedShader.unBind();
+        }
 
         terrainShader.bind();
         terrainShader.loadSkyColour(skyColor);
@@ -116,6 +133,7 @@ public class MasterRenderer {
         for (Entity entity : entities) {
             entity.update();
         }
+        theEntity.update();
     }
 
     public void clearEntity() {

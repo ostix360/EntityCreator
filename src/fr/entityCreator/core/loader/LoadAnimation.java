@@ -11,9 +11,9 @@ public class LoadAnimation {
 
     private static Animation animation;
 
-    public static void loadAnimatedModel(String animationFile) {
+    public static Animation loadAnimatedModel(String animationFile) {
 
-        animation = AnimationLoader.loadAnimation(Config.RES_FOLDER + animationFile + FileType.COLLADA.getExtension());
+         return animation = AnimationLoader.loadAnimation(animationFile);
 
     }
 

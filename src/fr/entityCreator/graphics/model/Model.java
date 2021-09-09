@@ -30,6 +30,10 @@ public class Model {
         this.isAnimated = isAnimated;
     }
 
+    public boolean isAnimated() {
+        return isAnimated;
+    }
+
     public MeshModel getMeshModel() {
         return meshModel;
     }

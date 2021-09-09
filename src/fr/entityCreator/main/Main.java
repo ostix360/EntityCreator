@@ -63,7 +63,6 @@ public class Main {
 
         TerrainTexturePack tp = new TerrainTexturePack(backt,rt,gt,bt);
         Terrain t = new Terrain(0,0,tp,blendt);
-        entities.add(theEntity);
         renderer.initToRender(entities,t,light,cam);
     }
 

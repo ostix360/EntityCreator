@@ -32,7 +32,6 @@ public class AnimatedModelLoader {
         GLRequestProcessor.sendRequest(request);
         SkeletonData skeletonData = entityData.getJointsData();
         Joint headJoint = createJoints(skeletonData.headJoint);
-        Timer.waitForRequest(request);
         return new AnimatedModel(entity.getName(), headJoint, skeletonData.jointCount);
     }
 

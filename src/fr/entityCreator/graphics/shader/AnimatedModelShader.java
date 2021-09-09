@@ -1,19 +1,19 @@
 package fr.entityCreator.graphics.shader;
 
-
 import fr.entityCreator.entity.Light;
-import fr.entityCreator.entity.camera.Camera;
 import fr.entityCreator.toolBox.Color;
-import fr.entityCreator.toolBox.Maths;
 import fr.entityCreator.toolBox.OpenGL.uniform.*;
 import org.joml.Matrix4f;
 
-public class ClassicShader extends ShaderProgram{
+public class AnimatedModelShader extends ShaderProgram {
+
+    private static final int MAX_JOINTS = 50;// max number of joints in a skeleton
 
 
-    private final MatrixUniform transformationMatrix = new MatrixUniform("transformationMatrix");
-    private final MatrixUniform projectionMatrix = new MatrixUniform("projectionMatrix");
-    private final MatrixUniform viewMatrix = new MatrixUniform("viewMatrix");
+    public MatrixUniform projectionMatrix = new MatrixUniform("projectionMatrix");
+    public MatrixUniform viewMatrix = new MatrixUniform("viewMatrix");
+    public MatrixUniformArray jointTransforms = new MatrixUniformArray("jointTransforms", MAX_JOINTS);
+    public MatrixUniform transformation = new MatrixUniform("transformationMatrix");
     private final Vector3fUniform lightPos = new Vector3fUniform("lightPos");
     private final Vector3fUniform lightColor = new Vector3fUniform("lightColor");
     private final Vector3fUniform lightAttenuation = new Vector3fUniform("attenuation");
@@ -29,9 +29,15 @@ public class ClassicShader extends ShaderProgram{
     public final Vector2fUniform offset = new Vector2fUniform("offset");
     public final FloatUniform numberOfRows = new FloatUniform("numberOfRows");
 
-    public ClassicShader() {
-        super("shader");
-        super.getAllUniformLocations(transformationMatrix, projectionMatrix, viewMatrix,
+    /**
+     * Creates the shader program for the {@link AnimatedModelRenderer} by
+     * loading up the vertex and fragment shader code files. It also gets the
+     * location of all the specified uniform variables, and also indicates that
+     * the diffuse texture will be sampled from texture unit 0.
+     */
+    public AnimatedModelShader() {
+        super("animation");
+        super.getAllUniformLocations(projectionMatrix, transformation, viewMatrix, jointTransforms,
                 reflectivity, shine, skyColor,useSpecularMap,
                 specularMap,diffuseMap,normalMap,useFakeLighting,offset,numberOfRows);
         super.getAllUniformLocations(lightPos);
@@ -40,22 +46,20 @@ public class ClassicShader extends ShaderProgram{
         super.getAllUniformLocations(lightPower);
         super.validateProgram();
     }
-
-    @Override
-    protected void bindAllAttributes() {
-        super.bindAttribute(0, "position");
-        super.bindAttribute(1, "textureCoords");
-        super.bindAttribute(2, "normals");
-        super.bindAttribute(3, "jointIndices");
-        super.bindAttribute(4, "weights");
-    }
-
     public void connectTextureUnits(){
         diffuseMap.loadIntToUniform(0);
         specularMap.loadIntToUniform(1);
         normalMap.loadIntToUniform(2);
     }
 
+    @Override
+    protected void bindAllAttributes() {
+        super.bindAttribute(0, "in_position");
+        super.bindAttribute(1, "in_textureCoords");
+        super.bindAttribute(2, "in_normal");
+        super.bindAttribute(3, "in_jointIndices");
+        super.bindAttribute(4, "in_weights");
+    }
 
     public void loadLight(Light light) {
         lightPos.loadVector3fToUniform(light.getPosition());
@@ -73,15 +77,7 @@ public class ClassicShader extends ShaderProgram{
     // Projection Transformation View Matrix
 
     public void loadTransformationMatrix(Matrix4f matrix) {
-        transformationMatrix.loadMatrixToUniform(matrix);
-    }
-
-    public void loadProjectionMatrix(Matrix4f matrix) {
-        projectionMatrix.loadMatrixToUniform(matrix);
-    }
-
-    public void loadViewMatrix(Camera cam) {
-        viewMatrix.loadMatrixToUniform(Maths.createViewMatrix(cam));
+        transformation.loadMatrixToUniform(matrix);
     }
 
 

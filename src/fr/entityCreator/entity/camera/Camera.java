@@ -60,7 +60,7 @@ public class Camera implements ICamera {
         float horizontalDistance = calculateHorizontalDistance();
         float verticalDistance = calculateVerticalDistance();
         caculateCameraPosition(horizontalDistance, verticalDistance);
-        this.yaw = 180 - (player.getRotation().y() + angleAroundPlayer);
+        this.yaw = 180 - (player.getRotation().y() + 5 + angleAroundPlayer);
         this.projection = MasterRenderer.getProjectionMatrix();
     }
 
@@ -101,7 +101,7 @@ public class Camera implements ICamera {
         float xoffset = (float) (horzontalDistance * Math.sin(Math.toRadians(theta)));
         float zoffset = (float) (horzontalDistance * Math.cos(Math.toRadians(theta)));
         position.x = player.getPosition().x - xoffset;
-        position.y = player.getPosition().y + verticalDistance;
+        position.y = player.getPosition().y + 5 + verticalDistance;
         if (position.y < terrainHeight) {
             position.y = terrainHeight;
         }
@@ -110,7 +110,7 @@ public class Camera implements ICamera {
 
     private void calculateAngleAroundPlayerAndPitch() {
         if (Input.keysMouse[GLFW_MOUSE_BUTTON_1]) {
-            float angleChange = Input.mouseDX * -0.5f;
+            float angleChange = Input.mouseDX * -0.7f;
             angleAroundPlayer -= angleChange;
             float pitchChange = Input.mouseDY * -0.5f;
             pitch += pitchChange;

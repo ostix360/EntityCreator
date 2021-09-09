@@ -11,7 +11,6 @@ uniform sampler2D normalMap;
 uniform sampler2D specularMap;
 
 uniform float useSpecularMap;
-uniform float useFakeLighting;
 
 uniform vec3 lightColor;
 uniform vec3 attenuation;

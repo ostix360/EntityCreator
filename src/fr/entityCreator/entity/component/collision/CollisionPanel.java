@@ -2,6 +2,7 @@ package fr.entityCreator.entity.component.collision;
 
 import fr.entityCreator.frame.ComponentListPanel;
 import fr.entityCreator.frame.ComponentPanel;
+import fr.entityCreator.graphics.CollisionObjectRenderer;
 
 import javax.swing.*;
 
@@ -14,10 +15,10 @@ public class CollisionPanel extends ComponentPanel {
         super(listPanel,component);
         this.collisionComponent = component;
         this.settingsPanel = settings;
-        addButtonPanel();
+        addPanel();
     }
 
-    public void addButtonPanel() {
+    public void addPanel() {
         settingsPanel.add(new CollisionObjectPanel(this, this.settingsPanel, this.collisionComponent));
 
         settingsPanel.validate();
@@ -26,6 +27,6 @@ public class CollisionPanel extends ComponentPanel {
 
     @Override
     public void cleanUp() {
-
+        CollisionObjectRenderer.boundingModels.clear();
     }
 }

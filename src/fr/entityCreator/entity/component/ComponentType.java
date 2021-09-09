@@ -5,6 +5,7 @@ import fr.entityCreator.entity.Entity;
 import fr.entityCreator.entity.component.ai.AICreator;
 import fr.entityCreator.entity.component.animation.AnimationCreator;
 import fr.entityCreator.entity.component.collision.CollisionCreator;
+import fr.entityCreator.entity.component.light.LightCreator;
 import fr.entityCreator.entity.component.particle.ParticleCreator;
 import fr.entityCreator.frame.ComponentListPanel;
 
@@ -14,7 +15,8 @@ public enum ComponentType {
     COLLISION_COMPONENT("Collision Component",new CollisionCreator(), 0),
     PARTICLE_COMPONENT("Particle Component", new ParticleCreator(), 1),
     AI_COMPONENT("AI Component", new AICreator(), 2),
-    ANIMATED_COMPONENT("Animated Component", new AnimationCreator(), 3);
+    ANIMATED_COMPONENT("Animated Component", new AnimationCreator(), 3),
+    LIGHT_COMPONENT("Light Component", new LightCreator(),4);
     private final String name;
     private final ComponentCreator creator;
     private final int id;

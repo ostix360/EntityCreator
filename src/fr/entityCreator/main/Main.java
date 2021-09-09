@@ -1,20 +1,17 @@
 package fr.entityCreator.main;
 
 import fr.entityCreator.core.Timer;
-import fr.entityCreator.core.loader.Loader;
 import fr.entityCreator.core.loader.ModelLoaderRequest;
 import fr.entityCreator.core.loader.OBJFileLoader;
 import fr.entityCreator.core.loader.TextureLoaderRequest;
-import fr.entityCreator.core.resourcesProcessor.GLRequest;
 import fr.entityCreator.core.resourcesProcessor.GLRequestProcessor;
 import fr.entityCreator.creator.Workspace;
 import fr.entityCreator.entity.Entity;
-import fr.entityCreator.entity.Light;
+import fr.entityCreator.entity.component.light.Light;
 import fr.entityCreator.entity.Transform;
 import fr.entityCreator.entity.camera.Camera;
 import fr.entityCreator.frame.MainFrame;
 import fr.entityCreator.graphics.MasterRenderer;
-import fr.entityCreator.graphics.model.MeshModel;
 import fr.entityCreator.graphics.model.ModelData;
 import fr.entityCreator.terrain.Terrain;
 import fr.entityCreator.terrain.texture.TerrainTexture;
@@ -22,13 +19,10 @@ import fr.entityCreator.terrain.texture.TerrainTexturePack;
 import fr.entityCreator.toolBox.Color;
 import fr.entityCreator.toolBox.Config;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 public class Main {
 

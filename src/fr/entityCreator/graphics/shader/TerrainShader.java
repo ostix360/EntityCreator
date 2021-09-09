@@ -2,16 +2,13 @@ package fr.entityCreator.graphics.shader;
 
 
 
-import fr.entityCreator.entity.Light;
+import fr.entityCreator.entity.component.light.Light;
 import fr.entityCreator.entity.camera.Camera;
 import fr.entityCreator.toolBox.Color;
 import fr.entityCreator.toolBox.Maths;
 import fr.entityCreator.toolBox.OpenGL.uniform.*;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 import org.joml.Vector4f;
-
-import java.util.List;
 
 
 public class TerrainShader extends ShaderProgram {

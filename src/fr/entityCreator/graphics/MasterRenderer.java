@@ -1,7 +1,7 @@
 package fr.entityCreator.graphics;
 
 import fr.entityCreator.entity.Entity;
-import fr.entityCreator.entity.Light;
+import fr.entityCreator.entity.component.light.Light;
 import fr.entityCreator.entity.camera.Camera;
 import fr.entityCreator.graphics.shader.AnimatedModelShader;
 import fr.entityCreator.graphics.shader.ClassicShader;
@@ -133,7 +133,7 @@ public class MasterRenderer {
         for (Entity entity : entities) {
             entity.update();
         }
-        theEntity.update();
+        if (theEntity != null)theEntity.update();
     }
 
     public void clearEntity() {

@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 
+import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +83,12 @@ public class Loader {
     }
 
     //TEXTURES
+
+    public TextureLoader loadTexture(InputStream fileName) {
+        TextureLoader textureLoader = TextureLoader.loadTexture(fileName, TextureUtils.MIPMAP_ANISOTROPIC_MODE, false);
+        textureLoaders.add(textureLoader);
+        return textureLoader;
+    }
 
     public TextureLoader loadTexture(String fileName) {
         TextureLoader textureLoader = TextureLoader.loadTexture(fileName, TextureUtils.MIPMAP_ANISOTROPIC_MODE, false);

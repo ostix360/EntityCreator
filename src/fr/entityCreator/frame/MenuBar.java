@@ -25,23 +25,19 @@ public class MenuBar extends JMenuBar {
         add(others);
 
         JMenuItem newStaticFile = new JMenuItem("Nouvelle static Entité");
-        JMenuItem newAnimatedFile = new JMenuItem("Nouvelle Entité Animée");
         JMenuItem openFile = new JMenuItem("Ouvrir");
         JMenuItem save = new JMenuItem("Sauvagarder");
         file.add(newStaticFile);
-        file.add(newAnimatedFile);
         file.add(openFile);
         file.add(save);
 
         JMenuItem settings = new JMenuItem("Options");
         others.add(settings);
-//        addOpenFileFunction(openFile, frame);
+        addOpenFileFunction(openFile, frame);
         addSaveFunction(save);
         addNewStaticFileFunction(newStaticFile);
-//        addNewAnimatedFileFunction(newAnimatedFile);
         file.setFont(new Font("Segoe UI", 1, 12));
         newStaticFile.setFont(new Font("Segoe UI", 1, 12));
-        newAnimatedFile.setFont(new Font("Segoe UI", 1, 12));
         openFile.setFont(new Font("Segoe UI", 1, 12));
         save.setFont(new Font("Segoe UI", 1, 12));
 
@@ -50,17 +46,18 @@ public class MenuBar extends JMenuBar {
         addSettingsFunction(settings);
     }
 
-//    private void addOpenFileFunction(JMenuItem open, final MainFrame mainFrame) {
-//        open.addActionListener(new ActionListener() {
-//
-//            public void actionPerformed(ActionEvent e) {
+    private void addOpenFileFunction(JMenuItem open, final MainFrame mainFrame) {
+        open.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                new PopUp("L'ouverture d'une entité n'est pas encore disponible");
 //                MenuBar.this.workspace.save();
 //
 //                new FileChooseScreen(MenuBar.this.workspace.getAvailableItems(), MenuBar.this.workspace, mainFrame);
-//
-//            }
-//        });
-//    }
+
+            }
+        });
+    }
 
     private void addSettingsFunction(JMenuItem settings){
         settings.addActionListener(e ->{
@@ -84,7 +81,6 @@ public class MenuBar extends JMenuBar {
     }
 
     private void addNewStaticFileFunction(JMenuItem newStaticFile) {
-
         newStaticFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 workspace.save();
@@ -94,15 +90,5 @@ public class MenuBar extends JMenuBar {
         });
     }
 
-//    private void addNewAnimatedFileFunction(JMenuItem newAnimatedFile) {
-//        newAnimatedFile.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                MenuBar.this.workspace.save();
-//                MenuBar.this.workspace.createNewEntity(EntityType.ANIMATED);
-//                MenuBar.this.mainFrame.setNewEntity(MenuBar.this.workspace.getCurrentEntity());
-//
-//            }
-//        });
-//    }
 
 }

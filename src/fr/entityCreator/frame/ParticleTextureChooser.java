@@ -7,11 +7,15 @@ import fr.entityCreator.entity.component.particle.ParticleComponentPanel;
 import fr.entityCreator.graphics.particles.ParticleSystem;
 import fr.entityCreator.graphics.particles.ParticleTexture;
 import fr.entityCreator.graphics.textures.TextureLoader;
+import fr.entityCreator.toolBox.Config;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class ParticleTextureChooser {
 
@@ -24,7 +28,7 @@ public class ParticleTextureChooser {
     }
 
     private void setup() {
-        chooser = new JFileChooser("D:\\Projet LWJGL\\2D\\Test003\\src\\main\\resources\\textures");
+        chooser = new JFileChooser(Config.TEXTURES_FOLDER);
         chooser.setApproveButtonText("Ouvrir");
         chooser.setDialogTitle("Selectioner une texture pour vos particules!");
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -44,6 +48,8 @@ public class ParticleTextureChooser {
         Timer.waitForRequest(request);
         texID = request.getTexture();
         parent.setTexture(texID);
+
+
         button.setText("Changer la texture de vos particle");
         button.setForeground(new Color(0, 255, 0));
         this.chooser.setVisible(false);

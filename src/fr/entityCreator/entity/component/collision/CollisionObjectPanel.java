@@ -14,7 +14,7 @@ import fr.entityCreator.graphics.model.ModelData;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
+import java.io.*;
 
 public class CollisionObjectPanel extends JPanel{
     private CollisionComponent cc;
@@ -184,13 +184,19 @@ public class CollisionObjectPanel extends JPanel{
             return;
         }
         if (object.getName().endsWith(".obj")) {
-            ModelData data = OBJFileLoader.loadModel(object);
-            request = new ModelLoaderRequest(data);
-            GLRequestProcessor.sendRequest(request);
-            Timer.waitForRequest(request);
-            actualModel = new BoundingModel(request.getModel());
-            actualModel.getModel().setModelFile(object);
-            boundingModelJComboBox.addItem(actualModel);
+            try (FileInputStream fis = new FileInputStream(object)){
+                ModelData data = OBJFileLoader.loadModel(fis);
+                request = new ModelLoaderRequest(data);
+                GLRequestProcessor.sendRequest(request);
+                Timer.waitForRequest(request);
+                actualModel = new BoundingModel(request.getModel());
+                actualModel.getModel().setModelFile(object);
+                boundingModelJComboBox.addItem(actualModel);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             boundingModelJComboBox.repaint();
             this.validate();
             this.repaint();

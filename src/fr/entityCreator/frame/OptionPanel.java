@@ -1,24 +1,119 @@
 package fr.entityCreator.frame;
 
 import fr.entityCreator.toolBox.Config;
+import org.lwjgl.system.CallbackI;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class OptionPanel {
 
     private JDialog frame;
     private JButton outputFolder;
+    private String output = Config.OUTPUT_FOLDER.getAbsolutePath();
+    private String model = Config.MODELS_FOLDER.getAbsolutePath();
+    private String texture = Config.TEXTURES_FOLDER.getAbsolutePath();
 
     public OptionPanel() {
         setupFrame();
         addButton();
+
         this.frame.setVisible(true);
-        this.frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     private void addButton() {
-        this.outputFolder = new JButton("Selectionner votre dossier de sauvegarde");
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.fill = 3;
+        gc.gridx = 0;
+        gc.gridy = 0;
+        outputFolder(gc);
+        gc.gridx = 0;
+        gc.gridy = 1;
+        modelFolder(gc);
+        gc.gridx = 0;
+        gc.gridy = 2;
+        texturesFolder(gc);
+        gc.gridy = 3;
+        JButton button = new JButton("Valider");
+        button.addActionListener((e) -> {
+            try (
+                    FileWriter writer = new FileWriter(Config.optionFile);) {
+                if (!Config.optionFile.exists()){
+                    Config.optionFile.getParentFile().mkdirs();
+                    Config.optionFile.createNewFile();
+                }
+                writer.write(output + ";" + model + ";" + texture);
+                this.frame.dispose();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+        button.setForeground(Color.GREEN);
+        frame.add(button,gc);
+
+    }
+
+    private void modelFolder(GridBagConstraints gc) {
+        JLabel label = new JLabel(model);
+        gc.gridx = 0;
+        this.frame.add(label, gc);
+        JButton modelsFolder = new JButton("Dossier des models");
+        modelsFolder.addActionListener(e -> {
+            JFileChooser output = new JFileChooser();
+            output.setDialogTitle("Selectionner votre dossier contenent vos models");
+            output.setDialogType(JFileChooser.OPEN_DIALOG);
+            output.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            output.setMultiSelectionEnabled(false);
+            output.setApproveButtonText("Ouvrir");
+            output.setVisible(true);
+            while (output.showOpenDialog(frame) != JFileChooser.APPROVE_OPTION) {
+                System.out.println("not selected");
+            }
+            Config.MODELS_FOLDER = output.getSelectedFile();
+            this.model = output.getSelectedFile().getAbsolutePath();
+            this.frame.validate();
+            this.frame.repaint();
+        });
+        gc.gridx = 2;
+        this.frame.add(modelsFolder,gc);
+    }
+
+    private void texturesFolder(GridBagConstraints gc) {
+        JLabel label = new JLabel(texture);
+        gc.gridx = 0;
+        this.frame.add(label, gc);
+        JButton texturesFolder = new JButton("Dossier des textures");
+        texturesFolder.addActionListener(e -> {
+            JFileChooser output = new JFileChooser();
+            output.setDialogTitle("Selectionner votre dossier contenent vos textures");
+            output.setDialogType(JFileChooser.OPEN_DIALOG);
+            output.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            output.setMultiSelectionEnabled(false);
+            output.setApproveButtonText("Ouvrir");
+            output.setVisible(true);
+            while (output.showOpenDialog(frame) != JFileChooser.APPROVE_OPTION) {
+                System.out.println("not selected");
+            }
+            Config.TEXTURES_FOLDER = output.getSelectedFile();
+            this.texture = output.getSelectedFile().getAbsolutePath();
+            this.frame.validate();
+            this.frame.repaint();
+        });
+        gc.gridx = 2;
+        this.frame.add(texturesFolder,gc);
+    }
+
+    private void outputFolder(GridBagConstraints gc){
+        JLabel label = new JLabel(output);
+        gc.gridx = 0;
+        this.frame.add(label, gc);
+        this.outputFolder = new JButton("Dossier de sauvegarde");
         this.outputFolder.addActionListener(e -> {
             JFileChooser output = new JFileChooser();
             output.setDialogTitle("Selectionner votre dossier de sauvegarde");
@@ -31,15 +126,28 @@ public class OptionPanel {
                 System.out.println("not selected");
             }
             Config.OUTPUT_FOLDER = output.getSelectedFile();
-            output.setVisible(false);
+            this.output = output.getSelectedFile().getAbsolutePath();
+            this.frame.validate();
+            this.frame.repaint();
         });
-        this.frame.add(outputFolder);
+        gc.gridx = 2;
+        this.frame.add(outputFolder,gc);
     }
 
     private void setupFrame() {
-        this.frame = new JDialog();
+        this.frame = new JDialog(){
+            @Override
+            public void dispose() {
+                super.dispose();
+            }
+        };
         this.frame.setTitle("Option");
+        this.frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.frame.setAlwaysOnTop(true);
+        this.frame.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+        this.frame.setSize(600, 200);
+        this.frame.setResizable(true);
+        this.frame.setLocationRelativeTo(null);
         this.frame.setLayout(new GridBagLayout());
-        this.frame.setPreferredSize(new Dimension(550,345));
     }
 }

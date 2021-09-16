@@ -5,10 +5,13 @@ import fr.entityCreator.core.loader.TextureLoaderRequest;
 import fr.entityCreator.core.resourcesProcessor.GLRequestProcessor;
 import fr.entityCreator.entity.Entity;
 import fr.entityCreator.graphics.textures.TextureLoader;
+import fr.entityCreator.toolBox.Config;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class TextureChooseScreen {
 
@@ -30,7 +33,7 @@ public class TextureChooseScreen {
     }
 
     private void setup() {
-        chooser = new JFileChooser("D:\\Projet LWJGL\\2D\\Test003\\src\\main\\resources\\textures");
+        chooser = new JFileChooser(Config.TEXTURES_FOLDER);
         chooser.setApproveButtonText("Ouvrir");
         chooser.setDialogTitle("Selectioner une texture!");
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -48,18 +51,18 @@ public class TextureChooseScreen {
         assert tex != null;
         switch (id) {
             case 2:
-                request = new TextureLoaderRequest(tex.getAbsolutePath());
-                GLRequestProcessor.sendRequest(request);
-                Timer.waitForRequest(request);
-                texID = request.getTexture();
-                entity.getModel().getTexture().setSpecularMap(texID);
+                    request = new TextureLoaderRequest(tex.getAbsolutePath());
+                    GLRequestProcessor.sendRequest(request);
+                    Timer.waitForRequest(request);
+                    texID = request.getTexture();
+                    entity.getModel().getTexture().setSpecularMap(texID);
                 break;
             case 3:
-                request = new TextureLoaderRequest(tex.getAbsolutePath());
-                GLRequestProcessor.sendRequest(request);
-                Timer.waitForRequest(request);
-                texID = request.getTexture();
-                entity.getModel().getTexture().setNormalMapFile(texID);
+                    request = new TextureLoaderRequest(tex.getAbsolutePath());
+                    GLRequestProcessor.sendRequest(request);
+                    Timer.waitForRequest(request);
+                    texID = request.getTexture();
+                    entity.getModel().getTexture().setNormalMapFile(texID);
                 break;
             default:
                 entity.setTexturedFile(tex);

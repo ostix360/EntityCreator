@@ -8,6 +8,7 @@ import fr.entityCreator.frame.ComponentListPanel;
 import fr.entityCreator.frame.ComponentPanel;
 import fr.entityCreator.frame.MainFrame;
 import fr.entityCreator.frame.VectorPanel;
+import fr.entityCreator.graphics.MasterRenderer;
 import fr.entityCreator.toolBox.Color;
 import org.joml.Vector3f;
 
@@ -34,6 +35,7 @@ public class Light extends Component {
         this.colour = colour;
         this.power = power;
         this.attenuation = attenuation;
+        MasterRenderer.addLight(this);
         setupPanel();
     }
 
@@ -197,7 +199,8 @@ public class Light extends Component {
     }
 
     public Vector3f getPosition() {
-        return position;
+        return new Vector3f(position).add(200,0,200);  //l'entité se trouve au meme coordoné
+                                                                // la lumiére va avoir des coodoné relative
     }
 
     public Vector3f getColourVec3f() {

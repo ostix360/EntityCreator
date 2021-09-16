@@ -2,6 +2,7 @@ package fr.entityCreator.frame;
 
 import fr.entityCreator.entity.Entity;
 import fr.entityCreator.entity.component.collision.CollisionObjectPanel;
+import fr.entityCreator.toolBox.Config;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -43,7 +44,7 @@ public class ModelChooseScreen {
     }
 
     private void setup() {
-        chooser = new JFileChooser("D:\\Projet LWJGL\\3D\\Projet_1\\src\\main\\resources\\models");
+        chooser = new JFileChooser(Config.MODELS_FOLDER);
         chooser.setApproveButtonText("Ouvrir");
         chooser.setDialogTitle("Selectioner un model!");
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);

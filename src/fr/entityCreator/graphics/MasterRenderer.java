@@ -41,11 +41,19 @@ public class MasterRenderer {
 
     private Entity theEntity;
     private Camera cam;
-    private Light light;
+    private static Light light;
 
     private final List<Entity> entities = new ArrayList<>();
 
     public MasterRenderer() {
+    }
+
+    public static void addLight(Light light) {
+        MasterRenderer.light = light;
+    }
+
+    public static void removeLight(){
+        MasterRenderer.light= null;
     }
 
     public void init() {
@@ -89,9 +97,7 @@ public class MasterRenderer {
     }
 
     public void renderScene() {
-
         render(light, cam);
-
     }
 
     public void setTheEntity(Entity e) {

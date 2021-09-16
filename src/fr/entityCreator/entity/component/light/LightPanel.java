@@ -2,6 +2,7 @@ package fr.entityCreator.entity.component.light;
 
 import fr.entityCreator.frame.ComponentListPanel;
 import fr.entityCreator.frame.ComponentPanel;
+import fr.entityCreator.graphics.MasterRenderer;
 
 import javax.swing.*;
 
@@ -15,6 +16,6 @@ public class LightPanel extends ComponentPanel {
 
     @Override
     public void cleanUp() {
-
+        MasterRenderer.removeLight();
     }
 }

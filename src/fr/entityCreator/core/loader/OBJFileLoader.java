@@ -81,13 +81,9 @@ public class OBJFileLoader {
         GLRequestProcessor.sendRequest(request);
         Timer.waitForRequest(request);
     }
-    public static ModelData loadModel(File objFileName) {
+    public static ModelData loadModel(InputStream objFileName) {
         InputStreamReader isr = null;
-        try {
-            isr = new InputStreamReader(new FileInputStream(objFileName));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        isr = new InputStreamReader(objFileName);
         assert isr != null;
         BufferedReader reader = new BufferedReader(isr);
         String line;

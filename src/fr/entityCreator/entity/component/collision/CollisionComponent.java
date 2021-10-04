@@ -10,6 +10,7 @@ import fr.entityCreator.entity.component.Component;
 import fr.entityCreator.entity.component.ComponentType;
 import fr.entityCreator.frame.ComponentListPanel;
 import fr.entityCreator.frame.ComponentPanel;
+import fr.entityCreator.graphics.CollisionObjectRenderer;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -50,6 +51,8 @@ public class CollisionComponent extends Component {
     public ComponentPanel getComponentPanel(ComponentListPanel listPanel) {
         if (panel == null){
             panel = new CollisionPanel(this,listPanel);
+        }else{
+            CollisionObjectRenderer.boundingModels.addAll(this.getProperties().getBoundingModels());
         }
         return panel;
     }

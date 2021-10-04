@@ -23,7 +23,7 @@ import java.text.NumberFormat;
 
 public class Light extends Component {
     private Vector3f position;
-    private final Color colour;
+    private Color colour;
     private Vector3f attenuation;
     private float power;
     private JPanel panel;
@@ -35,7 +35,6 @@ public class Light extends Component {
         this.colour = colour;
         this.power = power;
         this.attenuation = attenuation;
-        MasterRenderer.addLight(this);
         setupPanel();
     }
 
@@ -72,9 +71,9 @@ public class Light extends Component {
             }
         });
         gc.gridy = 1;
-        VectorPanel rotPanel = new VectorPanel(280, 25, "Color", 0, 0, 0);
-        panel.add(rotPanel, gc);
-        rotPanel.addTotalListener(new DocumentListener() {
+        VectorPanel color = new VectorPanel(280, 25, "Color", 0, 0, 0);
+        panel.add(color, gc);
+        color.addTotalListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
                 warn();
             }
@@ -88,18 +87,17 @@ public class Light extends Component {
             }
 
             public void warn() {
-                if ((rotPanel.getXField().getText().equals("")) || (rotPanel.getYField().getText().equals("")) || (rotPanel.getZField().getText().equals(""))) {
+                if ((color.getXField().getText().equals("")) || (color.getYField().getText().equals("")) || (color.getZField().getText().equals(""))) {
                     return;
                 }
-                float r = Float.parseFloat(rotPanel.getXField().getText().replaceAll(",", "."));
-                float g = Float.parseFloat(rotPanel.getYField().getText().replaceAll(",", "."));
-                float b = Float.parseFloat(rotPanel.getZField().getText().replaceAll(",", "."));
-               colour.set(r,g,b,1.0f);
+                float r = Float.parseFloat(color.getXField().getText().replaceAll(",", "."));
+                float g = Float.parseFloat(color.getYField().getText().replaceAll(",", "."));
+                float b = Float.parseFloat(color.getZField().getText().replaceAll(",", "."));
+               setColour(new Color(r,g,b,1.0f));
             }
         });
-        VectorPanel attenuation = new VectorPanel(280, 25, "Attenuation", 0, 0, 0);
-        panel.add(rotPanel, gc);
-        rotPanel.addTotalListener(new DocumentListener() {
+        VectorPanel attenuationPanel = new VectorPanel(280, 25, "Attenuation", 0, 0, 0);
+        attenuationPanel.addTotalListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
                 warn();
             }
@@ -113,19 +111,23 @@ public class Light extends Component {
             }
 
             public void warn() {
-                if ((rotPanel.getXField().getText().equals("")) || (rotPanel.getYField().getText().equals("")) || (rotPanel.getZField().getText().equals(""))) {
+                if ((attenuationPanel.getXField().getText().equals("")) || (attenuationPanel.getYField().getText().equals("")) || (attenuationPanel.getZField().getText().equals(""))) {
                     return;
                 }
-                float r = Float.parseFloat(rotPanel.getXField().getText().replaceAll(",", "."));
-                float g = Float.parseFloat(rotPanel.getYField().getText().replaceAll(",", "."));
-                float b = Float.parseFloat(rotPanel.getZField().getText().replaceAll(",", "."));
-                Light.this.attenuation.set(r,g,b);
+                float x = Float.parseFloat(attenuationPanel.getXField().getText().replaceAll(",", "."));
+                float y = Float.parseFloat(attenuationPanel.getYField().getText().replaceAll(",", "."));
+                float z = Float.parseFloat(attenuationPanel.getZField().getText().replaceAll(",", "."));
+                Light.this.attenuation.set(x,y,z);
             }
         });
         gc.gridy = 2;
-        panel.add(attenuation,gc);
+        panel.add(attenuationPanel,gc);
         gc.gridy = 3;
         panel.add(createErrorPanel(), gc);
+    }
+
+    private void setColour(Color colour) {
+        this.colour = colour;
     }
 
     private JPanel createErrorPanel() {
@@ -199,7 +201,7 @@ public class Light extends Component {
     }
 
     public Vector3f getPosition() {
-        return new Vector3f(position).add(200,0,200);  //l'entité se trouve au meme coordoné
+        return new Vector3f(position).add(200,1,200);  //l'entité se trouve au meme coordoné
                                                                 // la lumiére va avoir des coodoné relative
     }
 
@@ -215,10 +217,11 @@ public class Light extends Component {
 
     @Override
     public void export(FileChannel fc) throws IOException {
-        fc.write(DataTransformer.casteString(position.x() + ";" + position.y() + ";" + position.z()));
-        fc.write(DataTransformer.casteString(colour.getRed() + ";" + colour.getGreen() + ";" + colour.getBlue()));
-        fc.write(DataTransformer.casteString(attenuation.x() + ";" + attenuation.y() + ";" + attenuation.z()));
-        fc.write(DataTransformer.casteString(String.valueOf(power)));
+        fc.write(DataTransformer.casteString(this.getType().toString() + "\n"));
+        fc.write(DataTransformer.casteString(position.x() + ";" + (position.y() - 1) + ";" + position.z()+"\n"));
+        fc.write(DataTransformer.casteString(colour.getRed() + ";" + colour.getGreen() + ";" + colour.getBlue()+"\n"));
+        fc.write(DataTransformer.casteString(attenuation.x() + ";" + attenuation.y() + ";" + attenuation.z()+"\n"));
+        fc.write(DataTransformer.casteString(String.valueOf(power)+ "\n"));
     }
 
     @Override

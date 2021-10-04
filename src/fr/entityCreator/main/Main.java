@@ -31,6 +31,8 @@ public class Main {
     public static Entity theEntity;
     private static final List<Entity> entities = new ArrayList<>();
 
+    public static final Light light = new Light(new Vector3f(100,100000,100), Color.SUN);
+
     public static void main(String[] args) throws InterruptedException, URISyntaxException {
         readConfig();
         MasterRenderer renderer = new MasterRenderer();
@@ -48,7 +50,7 @@ public class Main {
         TextureLoaderRequest blendRequest = new TextureLoaderRequest(Main.class.getResourceAsStream("/res/terrain/blendMap.png"));
         GLRequestProcessor.sendRequest(backgroundTexture,rTexture,gTexture,bTexture,blendRequest);
 
-        Light light = new Light(new Vector3f(100,100000,100), Color.SUN);
+
         setupMesh();
         Timer.waitForRequest(blendRequest);
 

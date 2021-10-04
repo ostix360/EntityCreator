@@ -58,7 +58,7 @@ public class ParticleTexture {
     }
 
     private FileOutputStream openJson() throws IOException {
-        File file = new File(Config.OUTPUT_FOLDER, "textures/particle/data/" + name + ".json");
+        File file = new File(Config.OUTPUT_FOLDER, "textures/data/" + name + ".json");
         if (!file.exists()){
             file.getParentFile().mkdirs();
             file.createNewFile();

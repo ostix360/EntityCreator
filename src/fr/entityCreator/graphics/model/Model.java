@@ -89,7 +89,7 @@ public class Model {
 
     public void saveFile(String fileContent, boolean isTexture) throws Exception {
         File file = new File(Config.OUTPUT_FOLDER, isTexture ?
-                "/textures/entities/data/" + name + ".json" : "models/entities/data/" + name + ".json");
+                "/textures/data/" + name + ".json" : "models/data/" + name + ".json");
         if (!file.exists()){
             file.getParentFile().mkdirs();
             file.createNewFile();

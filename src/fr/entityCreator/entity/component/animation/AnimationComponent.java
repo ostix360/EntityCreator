@@ -53,7 +53,7 @@ public class AnimationComponent extends Component {
 
     @Override
     public void export(FileChannel fc) throws IOException {
-        fc.write(DataTransformer.casteString(this.getType().toString()));
+        fc.write(DataTransformer.casteString(this.getType().toString()+"\n"));
 
     }
 

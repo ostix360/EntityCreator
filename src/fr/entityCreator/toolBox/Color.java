@@ -67,7 +67,7 @@ public class Color {
 
     public void set(float r, float g, float b, float a) {
         this.red = r;
-        this.green = b;
+        this.green = g;
         this.blue = b;
         this.alpha = a;
     }

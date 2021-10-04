@@ -73,8 +73,8 @@ public class AIComponent extends Component {
     @Override
     public void export(FileChannel fc) throws IOException {
 
-        fc.write(DataTransformer.casteString(this.getType().toString()));
-        fc.write(DataTransformer.casteString(JsonUtils.gsonInstance(false).toJson(properties)));
+        fc.write(DataTransformer.casteString(this.getType().toString() + "\n"));
+        fc.write(DataTransformer.casteString(JsonUtils.gsonInstance(false).toJson(properties)+ "\n"));
 
     }
 

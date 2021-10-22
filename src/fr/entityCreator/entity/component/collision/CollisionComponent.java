@@ -44,7 +44,7 @@ public class CollisionComponent extends Component {
                     bm.export(fc);
                 }
             }
-            fc.write(DataTransformer.casteString("\n"));
+            fc.write(DataTransformer.casteString("true\n"));
     }
 
     @Override

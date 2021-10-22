@@ -10,12 +10,10 @@ import java.util.List;
 public class CollisionProperties {
     private final boolean canMove;
     private final List<BoundingModel> boundingModels;
-    private final List<CollisionShapeResource> collision;
 
     public CollisionProperties(boolean canMove) {
         this.canMove = canMove;
         this.boundingModels = new ArrayList<>();
-        this.collision = new ArrayList<>();
     }
 
     public boolean canMove() {
@@ -25,9 +23,5 @@ public class CollisionProperties {
 
     public List<BoundingModel> getBoundingModels() {
         return boundingModels;
-    }
-
-    public List<CollisionShapeResource> getCollisionShape() {
-        return collision;
     }
 }

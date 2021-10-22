@@ -40,7 +40,7 @@ public class BoundingModel {
 
     public void export(FileChannel fc) throws IOException {
         relativeTransform.export(fc);
-        fc.write(DataTransformer.casteString(m.getModelFile().getName()));
+        fc.write(DataTransformer.casteString(m.getModelFile().getName() + "\n"));
         exportModel();
     }
 

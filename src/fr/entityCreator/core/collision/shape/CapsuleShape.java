@@ -32,6 +32,7 @@ import fr.entityCreator.core.collision.maths.ReactDefaults;
 import fr.entityCreator.core.collision.maths.Vector3;
 import fr.entityCreator.frame.MainFrame;
 import fr.entityCreator.toolBox.Config;
+import org.joml.Vector3f;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -186,6 +187,7 @@ public class CapsuleShape extends CollisionShape {
     @Override
     public void export(FileChannel fc) throws IOException {
         fc.write(DataTransformer.casteString(String.valueOf(mRadius)+";" + String.valueOf(mHalfHeight * 2) + "\n"));
+        this.getRelativeTransform().getPosition().add(new Vector3f(0,mHalfHeight,0));
     }
 
 

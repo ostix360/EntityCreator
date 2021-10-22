@@ -145,7 +145,7 @@ public class Texture {
 
 
     public void exportDiffuse(String name) throws IOException {
-        File file = new File(Config.OUTPUT_FOLDER + "/textures/entities/"+ name + "/" +
+        File file = new File(Config.OUTPUT_FOLDER + "/textures/entities/" +
                 textureLoader.getFile().getName());
         if (!file.exists()){
             file.getParentFile().mkdirs();

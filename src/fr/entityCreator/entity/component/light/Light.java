@@ -8,7 +8,6 @@ import fr.entityCreator.frame.ComponentListPanel;
 import fr.entityCreator.frame.ComponentPanel;
 import fr.entityCreator.frame.MainFrame;
 import fr.entityCreator.frame.VectorPanel;
-import fr.entityCreator.graphics.MasterRenderer;
 import fr.entityCreator.toolBox.Color;
 import org.joml.Vector3f;
 
@@ -225,7 +224,7 @@ public class Light extends Component {
     }
 
     @Override
-    public ComponentPanel getComponentPanel(ComponentListPanel paramComponentListPanel) {
+    public ComponentPanel getComponentPanel(ComponentListPanel paramComponentListPanel, MainFrame mainFrame) {
         return new LightPanel(panel,paramComponentListPanel,this);
     }
 }

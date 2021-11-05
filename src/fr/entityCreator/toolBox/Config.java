@@ -22,6 +22,7 @@ public class Config {
     public static MeshModel CYLINDER;
     public static MeshModel SPHERE;
     public static TextureLoader WHITE;
+    public static MeshModel CUBE;
     public static Animation CURRENT_ANIMATION;
 
 }

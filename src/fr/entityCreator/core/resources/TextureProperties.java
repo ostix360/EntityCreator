@@ -14,7 +14,9 @@ public class TextureProperties {
 
     private TextureLoader normalMapFile;
     private TextureLoader specularMapFile;
-    
+
+    private boolean additive;
+    private boolean affectedByLighting;
 
     @Expose
     @SerializedName("specularMap")
@@ -81,13 +83,21 @@ public class TextureProperties {
 
     public void setNormalMapFile(TextureLoader normalMap) {
         this.normalMapFile = normalMap;
-        this.normalMapName = normalMap.getFile().getName();
+        this.normalMapName = normalMap.getFile().getName().replaceAll(".png","");
     }
 
     public void setSpecularMapFile(TextureLoader specularMapFile) {
         this.specularMapFile = specularMapFile;
-        this.specularMapName = specularMapFile.getFile().getName();
+        this.specularMapName = specularMapFile.getFile().getName().replaceAll(".png","");;
     }
+    public boolean isAdditive() {
+        return additive;
+    }
+
+    public boolean isAffectedByLighting() {
+        return affectedByLighting;
+    }
+
 
     public void setShineDamper(float shineDamper) {
         this.shineDamper = shineDamper;

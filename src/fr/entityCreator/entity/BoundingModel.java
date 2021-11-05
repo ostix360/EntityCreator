@@ -1,5 +1,6 @@
 package fr.entityCreator.entity;
 
+import com.flowpowered.react.collision.shape.*;
 import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.graphics.model.MeshModel;
 import fr.entityCreator.toolBox.Config;
@@ -22,12 +23,24 @@ public class BoundingModel {
         this.relativeTransform = new Transform(new Vector3f(),new Vector3f(),1);
     }
 
+    public static BoundingModel load(String content) {
+        String[] lines = content.split("\n");
+        Transform transform = Transform.load(lines[0]);
+        MeshModel cm = loadModel(lines[1]);
+        return new BoundingModel(cm).setRelativeTransform(transform);
+    }
+
+    private static MeshModel loadModel(String name) {
+        return null;
+    }
+
     public void setModel(MeshModel m) {
         this.m = m;
     }
 
-    public void setRelativeTransform(Transform relativeTransform) {
+    public BoundingModel setRelativeTransform(Transform relativeTransform) {
         this.relativeTransform = relativeTransform;
+        return this;
     }
 
     public MeshModel getModel() {
@@ -65,6 +78,8 @@ public class BoundingModel {
             }
         }
     }
+
+
 
     @Override
     public String toString() {

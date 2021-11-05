@@ -14,8 +14,7 @@ public class JFloatSlider extends JSlider {
     }
 
     public float getActualValue() {
-        /* 19 */
         return super.getValue() / 200.0F * this.scale + this.min;
-        /*    */
+
     }
 }

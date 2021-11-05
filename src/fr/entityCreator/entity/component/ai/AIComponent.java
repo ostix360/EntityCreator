@@ -1,14 +1,13 @@
 package fr.entityCreator.entity.component.ai;
 
 
+import com.flowpowered.react.math.*;
 import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.core.loader.json.JsonUtils;
-import fr.entityCreator.core.collision.maths.Vector3;
 import fr.entityCreator.entity.Entity;
 import fr.entityCreator.entity.component.Component;
 import fr.entityCreator.entity.component.ComponentType;
-import fr.entityCreator.frame.ComponentListPanel;
-import fr.entityCreator.frame.ComponentPanel;
+import fr.entityCreator.frame.*;
 import org.joml.Random;
 import org.joml.Vector3f;
 
@@ -65,7 +64,6 @@ public class AIComponent extends Component {
 
         float dx = (float) (pos * Math.sin(Math.toRadians(e.getRotation().y())));
         float dz = (float) (pos * Math.cos(Math.toRadians(e.getRotation().y())));
-        e.getTorque().set(new Vector3(0, rotY, 0));
         e.increaseRotation(new Vector3f(0, rotY, 0));
         e.getForceToCenter().add(new Vector3(dx, 0, dz));
     }
@@ -79,7 +77,7 @@ public class AIComponent extends Component {
     }
 
     @Override
-    public ComponentPanel getComponentPanel(ComponentListPanel paramComponentListPanel) {
+    public ComponentPanel getComponentPanel(ComponentListPanel paramComponentListPanel, MainFrame mainFrame) {
         return null;
     }
 

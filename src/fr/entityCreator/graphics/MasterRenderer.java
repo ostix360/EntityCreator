@@ -78,6 +78,9 @@ public class MasterRenderer {
         createProjectionMatrix();
     }
 
+    public void addEntity(Entity entity){
+        this.entities.add(entity);
+    }
 
     private void processEntity(Entity e) {
         entities.clear();
@@ -99,6 +102,7 @@ public class MasterRenderer {
     public void renderScene() {
         render(light, cam);
     }
+
 
     public void setTheEntity(Entity e) {
         this.theEntity = e;
@@ -179,5 +183,10 @@ public class MasterRenderer {
 
     public void setCam(Camera cam) {
         this.cam = cam;
+    }
+
+    public void clearCollisionEntity() {
+        entities.clear();
+        if (!theEntity.getModel().isAnimated()) processEntity(theEntity);
     }
 }

@@ -19,6 +19,7 @@ import fr.entityCreator.terrain.texture.TerrainTexture;
 import fr.entityCreator.terrain.texture.TerrainTexturePack;
 import fr.entityCreator.toolBox.Color;
 import fr.entityCreator.toolBox.Config;
+import fr.entityCreator.world.*;
 import org.joml.Vector3f;
 
 import java.io.*;
@@ -40,7 +41,8 @@ public class Main {
         Camera cam = new Camera(playerTransform);
         Workspace workspace = new Workspace();
         Thread main = Thread.currentThread();
-        MainFrame frame = new MainFrame(renderer,workspace,cam);
+        World world = new World(renderer);
+        MainFrame frame = new MainFrame(renderer,workspace,cam,world);
         Thread renderThread = new Thread(frame.getRenderRunnable(),"Render Thread");
         renderThread.start();
         TextureLoaderRequest backgroundTexture = new TextureLoaderRequest(Main.class.getResourceAsStream("/res/terrain/grassy2.png"));
@@ -49,7 +51,6 @@ public class Main {
         TextureLoaderRequest bTexture = new TextureLoaderRequest(Main.class.getResourceAsStream("/res/terrain/path.png"));
         TextureLoaderRequest blendRequest = new TextureLoaderRequest(Main.class.getResourceAsStream("/res/terrain/blendMap.png"));
         GLRequestProcessor.sendRequest(backgroundTexture,rTexture,gTexture,bTexture,blendRequest);
-
 
         setupMesh();
         Timer.waitForRequest(blendRequest);
@@ -63,6 +64,7 @@ public class Main {
         TerrainTexturePack tp = new TerrainTexturePack(backt,rt,gt,bt);
         Terrain t = new Terrain(0,0,tp,blendt);
         renderer.initToRender(entities,t,light,cam);
+        world.init();
     }
 
     private static void readConfig() {
@@ -105,13 +107,18 @@ public class Main {
         data = OBJFileLoader.loadModel(Main.class.getResourceAsStream("/model/sphere.obj"));
         ModelLoaderRequest sphereRequest = new ModelLoaderRequest(data);
         GLRequestProcessor.sendRequest(sphereRequest);
+        data = OBJFileLoader.loadModel(Main.class.getResourceAsStream("/model/cube2.obj"));
+        ModelLoaderRequest cube2 = new ModelLoaderRequest(data);
+        GLRequestProcessor.sendRequest(cube2);
 
-        Timer.waitForRequest(sphereRequest);
+        Timer.waitForRequest(cube2);
         Config.BOX = boxRequest.getModel();
         Config.CONE = conRequest.getModel();
         Config.CYLINDER = cylinderRequest.getModel();
         Config.SPHERE = sphereRequest.getModel();
+        Config.CUBE = cube2.getModel();
         Config.WHITE = textureRequest.getTexture();
+
     }
 
 }

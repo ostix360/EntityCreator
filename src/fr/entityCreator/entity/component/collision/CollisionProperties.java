@@ -1,19 +1,21 @@
 package fr.entityCreator.entity.component.collision;
 
 
-import fr.entityCreator.core.resources.CollisionShapeResource;
 import fr.entityCreator.entity.BoundingModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CollisionProperties {
-    private final boolean canMove;
-    private final List<BoundingModel> boundingModels;
+    private boolean canMove = false;
+    private List<BoundingModel> boundingModels;
 
-    public CollisionProperties(boolean canMove) {
-        this.canMove = canMove;
+    public CollisionProperties() {
         this.boundingModels = new ArrayList<>();
+    }
+
+    public void setCanMove(boolean canMove) {
+        this.canMove = canMove;
     }
 
     public boolean canMove() {
@@ -23,5 +25,9 @@ public class CollisionProperties {
 
     public List<BoundingModel> getBoundingModels() {
         return boundingModels;
+    }
+
+    public void setBoundingModels(List<BoundingModel> boundingModels) {
+        this.boundingModels = boundingModels;
     }
 }

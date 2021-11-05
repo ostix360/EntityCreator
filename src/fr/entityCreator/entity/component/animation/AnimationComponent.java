@@ -2,14 +2,12 @@ package fr.entityCreator.entity.component.animation;
 
 
 import fr.entityCreator.core.exporter.DataTransformer;
-import fr.entityCreator.core.resources.ResourcePack;
 import fr.entityCreator.entity.Entity;
 import fr.entityCreator.entity.animated.animation.animatedModel.AnimatedModel;
 import fr.entityCreator.entity.animated.animation.animation.Animation;
 import fr.entityCreator.entity.component.Component;
 import fr.entityCreator.entity.component.ComponentType;
-import fr.entityCreator.frame.ComponentListPanel;
-import fr.entityCreator.frame.ComponentPanel;
+import fr.entityCreator.frame.*;
 import fr.entityCreator.toolBox.Config;
 import fr.entityCreator.toolBox.Logger;
 import org.joml.Random;
@@ -58,7 +56,7 @@ public class AnimationComponent extends Component {
     }
 
     @Override
-    public ComponentPanel getComponentPanel(ComponentListPanel paramComponentListPanel) {
+    public ComponentPanel getComponentPanel(ComponentListPanel paramComponentListPanel, MainFrame mainFrame) {
         return new ComponentPanel(paramComponentListPanel,this) {
             @Override
             public void cleanUp() {

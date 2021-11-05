@@ -9,6 +9,7 @@ import fr.entityCreator.graphics.textures.Texture;
 import fr.entityCreator.graphics.shader.ClassicShader;
 import fr.entityCreator.toolBox.OpenGL.OpenGlUtils;
 import fr.entityCreator.toolBox.OpenGL.VAO;
+import fr.entityCreator.world.*;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.lwjgl.opengl.GL11;
@@ -38,6 +39,7 @@ public class EntityRenderer implements IRenderer {
             if (model.getTexture() == null) {
                 return;
             }
+            OpenGlUtils.goWireframe(false);
             prepareTexturedModel(model);
 
             prepareInstance(entity);
@@ -50,6 +52,9 @@ public class EntityRenderer implements IRenderer {
 
     @Override
     public void prepareTexturedModel(Model model) {
+        if (model.equals(World.CUBE)) {
+            OpenGlUtils.goWireframe(true);
+        }
         MeshModel meshModel = model.getMeshModel();
         meshModel.getVAO().bind(0, 1, 2);
 

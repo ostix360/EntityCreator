@@ -6,8 +6,7 @@ import fr.entityCreator.core.loader.json.JsonUtils;
 import fr.entityCreator.entity.Entity;
 import fr.entityCreator.entity.component.Component;
 import fr.entityCreator.entity.component.ComponentType;
-import fr.entityCreator.frame.ComponentListPanel;
-import fr.entityCreator.frame.ComponentPanel;
+import fr.entityCreator.frame.*;
 import fr.entityCreator.graphics.particles.ParticleSystem;
 import fr.entityCreator.graphics.particles.ParticleTarget;
 import fr.entityCreator.graphics.particles.ParticleTexture;
@@ -88,7 +87,7 @@ public class ParticleComponent extends Component {
     }
 
     @Override
-    public ComponentPanel getComponentPanel(ComponentListPanel paramComponentListPanel) {
+    public ComponentPanel getComponentPanel(ComponentListPanel paramComponentListPanel, MainFrame mainFrame) {
         if (panel == null)panel = new ParticleComponentPanel(this, paramComponentListPanel);
         return panel;
     }

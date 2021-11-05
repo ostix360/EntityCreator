@@ -24,7 +24,7 @@ public class MenuBar extends JMenuBar {
         JMenu others = new JMenu("Autres");
         add(others);
 
-        JMenuItem newStaticFile = new JMenuItem("Nouvelle static Entité");
+        JMenuItem newStaticFile = new JMenuItem("Nouvelle Entité");
         JMenuItem openFile = new JMenuItem("Ouvrir");
         JMenuItem save = new JMenuItem("Sauvagarder");
         file.add(newStaticFile);

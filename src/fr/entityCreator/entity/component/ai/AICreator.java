@@ -16,10 +16,10 @@ public class AICreator implements ComponentCreator {
     }
 
     @Override
-    public Component loadComponent(BufferedReader reader, Entity entity) {
+    public Component loadComponent(String component, Entity entity) {
         AIComponent ai = null;
         try{
-            AIProperties prop = JsonUtils.gsonInstance(false).fromJson(reader,AIProperties.class);
+            AIProperties prop = JsonUtils.gsonInstance(false).fromJson(component,AIProperties.class);
             ai = new AIComponent(entity,prop);
         }catch(Exception e){
             Logger.err("Failled to load AI Component from " + entity.getModel().getName() + " ");

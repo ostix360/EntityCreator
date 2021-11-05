@@ -1,22 +1,20 @@
 package fr.entityCreator.entity.component.collision;
 
+import com.flowpowered.react.collision.shape.*;
 import fr.entityCreator.core.Timer;
-import fr.entityCreator.core.loader.ModelLoaderRequest;
-import fr.entityCreator.core.loader.OBJFileLoader;
-import fr.entityCreator.core.collision.shape.*;
-import fr.entityCreator.core.resourcesProcessor.GLRequestProcessor;
-import fr.entityCreator.entity.BoundingModel;
-import fr.entityCreator.frame.ErrorPopUp;
-import fr.entityCreator.frame.MainFrame;
-import fr.entityCreator.frame.ModelChooseScreen;
-import fr.entityCreator.graphics.CollisionObjectRenderer;
-import fr.entityCreator.graphics.model.ModelData;
+import fr.entityCreator.core.loader.*;
+import fr.entityCreator.core.resourcesProcessor.*;
+import fr.entityCreator.entity.*;
+import fr.entityCreator.frame.*;
+import fr.entityCreator.graphics.*;
+import fr.entityCreator.graphics.model.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.util.concurrent.atomic.*;
 
-public class CollisionObjectPanel extends JPanel{
+public class CollisionObjectPanel extends JPanel {
     private CollisionComponent cc;
     private JComboBox<BoundingModel> boundingModelJComboBox;
     private JComboBox<CollisionShape> collisionShapeJComboBox;
@@ -29,7 +27,7 @@ public class CollisionObjectPanel extends JPanel{
     private JPanel actualTransformPanel;
     private JPanel actualShapePanel;
 
-    public CollisionObjectPanel(CollisionPanel collisionPanel, JPanel settingsPanel, CollisionComponent collisionComponent) {
+    public CollisionObjectPanel(CollisionPanel collisionPanel, JPanel settingsPanel, CollisionComponent collisionComponent,MainFrame mainFrame) {
         super();
         setLayout(new GridBagLayout());
         CollisionObjectRenderer.boundingModels.clear();
@@ -41,12 +39,12 @@ public class CollisionObjectPanel extends JPanel{
         removeButton.setVisible(false);
         removeButton.setFont(MainFrame.SMALL_FONT);
         add(removeButton, getGC(0, 2, 1));
-        removeButton.addActionListener((e) ->{
+        removeButton.addActionListener((e) -> {
             this.actualModel = (BoundingModel) boundingModelJComboBox.getSelectedItem();
             CollisionObjectRenderer.boundingModels.remove(actualModel);
             cc.getProperties().getBoundingModels().remove(actualModel);
             this.boundingModelJComboBox.removeItem(boundingModelJComboBox.getSelectedItem());
-            if (boundingModelJComboBox.getItemCount() == 0){
+            if (boundingModelJComboBox.getItemCount() == 0) {
                 this.actualModel = null;
                 this.remove(actualTransformPanel);
                 this.remove(actualShapePanel);
@@ -75,10 +73,10 @@ public class CollisionObjectPanel extends JPanel{
         addPersButton.setForeground(new Color(255, 0, 0));
         setup();
 
-        addPersButton.addActionListener((e) ->{
+        addPersButton.addActionListener((e) -> {
             if (this.actualModel != null) beforeModel = actualModel;
             new ModelChooseScreen(this);
-            if (actualShapePanel != null){
+            if (actualShapePanel != null) {
                 this.remove(actualShapePanel);
             }
             boundingModelJComboBox.setSelectedItem(this.actualModel);
@@ -94,7 +92,7 @@ public class CollisionObjectPanel extends JPanel{
         addButton.setFont(MainFrame.SMALL_FONT);
         addButton.setForeground(new Color(255, 0, 0));
 
-        addButton.addActionListener((e) ->{
+        addButton.addActionListener((e) -> {
             if (this.actualModel != null) beforeModel = actualModel;
             this.actualModel = (BoundingModel) collisionShapeJComboBox.getSelectedItem();
             this.addSettingPanel();
@@ -104,15 +102,32 @@ public class CollisionObjectPanel extends JPanel{
             removeButton.setVisible(true);
         });
         add(addButton, getGC(1, 0, 1));
+
+        AtomicBoolean isShowing = new AtomicBoolean(false);
+        JButton showCollision = new JButton("Voir la collision");
+        showCollision.setPreferredSize(new Dimension(150, 25));
+        showCollision.setFont(MainFrame.SMALL_FONT);
+        showCollision.addActionListener((e) -> {
+            if (isShowing.compareAndSet(true,false)){
+                mainFrame.stopShowingCollision();
+                showCollision.setText("Voir la collision");
+            }else{
+                mainFrame.notifyShowCollision();
+                isShowing.set(true);
+                showCollision.setText("Stop visualisation de la collision");
+            }
+
+        });
+        add(showCollision, getGC(0, 5, 1));
     }
 
     private void addSpefSettingPanel() {
-        if (actualShapePanel != null){
+        if (actualShapePanel != null) {
             this.remove(actualShapePanel);
         }
         CollisionShape shape = (CollisionShape) collisionShapeJComboBox.getSelectedItem();
         actualShapePanel = shape.getPanel();
-        this.add(actualShapePanel,getGC(0,4,4));
+        this.add(actualShapePanel, getGC(0, 4, 4));
         this.boundingModelJComboBox.addItem(shape);
         this.boundingModelJComboBox.setSelectedItem(shape);
         this.validate();
@@ -125,18 +140,18 @@ public class CollisionObjectPanel extends JPanel{
         boundingModelJComboBox = new JComboBox<>();
         boundingModelJComboBox.setFont(MainFrame.SMALL_FONT);
         boundingModelJComboBox.setModel(new DefaultComboBoxModel<>());
-        this.add(boundingModelJComboBox,getGC(0,1,1));
-        boundingModelJComboBox.addActionListener((e) ->{
+        this.add(boundingModelJComboBox, getGC(0, 1, 1));
+        boundingModelJComboBox.addActionListener((e) -> {
             beforeModel = actualModel;
             actualModel = (BoundingModel) boundingModelJComboBox.getSelectedItem();
-            if (actualModel != null && !actualModel.equals(beforeModel)){
+            if (actualModel != null && !actualModel.equals(beforeModel)) {
                 this.addSettingPanel();
-                if (actualShapePanel != null){
+                if (actualShapePanel != null) {
                     this.remove(actualShapePanel);
                 }
-                if (actualModel instanceof CollisionShape){
-                    actualShapePanel =  ((CollisionShape) actualModel).getPanel();
-                    this.add(actualShapePanel,getGC(0,4,4));
+                if (actualModel instanceof CollisionShape) {
+                    actualShapePanel = ((CollisionShape) actualModel).getPanel();
+                    this.add(actualShapePanel, getGC(0, 4, 4));
                     this.validate();
                     this.repaint();
                     settings.validate();
@@ -148,19 +163,19 @@ public class CollisionObjectPanel extends JPanel{
         collisionShapeJComboBox = new JComboBox<>();
         collisionShapeJComboBox.setFont(MainFrame.SMALL_FONT);
         CollisionShape[] shapesPosibilities = new CollisionShape[]{
-                new BoxShape(1,1,1),new CapsuleShape(1,1),new ConeShape(1,1),
-                new CylinderShape(1,1),new SphereShape(1)
+                new BoxShape(1, 1, 1), new CapsuleShape(1, 1), new ConeShape(1, 1),
+                new CylinderShape(1, 1), new SphereShape(1)
         };
         collisionShapeJComboBox.setModel(new DefaultComboBoxModel<>(shapesPosibilities));
-        this.add(collisionShapeJComboBox,getGC(1,1,1));
+        this.add(collisionShapeJComboBox, getGC(1, 1, 1));
     }
 
-    public void addSettingPanel(){
-        if (actualTransformPanel != null){
+    public void addSettingPanel() {
+        if (actualTransformPanel != null) {
             this.remove(actualTransformPanel);
         }
         actualTransformPanel = actualModel.getRelativeTransform().getPanel();
-        this.add(actualTransformPanel,getGC(0,3,4));
+        this.add(actualTransformPanel, getGC(0, 3, 4));
         this.validate();
         this.repaint();
         settings.validate();
@@ -180,11 +195,11 @@ public class CollisionObjectPanel extends JPanel{
 
     public void setObjectFile(File object) {
         ModelLoaderRequest request;
-        if (object == null){
+        if (object == null) {
             return;
         }
         if (object.getName().endsWith(".obj")) {
-            try (FileInputStream fis = new FileInputStream(object)){
+            try (FileInputStream fis = new FileInputStream(object)) {
                 ModelData data = OBJFileLoader.loadModel(fis);
                 request = new ModelLoaderRequest(data);
                 GLRequestProcessor.sendRequest(request);
@@ -202,7 +217,7 @@ public class CollisionObjectPanel extends JPanel{
             this.repaint();
             settings.validate();
             settings.repaint();
-        }else{
+        } else {
             new ErrorPopUp("Votre fichier doit etre un obj");
         }
     }

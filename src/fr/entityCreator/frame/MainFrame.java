@@ -1,22 +1,19 @@
 package fr.entityCreator.frame;
 
-import fr.entityCreator.creator.Workspace;
-import fr.entityCreator.entity.Entity;
-import fr.entityCreator.entity.camera.Camera;
+import fr.entityCreator.creator.*;
+import fr.entityCreator.entity.*;
+import fr.entityCreator.entity.camera.*;
 import fr.entityCreator.entity.component.Component;
-import fr.entityCreator.entity.component.ComponentType;
-import fr.entityCreator.graphics.MasterRenderer;
-import org.lwjgl.opengl.awt.GLData;
+import fr.entityCreator.graphics.*;
+import fr.entityCreator.world.*;
+import org.lwjgl.opengl.awt.*;
 
-import javax.imageio.ImageIO;
+import javax.imageio.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
+import java.awt.image.*;
+import java.io.*;
+import java.util.concurrent.*;
 
 public class MainFrame {
     public static final String TITLE = "Entity Creator";
@@ -40,8 +37,10 @@ public class MainFrame {
     private PreviewSettingsPanel previewSettings;
     private MainSettingsPanel mainSettings;
     private ComponentPanel currentComponentPanel;
+    private World world;
 
-    public MainFrame(MasterRenderer renderer, Workspace workspace,Camera cam) {
+    public MainFrame(MasterRenderer renderer, Workspace workspace, Camera cam, World world) {
+        this.world = world;
         this.workspace = workspace;
         this.renderer = renderer;
         frame = new JFrame(TITLE) {
@@ -88,7 +87,8 @@ public class MainFrame {
         this.frame.validate();
         this.frame.repaint();
     }
-    private void addLoadedComponent(Component loadedComponent, Entity entity, ComponentListPanel listPanel){
+
+    private void addLoadedComponent(Component loadedComponent, Entity entity, ComponentListPanel listPanel) {
         listPanel.addComponent(loadedComponent);
     }
 
@@ -162,7 +162,7 @@ public class MainFrame {
         mainSettings.setVisible(true);
         mainPanel.add(this.mainSettings, gc);
         gc.gridy = 1;
-        previewSettings = new PreviewSettingsPanel(580, 105, camera,workspace);
+        previewSettings = new PreviewSettingsPanel(580, 105, camera, workspace);
         mainPanel.add(this.previewSettings, gc);
         GLData data = new GLData();
         data.samples = 8;
@@ -171,7 +171,7 @@ public class MainFrame {
         data.minorVersion = 3;
         data.debug = true;
         data.profile = GLData.Profile.CORE;
-        canvas = new GLCanvas(data, renderer,camera);
+        canvas = new GLCanvas(data, renderer, camera);
         canvas.setPreferredSize(new Dimension(580, 345));
         gc.gridy = 2;
         mainPanel.add(this.canvas);
@@ -180,6 +180,14 @@ public class MainFrame {
         addComponentPanel = new AddComponentPanel(220, 50, this.componentListPanel);
         componentsPanel.add(this.addComponentPanel);
         componentsPanel.add(this.componentListPanel);
+    }
+
+    public void notifyShowCollision() {
+        world.showCollision(workspace.getCurrentEntity());
+    }
+
+    public void stopShowingCollision() {
+        world.stopShowingCollision();
     }
 
     public void notifyModelSet() {
@@ -191,7 +199,7 @@ public class MainFrame {
     }
 
     public void setComponentPanel(ComponentPanel panel) {
-        if (panel == null){
+        if (panel == null) {
             return;
         }
         if (this.currentComponentPanel != null) {

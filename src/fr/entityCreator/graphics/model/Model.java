@@ -53,7 +53,7 @@ public class Model {
 
     private void exportModel() throws IOException {
         File output = new File(Config.OUTPUT_FOLDER +
-                "/models/entities/" + name + "/" + name + (isAnimated ? ".dae":".obj"));
+                "/models/entities/" + name + (isAnimated ? ".dae":".obj"));
         if (!output.exists()){
             output.getParentFile().mkdirs();
             output.createNewFile();
@@ -63,7 +63,7 @@ public class Model {
             FileOutputStream fos = new FileOutputStream(output);
             FileChannel fcWriter = fos.getChannel();
         ){
-            ByteBuffer buffer = ByteBuffer.allocate(1024);
+            ByteBuffer buffer = ByteBuffer.allocate(4096);
             while (fcReader.read(buffer) !=-1) {
                 buffer.flip();
                 fcWriter.write(buffer);

@@ -123,7 +123,7 @@ public class ParticleComponentPanel extends ComponentPanel {
         shapesPanel.add(this.currentShapesPanel, getGC(0, 1));
         shapes.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (ParticleComponentPanel.this.currentShapesPanel != null) {
+                if (currentShapesPanel != null) {
                     shapesPanel.remove(ParticleComponentPanel.this.currentShapesPanel);
                 }
                 currentShapesPanel = ((ParticleSpawn) shapes.getSelectedItem()).getSettingsPanel();

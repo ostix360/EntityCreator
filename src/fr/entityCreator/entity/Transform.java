@@ -33,6 +33,21 @@ public class Transform {
         setupPanel();
     }
 
+    public Transform(Transform t){
+        this(t.position, t.rotation, t.getScale().x());
+    }
+
+    public static Transform load(String values) {
+        String[] value = values.split(";");
+        int index = 0;
+        Vector3f pos = new Vector3f(Float.parseFloat(value[index++]), Float.parseFloat(value[index++]),
+                Float.parseFloat(value[index++]));
+        Vector3f rot = new Vector3f(Float.parseFloat(value[index++]), Float.parseFloat(value[index++]),
+                Float.parseFloat(value[index++]));
+        float scale = Float.parseFloat(value[index]);
+        return new Transform(pos, rot, scale);
+    }
+
     private void setupPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
@@ -114,6 +129,9 @@ public class Transform {
 
     public void setScale(float scale) {
         this.scale = new Vector3f(scale);
+    }
+    public void setScale(Vector3f scale) {
+        this.scale = scale;
     }
 
     public void setRotation(Vector3f rotation) {

@@ -81,27 +81,18 @@ public class GLCanvas extends AWTGLCanvas implements MouseWheelListener, MouseLi
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON1) {
-            Input.keysMouse[GLFW_MOUSE_BUTTON_1] = false;
-        }else{
-            Input.keysMouse[GLFW_MOUSE_BUTTON_1] = false;
-        }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {
             Input.keysMouse[GLFW_MOUSE_BUTTON_1] = true;
-        }else{
-            Input.keysMouse[GLFW_MOUSE_BUTTON_1] = false;
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {
-            Input.keysMouse[GLFW_MOUSE_BUTTON_1] = false;
-        }else{
             Input.keysMouse[GLFW_MOUSE_BUTTON_1] = false;
         }
     }
@@ -118,7 +109,9 @@ public class GLCanvas extends AWTGLCanvas implements MouseWheelListener, MouseLi
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
+        Input.mouseX = e.getX();
+        Input.mouseY = e.getY();
+        Input.updateInput();
     }
 
     @Override

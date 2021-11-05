@@ -66,6 +66,14 @@ public class Texture {
         return textureID;
     }
 
+    public boolean isAffectedByLighting() {
+        return properties.isAffectedByLighting();
+    }
+
+    public boolean isAdditive() {
+        return properties.isAdditive();
+    }
+
     public void setNormalMapFile(TextureLoader path) {
         this.properties.setNormalMapFile(path);
     }

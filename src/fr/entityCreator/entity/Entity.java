@@ -1,41 +1,33 @@
 package fr.entityCreator.entity;
 
 
+import com.flowpowered.react.math.*;
 import fr.entityCreator.core.Timer;
-import fr.entityCreator.core.collision.maths.Vector3;
-import fr.entityCreator.core.loader.LoadAnimation;
-import fr.entityCreator.core.loader.OBJFileLoader;
-import fr.entityCreator.core.loader.TextureLoaderRequest;
-import fr.entityCreator.core.resourcesProcessor.GLRequest;
-import fr.entityCreator.core.resourcesProcessor.GLRequestProcessor;
-import fr.entityCreator.entity.animated.animation.loaders.AnimatedModelLoader;
-import fr.entityCreator.entity.component.Component;
-import fr.entityCreator.entity.component.collision.CollisionComponent;
-import fr.entityCreator.entity.component.particle.ParticleComponent;
-import fr.entityCreator.frame.ErrorPopUp;
-import fr.entityCreator.graphics.model.Model;
-import fr.entityCreator.toolBox.Config;
-import org.joml.Vector3f;
+import fr.entityCreator.core.loader.*;
+import fr.entityCreator.core.resourcesProcessor.*;
+import fr.entityCreator.entity.animated.animation.loaders.*;
+import fr.entityCreator.entity.component.*;
+import fr.entityCreator.entity.component.collision.*;
+import fr.entityCreator.entity.component.particle.*;
+import fr.entityCreator.frame.*;
+import fr.entityCreator.graphics.model.*;
+import fr.entityCreator.toolBox.*;
+import org.joml.*;
 
-import javax.management.openmbean.OpenDataException;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import javax.management.openmbean.*;
+import java.io.*;
+import java.nio.*;
+import java.nio.channels.*;
+import java.util.*;
 
 
 public class Entity {
 
     protected final Vector3 forceToCenter = new Vector3();
-    protected final Vector3 torque = new Vector3();
     private Model model;
     protected Vector3f position;
     protected Vector3f rotation;
-    protected float scale;
+    protected Vector3f scale;
     private Transform transform;
     protected MovementType movement = MovementType.FORWARD;
     private CollisionComponent collision;
@@ -48,7 +40,7 @@ public class Entity {
         this.model = model;
         this.position = position;
         this.rotation = rotation.add(0, 0, 0);
-        this.scale = scale;
+        this.scale =new Vector3f(scale);
         this.transform = new Transform(position, rotation, scale);
     }
 
@@ -56,8 +48,8 @@ public class Entity {
         this.name = name;
         this.position = new Vector3f(200, 0, 200);
         this.rotation = new Vector3f(0);
-        this.scale = 1;
-        this.transform = new Transform(position, rotation, scale);
+        this.scale = new Vector3f(1);
+        this.transform = new Transform(position, rotation, scale.x());
     }
 
     public void setModel(Model model) {
@@ -70,7 +62,6 @@ public class Entity {
 
     public void setCollision(CollisionComponent collision) {
         this.collision = collision;
-        this.components.add(collision);
     }
 
     public void addComponent(Component c) {
@@ -136,8 +127,12 @@ public class Entity {
         return rotation;
     }
 
+    public Vector3f getScales() {
+        return new Vector3f(scale);
+    }
+
     public float getScale() {
-        return scale;
+        return scale.x();
     }
 
     public Transform getTransform() {
@@ -157,11 +152,6 @@ public class Entity {
 
     public Vector3 getForceToCenter() {
         return forceToCenter;
-    }
-
-
-    public Vector3 getTorque() {
-        return torque.multiply(100);
     }
 
     public void exportAllComponents() throws IOException {
@@ -263,6 +253,10 @@ public class Entity {
             bytes.flip();
             fc.write(bytes);
         }
+    }
+
+    public void setScale(Vector3f scale) {
+        this.scale = scale;
     }
 
     public enum MovementType {

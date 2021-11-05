@@ -9,5 +9,5 @@ import java.io.File;
 public interface ComponentCreator {
     Component createComponent(Entity entity);
 
-    Component loadComponent(BufferedReader reader, Entity entity);
+    Component loadComponent(String component, Entity entity);
 }

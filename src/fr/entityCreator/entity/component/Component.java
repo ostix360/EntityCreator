@@ -2,8 +2,7 @@ package fr.entityCreator.entity.component;
 
 
 import fr.entityCreator.entity.Entity;
-import fr.entityCreator.frame.ComponentListPanel;
-import fr.entityCreator.frame.ComponentPanel;
+import fr.entityCreator.frame.*;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,5 +33,5 @@ public abstract class Component {
         }
     }
 
-    public abstract ComponentPanel getComponentPanel(ComponentListPanel paramComponentListPanel);
+    public abstract ComponentPanel getComponentPanel(ComponentListPanel paramComponentListPanel, MainFrame mainFrame);
 }

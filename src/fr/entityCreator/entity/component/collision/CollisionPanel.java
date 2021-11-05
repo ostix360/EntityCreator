@@ -1,7 +1,6 @@
 package fr.entityCreator.entity.component.collision;
 
-import fr.entityCreator.frame.ComponentListPanel;
-import fr.entityCreator.frame.ComponentPanel;
+import fr.entityCreator.frame.*;
 import fr.entityCreator.graphics.CollisionObjectRenderer;
 
 import javax.swing.*;
@@ -11,15 +10,15 @@ public class CollisionPanel extends ComponentPanel {
     private JPanel settingsPanel;
     private CollisionComponent collisionComponent;
 
-    public CollisionPanel(CollisionComponent component, ComponentListPanel listPanel) {
+    public CollisionPanel(CollisionComponent component, ComponentListPanel listPanel, MainFrame frame) {
         super(listPanel,component);
         this.collisionComponent = component;
         this.settingsPanel = settings;
-        addPanel();
+        this.addPanel(frame);
     }
 
-    public void addPanel() {
-        settingsPanel.add(new CollisionObjectPanel(this, this.settingsPanel, this.collisionComponent));
+    private void addPanel(MainFrame frame) {
+        settingsPanel.add(new CollisionObjectPanel(this, this.settingsPanel, this.collisionComponent,frame));
 
         settingsPanel.validate();
         settingsPanel.repaint();

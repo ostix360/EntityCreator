@@ -1,8 +1,8 @@
 package fr.entityCreator.entity;
 
 
+import com.flowpowered.react.math.*;
 import fr.entityCreator.core.Input;
-import fr.entityCreator.core.collision.maths.Vector3;
 import fr.entityCreator.graphics.model.Model;
 import org.joml.Vector3f;
 
@@ -45,7 +45,6 @@ public class Player extends Entity {
     public void move() {
         checkInputs();
         super.increaseRotation(new Vector3f(0, this.currentTurnSpeed * 0.0023f, 0));
-        torque.set(new Vector3(0,this.currentTurnSpeed,0));
         float distance = currentSpeed * 0.006f;
         float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotation().y())));
         float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotation().y())));

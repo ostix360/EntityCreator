@@ -1,21 +1,15 @@
 package fr.entityCreator.entity.component.collision;
 
 
-import fr.entityCreator.core.collision.shape.CollisionShape;
-import fr.entityCreator.core.exporter.DataTransformer;
-import fr.entityCreator.core.resources.CollisionShapeResource;
-import fr.entityCreator.entity.BoundingModel;
-import fr.entityCreator.entity.Entity;
-import fr.entityCreator.entity.component.Component;
-import fr.entityCreator.entity.component.ComponentType;
-import fr.entityCreator.frame.ComponentListPanel;
-import fr.entityCreator.frame.ComponentPanel;
-import fr.entityCreator.graphics.CollisionObjectRenderer;
+import com.flowpowered.react.collision.shape.*;
+import fr.entityCreator.core.exporter.*;
+import fr.entityCreator.entity.*;
+import fr.entityCreator.entity.component.*;
+import fr.entityCreator.frame.*;
+import fr.entityCreator.graphics.*;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.channels.FileChannel;
+import java.io.*;
+import java.nio.channels.*;
 
 public class CollisionComponent extends Component {
     private final CollisionProperties properties;
@@ -44,13 +38,13 @@ public class CollisionComponent extends Component {
                     bm.export(fc);
                 }
             }
-            fc.write(DataTransformer.casteString("true\n"));
+            fc.write(DataTransformer.casteString("false\n"));
     }
 
     @Override
-    public ComponentPanel getComponentPanel(ComponentListPanel listPanel) {
+    public ComponentPanel getComponentPanel(ComponentListPanel listPanel, MainFrame mainFrame) {
         if (panel == null){
-            panel = new CollisionPanel(this,listPanel);
+            panel = new CollisionPanel(this,listPanel,mainFrame);
         }else{
             CollisionObjectRenderer.boundingModels.addAll(this.getProperties().getBoundingModels());
         }

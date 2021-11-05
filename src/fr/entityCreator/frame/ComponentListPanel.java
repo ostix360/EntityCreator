@@ -35,7 +35,7 @@ public class ComponentListPanel extends JPanel {
         add(button);
         button.setForeground(new Color(255, 100, 0));
         button.addActionListener((e) -> {
-            frame.setComponentPanel(component.getComponentPanel(ComponentListPanel.this));
+            frame.setComponentPanel(component.getComponentPanel(ComponentListPanel.this,frame));
             button.setForeground(new Color(0, 0, 0));
         });
         super.validate();

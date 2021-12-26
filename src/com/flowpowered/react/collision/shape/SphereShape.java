@@ -69,6 +69,7 @@ public class SphereShape extends CollisionShape {
     public SphereShape(SphereShape shape) {
         super(shape);
         mRadius = shape.mRadius;
+        createPanel();
     }
 
     public static SphereShape load(String content) {

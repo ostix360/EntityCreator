@@ -77,6 +77,7 @@ public class CapsuleShape extends CollisionShape {
         super(shape);
         mRadius = shape.mRadius;
         mHalfHeight = shape.mHalfHeight;
+        createPanel();
     }
 
     public static CapsuleShape load(String content) {

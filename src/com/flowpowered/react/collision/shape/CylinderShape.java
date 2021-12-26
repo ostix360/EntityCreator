@@ -93,6 +93,7 @@ public class CylinderShape extends CollisionShape {
         super(shape);
         mRadius = shape.mRadius;
         mHalfHeight = shape.mHalfHeight;
+        createPanel();
     }
 
     public static CylinderShape load(String content) {

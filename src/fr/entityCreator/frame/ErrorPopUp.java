@@ -1,7 +1,10 @@
 package fr.entityCreator.frame;
 
+import fr.entityCreator.toolBox.*;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -30,6 +33,7 @@ public class ErrorPopUp {
         this.frame.add(text, gc);
         gc.gridy = 1;
         JLabel messageText = new JLabel(msg);
+        Logger.err(msg);
         messageText.setForeground(new Color(255, 0, 0));
         messageText.setFont(new Font("Segoe UI", 1, 15));
         this.frame.add(messageText, gc);

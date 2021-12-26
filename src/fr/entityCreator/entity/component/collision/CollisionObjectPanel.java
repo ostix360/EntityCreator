@@ -94,7 +94,7 @@ public class CollisionObjectPanel extends JPanel {
 
         addButton.addActionListener((e) -> {
             if (this.actualModel != null) beforeModel = actualModel;
-            this.actualModel = (BoundingModel) collisionShapeJComboBox.getSelectedItem();
+            this.actualModel = ((CollisionShape) collisionShapeJComboBox.getSelectedItem()).clone();
             this.addSettingPanel();
             this.addSpefSettingPanel();
             CollisionObjectRenderer.boundingModels.add(actualModel);
@@ -125,7 +125,7 @@ public class CollisionObjectPanel extends JPanel {
         if (actualShapePanel != null) {
             this.remove(actualShapePanel);
         }
-        CollisionShape shape = (CollisionShape) collisionShapeJComboBox.getSelectedItem();
+        CollisionShape shape = (CollisionShape) actualModel;
         actualShapePanel = shape.getPanel();
         this.add(actualShapePanel, getGC(0, 4, 4));
         this.boundingModelJComboBox.addItem(shape);

@@ -142,6 +142,7 @@ public class ConvexMeshShape extends CollisionShape {
         if (mNbVertices != mVertices.size()) {
             throw new IllegalArgumentException("The number of vertices must be equal to the size of the vertex list");
         }
+        createPanel();
     }
 
     // Recomputes the bounds of the mesh.

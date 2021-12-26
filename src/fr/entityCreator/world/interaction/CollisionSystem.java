@@ -159,7 +159,8 @@ public class CollisionSystem {
     private void addBody(Entity e, CollisionShape shape) {
         fr.entityCreator.entity.Transform trans = shape.getRelativeTransform();
 
-        final Vector3 pos = Maths.toVector3(e.getPosition().add(trans.getPosition(), new Vector3f()).add(shape.applyCorrection()));//.sub(e.getScale().div(6,new Vector3f())));
+        final Vector3 pos = Maths.toVector3(e.getPosition().add(trans.getPosition(), new Vector3f())
+                .add(shape.applyCorrection()));//.sub(e.getScale().div(6,new Vector3f())));
         shape.scale(e.getScales().mul(1.0f, new Vector3f()));
         AxisAngle4d angles = new AxisAngle4d();
         Quaternionf q = new Quaternionf();

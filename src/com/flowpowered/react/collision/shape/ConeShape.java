@@ -98,6 +98,7 @@ public class ConeShape extends CollisionShape {
         mRadius = shape.mRadius;
         mHalfHeight = shape.mHalfHeight;
         mSinTheta = shape.mSinTheta;
+        createPanel();
     }
 
     public static ConeShape load(String content) {

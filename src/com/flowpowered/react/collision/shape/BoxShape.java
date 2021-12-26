@@ -99,6 +99,7 @@ public class BoxShape extends CollisionShape {
     public BoxShape(BoxShape shape) {
         super(shape);
         mExtent.set(shape.mExtent);
+        createPanel();
     }
 
 

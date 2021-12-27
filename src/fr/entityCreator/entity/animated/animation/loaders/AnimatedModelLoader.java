@@ -15,6 +15,8 @@ import fr.entityCreator.entity.animated.colladaParser.dataStructures.JointData;
 import fr.entityCreator.entity.animated.colladaParser.dataStructures.MeshData;
 import fr.entityCreator.entity.animated.colladaParser.dataStructures.SkeletonData;
 import fr.entityCreator.graphics.model.MeshModel;
+import fr.entityCreator.graphics.textures.*;
+import fr.entityCreator.toolBox.*;
 
 public class AnimatedModelLoader {
 
@@ -33,6 +35,16 @@ public class AnimatedModelLoader {
         SkeletonData skeletonData = entityData.getJointsData();
         Joint headJoint = createJoints(skeletonData.headJoint);
         return new AnimatedModel(entity.getName(), headJoint, skeletonData.jointCount);
+    }
+    public static AnimatedModel loadEntity(MeshModel model, Texture texture, SkeletonData skeletonData) {
+        Joint headJoint = createJoints(skeletonData.headJoint);
+        return new AnimatedModel(model, texture, headJoint, skeletonData.jointCount);
+    }
+
+    public static AnimatedModelData loadMeshData(String modelFile, int maxWeights){
+        AnimatedModelData entityData = ColladaLoader.loadColladaModel(Config.OUTPUT_FOLDER + "/models/entities/" + modelFile + ".dae", maxWeights);
+        return new AnimatedModelData(entityData.getMeshData(),entityData.getJointsData());
+
     }
 
     /**

@@ -1,7 +1,9 @@
 package fr.entityCreator.creator;
 
 import fr.entityCreator.core.exporter.EntityExporter;
+import fr.entityCreator.core.importer.*;
 import fr.entityCreator.entity.Entity;
+import fr.entityCreator.frame.*;
 
 import javax.swing.*;
 import java.util.logging.Level;
@@ -30,7 +32,7 @@ public class Workspace {
     }
 
     public void open(){
-
+        currentEntity = EntityImporter.importEntity();
     }
 
     public void newEntity(String name){

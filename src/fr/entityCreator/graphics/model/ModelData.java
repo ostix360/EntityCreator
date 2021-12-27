@@ -1,5 +1,7 @@
 package fr.entityCreator.graphics.model;
 
+import fr.entityCreator.entity.animated.colladaParser.dataStructures.*;
+
 public class ModelData {
     private final float[] vertices;
     private float[] texcoords;
@@ -16,6 +18,15 @@ public class ModelData {
         this.normals = normals;
         this.jointsId = jointsId;
         this.vertexWeights = vertexWeights;
+    }
+
+    public ModelData(MeshData meshData) {
+        this.vertices = meshData.getVertices();
+        this.texcoords = meshData.getTextureCoords();
+        this.indices = meshData.getIndices();
+        this.normals = meshData.getNormals();
+        this.jointsId = meshData.getJointIds();
+        this.vertexWeights = meshData.getVertexWeights();
     }
 
     public ModelData(float[] vertices, float[] texcoords, int[] indices, float[] normals) {

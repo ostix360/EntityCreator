@@ -14,6 +14,7 @@ public class TextureLoaderRequest extends GLRequest {
     private String Sfile;
     private TextureLoader texture;
     private boolean isForEntity;
+    private TextureProperties prop;
 
 
     public TextureLoaderRequest(String file, Entity entity) {
@@ -22,6 +23,12 @@ public class TextureLoaderRequest extends GLRequest {
         isForEntity = true;
     }
 
+    public TextureLoaderRequest(String file, TextureProperties prop,Entity e) {
+        this.prop = prop;
+        this.Sfile = file;
+        isForEntity = true;
+        this.e = e;
+    }
 
 
     public TextureLoaderRequest(String file){
@@ -46,7 +53,7 @@ public class TextureLoaderRequest extends GLRequest {
             texture = Loader.INSTANCE.loadTexture(Sfile);
         }
         if (isForEntity){
-            Texture tex = new Texture(texture, TextureProperties.DEFAULT());
+            Texture tex = new Texture(texture, prop == null ? TextureProperties.DEFAULT() : prop);
             e.getModel().setTexture(tex);
         }
         super.execute();

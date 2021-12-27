@@ -185,4 +185,18 @@ public class TextureProperties {
     public boolean hasNormalMap(){
         return normalMapFile != null;
     }
+
+    public String getNormalMapName() {
+        return normalMapName;
+    }
+
+    public void setNormalMapID(TextureLoader id) {
+        this.normalMapFile = id;
+    }
+
+    public String getSpecularMapName() {
+        return specularMapName;
+    }
+
+
 }

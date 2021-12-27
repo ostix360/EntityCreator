@@ -4,6 +4,7 @@ package fr.entityCreator.entity;
 import com.flowpowered.react.math.*;
 import fr.entityCreator.core.Timer;
 import fr.entityCreator.core.loader.*;
+import fr.entityCreator.core.loader.json.*;
 import fr.entityCreator.core.resourcesProcessor.*;
 import fr.entityCreator.entity.animated.animation.loaders.*;
 import fr.entityCreator.entity.component.*;
@@ -231,6 +232,18 @@ public class Entity {
         model.export();
         exportAllComponents();
         exportEntity();
+    }
+
+    public static Entity load(File file){
+        String name = file.getName().replaceAll(".json","");
+        Entity e = new Entity(name);
+        String content = JsonUtils.loadJson(file.getAbsolutePath());
+        String[] values = content.split(";");
+        Model.load(values[0],e );
+        content = JsonUtils.loadJson(Config.OUTPUT_FOLDER + "/component/"
+                + values[1].replaceAll("\n","") + ".component");
+        LoadComponents.loadComponents(content,e );
+        return e;
     }
 
     public void exportEntity() throws Exception {

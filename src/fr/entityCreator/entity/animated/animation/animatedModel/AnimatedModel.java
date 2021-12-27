@@ -2,7 +2,8 @@ package fr.entityCreator.entity.animated.animation.animatedModel;
 
 import fr.entityCreator.entity.animated.animation.animation.Animation;
 import fr.entityCreator.entity.animated.animation.animation.Animator;
-import fr.entityCreator.graphics.model.Model;
+import fr.entityCreator.graphics.model.*;
+import fr.entityCreator.graphics.textures.*;
 import org.joml.Matrix4f;
 
 
@@ -43,6 +44,15 @@ public class AnimatedModel extends Model {
      * @param jointCount - the number of joints in the joint hierarchy (skeleton) for
      *                   this entity.
      */
+    public AnimatedModel(MeshModel model, Texture texture, Joint rootJoint, int jointCount) {
+        super(model, texture);
+        // skin
+        this.rootJoint = rootJoint;
+        this.jointCount = jointCount;
+        this.animator = new Animator(this);
+        rootJoint.calcInverseBindTransform(new Matrix4f());
+    }
+
     public AnimatedModel(String name, Joint rootJoint, int jointCount) {
         super( name ,true);
         // skin

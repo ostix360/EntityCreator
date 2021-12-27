@@ -25,7 +25,7 @@ public class JsonUtils {
                     new InputStreamReader(new FileInputStream(jsonFile)));
             String line;
             while ((line = reader.readLine()) != null) {
-                sb.append(line);
+                sb.append(line).append("\n");
             }
         } catch (IOException e) {
             e.printStackTrace();

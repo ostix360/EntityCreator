@@ -50,8 +50,15 @@ public class MenuBar extends JMenuBar {
         open.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                new PopUp("L'ouverture d'une entité n'est pas encore disponible");
-//                MenuBar.this.workspace.save();
+                workspace.save();
+                workspace.open();
+                try {
+                    Thread.sleep(60);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                frame.setNewEntity(workspace.getCurrentEntity());
+                frame.notifyModelSet();
 //
 //                new FileChooseScreen(MenuBar.this.workspace.getAvailableItems(), MenuBar.this.workspace, mainFrame);
 

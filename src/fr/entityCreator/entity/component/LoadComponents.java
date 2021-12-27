@@ -23,6 +23,7 @@ public class LoadComponents {
                         }
                     }
                     entity.setCollision((CollisionComponent) type.loadComponent(entity, sb.toString()));
+                    entity.addComponent(entity.getCollision());
                 } else {
                     i++;
                     StringBuilder sb = new StringBuilder();

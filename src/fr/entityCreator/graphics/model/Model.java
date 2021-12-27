@@ -1,8 +1,11 @@
 package fr.entityCreator.graphics.model;
 
+import fr.entityCreator.core.*;
+import fr.entityCreator.core.loader.*;
 import fr.entityCreator.core.loader.json.JsonUtils;
-import fr.entityCreator.core.resources.ModelResources;
-import fr.entityCreator.core.resources.TextureResources;
+import fr.entityCreator.core.resources.*;
+import fr.entityCreator.core.resourcesProcessor.*;
+import fr.entityCreator.entity.*;
 import fr.entityCreator.graphics.textures.Texture;
 import fr.entityCreator.toolBox.Config;
 
@@ -29,7 +32,59 @@ public class Model {
         this.name = name;
         this.isAnimated = isAnimated;
     }
+    public Model(MeshModel meshModel, Texture texture) {
+        this.meshModel = meshModel;
+        this.texture = texture;
+        this.isAnimated = true;
+    }
 
+    public static void load(String file, Entity e) {
+        String content = JsonUtils.loadJson(Config.OUTPUT_FOLDER+"/models/data/" + file + ".json");
+
+        ModelResources current = JsonUtils.gsonInstance(false).fromJson(content, ModelResources.class);
+        if (current == null) {
+            throw new NullPointerException("The file cannot " + file + " be read");
+        }
+        String name = current.getName();
+        Model m = new Model(name, current.canAnimated());
+        e.setModel(m);
+        ModelLoaderRequest request;
+        if (current.canAnimated()) {
+            request = ResourceLoader.loadTexturedAnimatedModel(current.getPath(), current.getTexture(),e);
+            e.setModelFile(new File(Config.OUTPUT_FOLDER + "/models/entities/" + current.getPath() + ".dae"));
+            GLRequestProcessor.sendRequest(request);
+        } else {
+            request = ResourceLoader.loadTexturedModel(current.getPath(), current.getTexture(),e);
+            e.setModelFile(new File(Config.OUTPUT_FOLDER + "/models/entities/" + current.getPath() + ".obj"));
+            GLRequestProcessor.sendRequest(request);
+        }
+        loadTexture(file,e);
+    }
+
+    private static void loadTexture(String file, Entity e){
+        String content = JsonUtils.loadJson(Config.OUTPUT_FOLDER+"/textures/data/" + file + ".json");
+
+        TextureResources current = JsonUtils.gsonInstance(true).fromJson(content, TextureResources.class);
+        if (current == null) {
+            throw new NullPointerException("The file cannot " + file + " be read");
+        }
+        String name = current.getName();
+        TextureProperties prop = current.getTextureProperties();
+        if (prop.getNormalMapName() != null) {
+            TextureLoaderRequest tr = new TextureLoaderRequest(Config.OUTPUT_FOLDER+"/textures/entities/normal/" + prop.getNormalMapName() + ".png");
+            GLRequestProcessor.sendRequest(tr);
+            Timer.waitForRequest(tr);
+            prop.setNormalMapFile(tr.getTexture());
+        }
+        if (prop.getSpecularMapName() != null) {
+            TextureLoaderRequest tr = new TextureLoaderRequest(Config.OUTPUT_FOLDER+"/textures/entities/specularMap/" + prop.getSpecularMapName() + ".png");
+            GLRequestProcessor.sendRequest(tr);
+            Timer.waitForRequest(tr);
+            prop.setSpecularMapFile(tr.getTexture());
+        }
+        TextureLoaderRequest tex = new TextureLoaderRequest(Config.OUTPUT_FOLDER+"/textures/"+current.getPath()+".png", prop,e);
+        GLRequestProcessor.sendRequest(tex);
+    }
     public boolean isAnimated() {
         return isAnimated;
     }

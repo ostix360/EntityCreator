@@ -82,6 +82,7 @@ public class CylinderShape extends CollisionShape {
         if (margin <= 0) {
             throw new IllegalArgumentException("Margin must be greater than 0");
         }
+        createPanel();
     }
 
     /**
@@ -138,7 +139,13 @@ public class CylinderShape extends CollisionShape {
         panel.add(createErrorPanel(true), gc);
         gc.gridy = 2;
         panel.add(createErrorPanel(false), gc);
+        this.getRelativeTransform().getScale().set(mRadius, mHalfHeight*2, mRadius);
         this.panel = panel;
+    }
+
+    @Override
+    public void setScale() {
+        this.getRelativeTransform().getScale().set(mRadius, mHalfHeight*2, mRadius);
     }
 
     @Override
@@ -224,7 +231,7 @@ public class CylinderShape extends CollisionShape {
         label.setFont(MainFrame.SMALL_FONT);
         panel.add(label, "West");
         JFormattedTextField field = createTextField(4);
-        field.setText("1,0");
+        field.setValue(isRadius? mRadius : mHalfHeight*2);
         field.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {

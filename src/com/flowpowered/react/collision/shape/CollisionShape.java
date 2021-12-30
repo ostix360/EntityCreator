@@ -53,7 +53,6 @@ public abstract class CollisionShape extends BoundingModel {
      */
     protected CollisionShape(CollisionShapeType type, float margin, MeshModel m) {
         super(m);
-        this.createPanel();
         mType = type;
         mNbSimilarCreatedShapes = 0;
         mMargin = margin;
@@ -204,6 +203,8 @@ public abstract class CollisionShape extends BoundingModel {
     public JPanel getPanel(){
         return panel;
     }
+
+    public abstract void setScale();
 
     /**
      * An enumeration of the possible collision shape (box, sphere, cone and cylinder).

@@ -159,7 +159,7 @@ public class StandardInfoPanel extends JPanel {
         JLabel label = new JLabel("Nom: ");
         label.setFont(MainFrame.MEDIUM_FONT);
         this.idPanel.add(label, gc2);
-        this.name = new JTextField("", 10);
+        this.name = new JTextField(entity.getName(), 10);
         this.name.setFont(MainFrame.MEDIUM_FONT);
 //        ((AbstractDocument) this.id.getDocument()).setDocumentFilter(new MyDocumentFilter(9));
         this.name.getDocument().addDocumentListener(new DocumentListener() {

@@ -29,7 +29,6 @@ public class LightCreator implements ComponentCreator {
         values = lines[2].split(";");
         att = new Vector3f(Float.parseFloat(values[0]), Float.parseFloat(values[1]), Float.parseFloat(values[2]));
         power = Float.parseFloat(lines[3]);
-        pos.add(entity.getPosition());
         return new Light(pos, color, power, att);
     }
 }

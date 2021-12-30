@@ -44,7 +44,7 @@ public class Light extends Component {
         gc.fill = 4;
         gc.gridx = 0;
         gc.gridy = 0;
-        VectorPanel posPanel = new VectorPanel(280, 25, "Position", 0, 0, 0);
+        VectorPanel posPanel = new VectorPanel(280, 25, "Position", position.x(), position.y(), position.z());
         panel.add(posPanel, gc);
         posPanel.addTotalListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
@@ -70,7 +70,7 @@ public class Light extends Component {
             }
         });
         gc.gridy = 1;
-        VectorPanel color = new VectorPanel(280, 25, "Color", 0, 0, 0);
+        VectorPanel color = new VectorPanel(280, 25, "Color", colour.getRed(), colour.getGreen(), colour.getBlue());
         panel.add(color, gc);
         color.addTotalListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
@@ -95,7 +95,7 @@ public class Light extends Component {
                setColour(new Color(r,g,b,1.0f));
             }
         });
-        VectorPanel attenuationPanel = new VectorPanel(280, 25, "Attenuation", 0, 0, 0);
+        VectorPanel attenuationPanel = new VectorPanel(280, 25, "Attenuation", attenuation.x(), attenuation.y(), attenuation.z());
         attenuationPanel.addTotalListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
                 warn();
@@ -122,21 +122,21 @@ public class Light extends Component {
         gc.gridy = 2;
         panel.add(attenuationPanel,gc);
         gc.gridy = 3;
-        panel.add(createErrorPanel(), gc);
+        panel.add(createPowerPanel(), gc);
     }
 
     private void setColour(Color colour) {
         this.colour = colour;
     }
 
-    private JPanel createErrorPanel() {
+    private JPanel createPowerPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         JLabel label = new JLabel("Power / Intensité: ");
         label.setFont(MainFrame.SMALL_FONT);
         panel.add(label, "West");
         JFormattedTextField field = createTextField(5);
-        field.setText("1,0");
+        field.setValue(power);
         field.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {

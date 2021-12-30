@@ -145,6 +145,11 @@ public class ConvexMeshShape extends CollisionShape {
         createPanel();
     }
 
+    @Override
+    public void setScale() {
+
+    }
+
     // Recomputes the bounds of the mesh.
     private void recalculateBounds() {
         mMinBounds.setToZero();

@@ -59,6 +59,7 @@ public class SphereShape extends CollisionShape {
         if (radius <= 0) {
             throw new IllegalArgumentException("Radius must be greater than zero");
         }
+        createPanel();
     }
 
     /**
@@ -75,6 +76,11 @@ public class SphereShape extends CollisionShape {
     public static SphereShape load(String content) {
         float radius = Float.parseFloat(content);
         return new SphereShape(radius);
+    }
+
+    @Override
+    public void setScale() {
+        this.getRelativeTransform().getScale().set(mRadius, mRadius, mRadius);
     }
 
     /**
@@ -95,6 +101,7 @@ public class SphereShape extends CollisionShape {
         gc.gridx = 1;
         gc.gridy = 1;
         panel.add(createErrorPanel(), gc);
+        super.getRelativeTransform().setScale(mRadius);
         this.panel = panel;
     }
 
@@ -165,7 +172,7 @@ public class SphereShape extends CollisionShape {
         label.setFont(MainFrame.SMALL_FONT);
         panel.add(label, "West");
         JFormattedTextField field = createTextField(4);
-        field.setText("1,0");
+        field.setValue(mRadius);
         field.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {

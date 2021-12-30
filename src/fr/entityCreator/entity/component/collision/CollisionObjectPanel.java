@@ -12,6 +12,7 @@ import fr.entityCreator.graphics.model.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.util.*;
 import java.util.concurrent.atomic.*;
 
 public class CollisionObjectPanel extends JPanel {
@@ -33,6 +34,7 @@ public class CollisionObjectPanel extends JPanel {
         CollisionObjectRenderer.boundingModels.clear();
         this.cc = collisionComponent;
         this.settings = settingsPanel;
+
 
         removeButton = new JButton("Remove");
         removeButton.setPreferredSize(new Dimension(100, 25));
@@ -119,6 +121,15 @@ public class CollisionObjectPanel extends JPanel {
 
         });
         add(showCollision, getGC(0, 5, 1));
+
+        for (BoundingModel bm : new ArrayList<>(cc.getProperties().getBoundingModels())){
+            if (this.actualModel != null) beforeModel = actualModel;
+            this.actualModel = bm;
+            this.addSettingPanel();
+            this.addSpefSettingPanel();
+            CollisionObjectRenderer.boundingModels.add(actualModel);
+            removeButton.setVisible(true);
+        }
     }
 
     private void addSpefSettingPanel() {

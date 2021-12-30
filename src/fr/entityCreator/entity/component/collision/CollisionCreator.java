@@ -46,6 +46,7 @@ public class CollisionCreator implements ComponentCreator {
                 }
                 Transform t = Transform.load(lines[++i]);
                 model.setRelativeTransform(t);
+                ((CollisionShape)model).setScale();
                 bounds.add(model);
             } else {
                 String sb = line + "\n" +

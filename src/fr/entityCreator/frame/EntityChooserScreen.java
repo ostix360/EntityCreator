@@ -105,6 +105,7 @@ public class EntityChooserScreen {
         if (allFiles == null) {
             System.err.println("Nothing found in " + folder.getAbsolutePath());
             new PopUp("No entity alredy exported in ", folder.getAbsolutePath());
+            return null;
         }
         assert allFiles != null;
         for (File file : allFiles) {

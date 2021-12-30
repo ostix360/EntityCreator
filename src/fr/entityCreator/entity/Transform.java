@@ -55,7 +55,7 @@ public class Transform {
         gc.fill = 3;
         gc.gridx = 0;
         gc.gridy = 0;
-        VectorPanel posPanel = new VectorPanel(280, 25, "Position", 0, 0, 0);
+        VectorPanel posPanel = new VectorPanel(280, 25, "Position", position.x(), position.y(),position.z());
         panel.add(posPanel, gc);
         posPanel.addTotalListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
@@ -81,7 +81,7 @@ public class Transform {
             }
         });
         gc.gridy = 1;
-        VectorPanel rotPanel = new VectorPanel(280, 25, "Rotation", 0, 0, 0);
+        VectorPanel rotPanel = new VectorPanel(280, 25, "Rotation", rotation.x(), rotation.y(), rotation.z());
         panel.add(rotPanel, gc);
         rotPanel.addTotalListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
@@ -196,7 +196,7 @@ public class Transform {
         label.setFont(MainFrame.SMALL_FONT);
         panel.add(label, "West");
         JFormattedTextField field = createTextField(5);
-        field.setText("1,0");
+        field.setValue(scale.y());
         field.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {

@@ -52,11 +52,6 @@ public class MenuBar extends JMenuBar {
             public void actionPerformed(ActionEvent e) {
                 workspace.save();
                 workspace.open();
-                try {
-                    Thread.sleep(60);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
                 frame.setNewEntity(workspace.getCurrentEntity());
                 frame.notifyModelSet();
 //

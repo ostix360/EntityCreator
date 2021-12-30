@@ -66,6 +66,7 @@ public class CapsuleShape extends CollisionShape {
         if (height <= 0) {
             throw new IllegalArgumentException("Height must be greater than zero");
         }
+        createPanel();
     }
 
     /**
@@ -147,6 +148,11 @@ public class CapsuleShape extends CollisionShape {
     }
 
     @Override
+    public void setScale() {
+        this.getRelativeTransform().getScale().set(mRadius, mHalfHeight*2, mRadius);
+    }
+
+    @Override
     public Vector3 getLocalSupportPointWithoutMargin(Vector3 direction) {
         if (direction.getY() > 0) {
             return new Vector3(0, mHalfHeight, 0);
@@ -217,7 +223,7 @@ public class CapsuleShape extends CollisionShape {
         label.setFont(MainFrame.SMALL_FONT);
         panel.add(label, "West");
         JFormattedTextField field = createTextField(4);
-        field.setText("1,0");
+        field.setValue(isRadius? mRadius : mHalfHeight*2);
         field.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {

@@ -84,6 +84,7 @@ public class Model {
         }
         TextureLoaderRequest tex = new TextureLoaderRequest(Config.OUTPUT_FOLDER+"/textures/"+current.getPath()+".png", prop,e);
         GLRequestProcessor.sendRequest(tex);
+        Timer.waitForRequest(tex);
     }
     public boolean isAnimated() {
         return isAnimated;

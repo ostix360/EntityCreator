@@ -25,9 +25,9 @@ public class SliderWithError extends JPanel {
         this.setLayout(new BorderLayout());
         if (hasError) {
             add(createErrorPanel(error),"East");
-            add(createSlider(name, max, start),"West");
+            add(createSlider(name, max, current),"West");
         }else{
-            add(createSlider(name, max, start));
+            add(createSlider(name, max, current));
         }
     }
 
@@ -65,7 +65,7 @@ public class SliderWithError extends JPanel {
         label.setFont(MainFrame.SMALL_FONT);
         panel.add(label, "West");
         this.errorField = createTextField(4);
-        this.errorField.setText(Float.toString(error));
+        this.errorField.setValue(error);
         panel.add(this.errorField, "East");
         return panel;
     }
@@ -90,7 +90,6 @@ public class SliderWithError extends JPanel {
         valueReading.setPreferredSize(new Dimension(50, 20));
         valueReading.setFont(MainFrame.SMALL_FONT);
         this.slider = new JFloatSlider(0, 0.0F, 1.0F, reverseConvertValue(start));
-
         valueReading.setText(limitChars(Float.toString(convertScaleValue(this.slider.getActualValue())), 5));
 
 

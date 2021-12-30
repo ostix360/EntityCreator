@@ -164,6 +164,7 @@ public class ParticleComponentPanel extends ComponentPanel {
         spinner.setFont(MainFrame.SMALL_FONT);
         ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().setEditable(false);
         spinner.setPreferredSize(new Dimension(30, 20));
+        spinner.setValue(particleSystem.getTexture().getNumberOfRows());
         JPanel panel = new JPanel();
         textureSettings.add(panel, getGC(1, 0));
         panel.setLayout(new GridBagLayout());
@@ -267,7 +268,7 @@ public class ParticleComponentPanel extends ComponentPanel {
 
         if (this.particleSystem.getDirection() != null) {
             Vector3f direction = this.particleSystem.getDirection();
-            this.directionFields = new VectorPanel(280, 25, "", direction.x, direction.y, direction.z);
+            this.directionFields = new VectorPanel(280, 25, "", direction.x(), direction.y(), direction.z());
         } else {
             this.directionFields = new VectorPanel(280, 25, "", 0.0F, 0.0F, 0.0F);
         }

@@ -89,6 +89,7 @@ public class BoxShape extends CollisionShape {
         if (margin <= 0) {
             throw new IllegalArgumentException("Margin must be greater than 0");
         }
+        createPanel();
     }
 
     /**
@@ -129,9 +130,9 @@ public class BoxShape extends CollisionShape {
     @Override
     protected void createPanel() {
         JPanel panel = new JPanel();
-        VectorPanel rotPanel = new VectorPanel(280,25,"Echelle ",1,1,1);
-        panel.add(rotPanel);
-        rotPanel.addTotalListener(new DocumentListener() {
+        VectorPanel echellePanel = new VectorPanel(280,25,"Echelle ",mExtent.getX(),mExtent.getY(),mExtent.getZ());
+        panel.add(echellePanel);
+        echellePanel.addTotalListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
                 warn();
             }
@@ -145,17 +146,22 @@ public class BoxShape extends CollisionShape {
             }
 
             public void warn() {
-                if ((rotPanel.getXField().getText().equals("")) || (rotPanel.getYField().getText().equals("")) || (rotPanel.getZField().getText().equals(""))) {
+                if ((echellePanel.getXField().getText().equals("")) || (echellePanel.getYField().getText().equals("")) || (echellePanel.getZField().getText().equals(""))) {
                     return;
                 }
-                float x = Float.parseFloat(rotPanel.getXField().getText().replaceAll(",", "."));
-                float y = Float.parseFloat(rotPanel.getYField().getText().replaceAll(",", "."));
-                float z = Float.parseFloat(rotPanel.getZField().getText().replaceAll(",", "."));
+                float x = Float.parseFloat(echellePanel.getXField().getText().replaceAll(",", "."));
+                float y = Float.parseFloat(echellePanel.getYField().getText().replaceAll(",", "."));
+                float z = Float.parseFloat(echellePanel.getZField().getText().replaceAll(",", "."));
                 setmExtent(new Vector3(x, y, z));
                 BoxShape.this.getRelativeTransform().getScale().set(x,y,z);
             }
         });
         this.panel = panel;
+    }
+
+    @Override
+    public void setScale() {
+        this.getRelativeTransform().getScale().set(mExtent.getX(),mExtent.getY(),mExtent.getZ());
     }
 
     @Override

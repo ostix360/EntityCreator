@@ -12,7 +12,7 @@ import java.io.BufferedReader;
 public class AICreator implements ComponentCreator {
     @Override
     public Component createComponent(Entity entity) {
-        return new AIComponent(entity,new AIProperties(10,1,1,1,1,1,1));
+        return new AIComponent(entity,new AIProperties(10,1,1,1,1,1,1,entity.getPosition(),50));
     }
 
     @Override

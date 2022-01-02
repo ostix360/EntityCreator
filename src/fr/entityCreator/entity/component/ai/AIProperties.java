@@ -1,17 +1,19 @@
 package fr.entityCreator.entity.component.ai;
 
-import java.util.Objects;
+import org.joml.*;
 
 public class AIProperties {
-    private final float updatePerSecond;
-    private final float speed;
-    private final float speedError;
-    private final float speedTurn;
-    private final float speedTurnError;
-    private final float rotateProbabilities;
-    private final float staticTime;
+    private float updatePerSecond;
+    private float speed;
+    private float speedError;
+    private float speedTurn;
+    private float speedTurnError;
+    private float rotateProbabilities;
+    private float staticTime;
+    private final Vector3f pos;
+    private float distance;
 
-    public AIProperties(float updatePerSecond, float speed, float speedError, float speedTurn, float speedTurnError, float rotateProbabilities, float staticTime) {
+    public AIProperties(float updatePerSecond, float speed, float speedError, float speedTurn, float speedTurnError, float rotateProbabilities, float staticTime, Vector3f pos, float distance) {
         this.updatePerSecond = updatePerSecond * 60;
         this.speed = speed;
         this.speedError = speedError;
@@ -19,19 +21,48 @@ public class AIProperties {
         this.speedTurnError = speedTurnError;
         this.rotateProbabilities = rotateProbabilities;
         this.staticTime = staticTime;
+        this.pos = pos;
+        this.distance = distance;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AIProperties that = (AIProperties) o;
-        return Float.compare(that.updatePerSecond, updatePerSecond) == 0 && Float.compare(that.speed, speed) == 0 && Float.compare(that.speedError, speedError) == 0 && Float.compare(that.speedTurn, speedTurn) == 0 && Float.compare(that.speedTurnError, speedTurnError) == 0 && Float.compare(that.rotateProbabilities, rotateProbabilities) == 0 && Float.compare(that.staticTime, staticTime) == 0;
+    public void setUpdatePerSecond(float updatePerSecond) {
+        this.updatePerSecond = updatePerSecond;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(updatePerSecond, speed, speedError, speedTurn, speedTurnError, rotateProbabilities, staticTime);
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public void setSpeedError(float speedError) {
+        this.speedError = speedError;
+    }
+
+    public void setSpeedTurn(float speedTurn) {
+        this.speedTurn = speedTurn;
+    }
+
+    public void setSpeedTurnError(float speedTurnError) {
+        this.speedTurnError = speedTurnError;
+    }
+
+    public void setRotateProbabilities(float rotateProbabilities) {
+        this.rotateProbabilities = rotateProbabilities;
+    }
+
+    public void setStaticTime(float staticTime) {
+        this.staticTime = staticTime;
+    }
+
+    public void setDistance(float distance) {
+        this.distance = distance;
+    }
+
+    public Vector3f getPos() {
+        return pos;
+    }
+
+    public float getDistance() {
+        return distance;
     }
 
     public float getRotateProbabilities() {

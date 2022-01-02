@@ -18,10 +18,6 @@ Premier logiciel pour créer une entité dans le RPG
  | Particle  |   ✔    |    ✔     |
 | Collision |   ✔    |    ✔     |
  |   Light   |   ✔    |    ✔     |
- |    AI     |   ⨯    |    ⨯     |
+ |    AI     |   ✔    |   /!\    |
  | Animation |   ⨯    |    ⨯     |
  |    LOD    |   ⨯    |    ⨯     |
-
-
-
-

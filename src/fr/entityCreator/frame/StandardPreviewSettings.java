@@ -2,6 +2,7 @@ package fr.entityCreator.frame;
 
 
 import fr.entityCreator.creator.Workspace;
+import fr.entityCreator.entity.*;
 import fr.entityCreator.entity.camera.Camera;
 import javafx.scene.control.Slider;
 import org.joml.Vector3f;
@@ -30,6 +31,7 @@ public class StandardPreviewSettings extends JPanel {
         //addShowPlayerBox();
         addRotateCameraBox();
         addRotateXAxis();
+        addScaleSlider();
        // addRotateTexturesBox();
        // addShowTerrainBox();
        // addTimeSlider();
@@ -50,6 +52,12 @@ public class StandardPreviewSettings extends JPanel {
 //        });
 //        add(this.showPlayerBox, gc);
 //    }
+
+    private void addScaleSlider(){
+        GridBagConstraints gc = getGC(10, 0, 2);
+        add(this.createSlider("Scale :",5,1),gc);
+    }
+
 
     private void addRotateCameraBox() {
         GridBagConstraints gc = getGC(0, 1, 2);
@@ -78,6 +86,52 @@ public class StandardPreviewSettings extends JPanel {
         });
         add(this.rotateXAxis, gc);
     }
+
+
+    private JPanel createSlider(String name, float maximum, float start) {
+        JPanel panelSlider = new JPanel();
+        panelSlider.setLayout(new GridBagLayout());
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.fill = 1;
+        gc.gridx = 0;
+        gc.gridy = 0;
+        gc.weightx = 1.0D;
+        gc.weighty = 1.0D;
+        JLabel nameLabel = new JLabel(name);
+        nameLabel.setFont(MainFrame.SMALL_FONT);
+        nameLabel.setPreferredSize(new Dimension(50, 20));
+        panelSlider.add(nameLabel, gc);
+        gc.weightx = 4.0D;
+        gc.gridx = 1;
+        JLabel valueReading = new JLabel();
+        valueReading.setPreferredSize(new Dimension(40, 20));
+        valueReading.setFont(MainFrame.SMALL_FONT);
+        JFloatSlider slider = new JFloatSlider(0, 0.0F, maximum, start);
+        valueReading.setText(limitChars(Float.toString(slider.getActualValue()), 4));
+        slider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent arg0) {
+                valueReading.setText(limitChars(String.valueOf(slider.getActualValue()), 5));
+                if (workspace.getCurrentEntity() != null) {
+                    workspace.getCurrentEntity().setScale(new Vector3f(slider.getActualValue()));
+                }
+            }
+        });
+        panelSlider.add(slider, gc);
+        slider.setPreferredSize(new Dimension(120, 20));
+        gc.gridx = 2;
+        gc.weightx = 1.0D;
+        panelSlider.add(valueReading, gc);
+        return panelSlider;
+    }
+
+    private String limitChars(String original, int limit) {
+        if (original.length() <= limit) {
+            return original;
+        }
+        return original.substring(0, 5);
+    }
+
+
 //    private void addTimeSlider() {
 //        final Slider slider = new Slider("Time", MainApp.time, 0.0F, 24000.0F, true, 220, 40);
 //        slider.addSliderListener(new ChangeListener() {
@@ -112,7 +166,6 @@ public class StandardPreviewSettings extends JPanel {
 
     private GridBagConstraints getGC(int x, int y, int width) {
         GridBagConstraints gc = new GridBagConstraints();
-        gc.anchor = 17;
         gc.gridx = x;
         gc.gridy = y;
         gc.weightx = 1.0D;

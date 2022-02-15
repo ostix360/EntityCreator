@@ -6,6 +6,7 @@ import fr.entityCreator.entity.Entity;
 import fr.entityCreator.frame.*;
 
 import javax.swing.*;
+import java.lang.reflect.*;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -40,6 +41,18 @@ public class Workspace {
     }
 
     public void createNewEntity() {
-        this.currentEntity = new Entity("test");
+        EntityTypeChooserScreen type = new EntityTypeChooserScreen();
+        try {
+            this.currentEntity = ((Entity) type.getChosen().getDeclaredConstructor(String.class).newInstance("test"));
+        }catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        System.out.println();
     }
 }

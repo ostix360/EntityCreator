@@ -34,10 +34,12 @@ public class Entity {
     private CollisionComponent collision;
     private String name;
     private int textureIndex = 1;
+    protected String type = "Entity";
 
     private final List<Component> components = new ArrayList<>();
 
     public Entity(Model model, Vector3f position, Vector3f rotation, float scale) {
+
         this.model = model;
         this.position = position;
         this.rotation = rotation.add(0, 0, 0);
@@ -270,6 +272,11 @@ public class Entity {
 
     public void setScale(Vector3f scale) {
         this.scale = scale;
+    }
+
+    @Override
+    public String toString() {
+        return "Entity";
     }
 
     public enum MovementType {

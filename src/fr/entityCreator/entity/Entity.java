@@ -35,6 +35,7 @@ public class Entity {
     private String name;
     private int textureIndex = 1;
     protected String type = "Entity";
+    private int id = -1;
 
     private final List<Component> components = new ArrayList<>();
 
@@ -243,14 +244,14 @@ public class Entity {
         String[] values = content.split(";");
         Model.load(values[0],e );
         content = JsonUtils.loadJson(Config.OUTPUT_FOLDER + "/component/"
-                + values[1].replaceAll("\n","") + ".component");
+                + values[2].replaceAll("\n","") + ".component");
         LoadComponents.loadComponents(content,e );
         return e;
     }
 
     public void exportEntity() throws Exception {
         StringBuilder fileContent = new StringBuilder();
-        fileContent.append(model.getName()).append(";").append(hashCode());
+        fileContent.append(model.getName()).append(";").append(name.hashCode()).append(";").append(hashCode());
         File file = new File(Config.OUTPUT_FOLDER,
                 "/entities/data/" + name + ".json");
         if (!file.exists()) {

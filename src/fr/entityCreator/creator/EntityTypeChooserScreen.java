@@ -30,14 +30,14 @@ public class EntityTypeChooserScreen {
         this.frame.add(shapesPanel);
 
         Class[] possibleShapes = Entities.getEntities().toArray(new Class[]{});
-        final JComboBox<Class> shapes = new JComboBox();
-        shapes.setModel(new DefaultComboBoxModel<>(possibleShapes));
-        shapes.addActionListener(new ActionListener() {
+        final JComboBox<Class> type = new JComboBox();
+        type.setModel(new DefaultComboBoxModel<>(possibleShapes));
+        type.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                chosen = (Class) shapes.getSelectedItem();
+                chosen = (Class) type.getSelectedItem();
             }
         });
-        shapesPanel.add(shapes);
+        shapesPanel.add(type);
     }
 
     public Class getChosen() {

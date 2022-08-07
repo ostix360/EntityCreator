@@ -1,9 +1,6 @@
 package fr.entityCreator.creator;
 
 import fr.entityCreator.entity.*;
-import fr.entityCreator.entity.component.particle.*;
-import fr.entityCreator.graphics.particles.particleSpawn.*;
-import fr.entityCreator.graphics.particles.particleSpawn.Point;
 import fr.ostix.entities.*;
 
 import javax.swing.*;
@@ -13,7 +10,7 @@ import java.awt.event.*;
 public class EntityTypeChooserScreen {
 
     private JDialog frame;
-    private Class chosen;
+    private Class<? extends Entity> chosen = Entity.class;
 
     public EntityTypeChooserScreen() {
         setUpFrame();
@@ -29,18 +26,14 @@ public class EntityTypeChooserScreen {
         shapesPanel.setLayout(new GridBagLayout());
         this.frame.add(shapesPanel);
 
-        Class[] possibleShapes = Entities.getEntities().toArray(new Class[]{});
-        final JComboBox<Class> type = new JComboBox();
+        Class<? extends Entity>[] possibleShapes = Entities.getEntities().toArray(new Class[0]);
+        final JComboBox<Class<? extends Entity>> type = new JComboBox<>();
         type.setModel(new DefaultComboBoxModel<>(possibleShapes));
-        type.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                chosen = (Class) type.getSelectedItem();
-            }
-        });
+        type.addActionListener(e -> chosen = (Class<? extends Entity>) type.getSelectedItem());
         shapesPanel.add(type);
     }
 
-    public Class getChosen() {
+    public Class<? extends Entity> getChosen() {
         return chosen;
     }
 

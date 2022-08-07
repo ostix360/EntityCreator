@@ -1,7 +1,6 @@
 package fr.entityCreator.entity;
 
 
-import com.flowpowered.react.math.*;
 import fr.entityCreator.core.Timer;
 import fr.entityCreator.core.loader.*;
 import fr.entityCreator.core.loader.json.*;
@@ -24,7 +23,6 @@ import java.util.*;
 
 public class Entity {
 
-    protected final Vector3 forceToCenter = new Vector3();
     private Model model;
     protected Vector3f position;
     protected Vector3f rotation;
@@ -152,10 +150,6 @@ public class Entity {
 
     public void setMovement(MovementType movement) {
         this.movement = movement;
-    }
-
-    public Vector3 getForceToCenter() {
-        return forceToCenter;
     }
 
     public void exportAllComponents() throws IOException {

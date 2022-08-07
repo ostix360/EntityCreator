@@ -1,6 +1,5 @@
 package fr.entityCreator.entity.component.ai;
 
-import com.flowpowered.react.math.*;
 import fr.entityCreator.core.exporter.*;
 import fr.entityCreator.core.loader.json.*;
 import fr.entityCreator.entity.*;

@@ -1,16 +1,11 @@
 package fr.entityCreator.frame;
 
-import fr.entityCreator.toolBox.Config;
-import org.lwjgl.system.CallbackI;
+import fr.entityCreator.toolBox.*;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileSystemView;
+import java.awt.Color;
 import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class OptionPanel {
 

@@ -31,7 +31,6 @@ public class MasterRenderer {
     private TerrainRenderer terrainRenderer;
     private TerrainShader terrainShader;
 
-    private CollisionObjectRenderer collisionObjectRenderer;
 
     private AnimatedModelRenderer animatedRender;
     private AnimatedModelShader animatedShader;
@@ -66,7 +65,6 @@ public class MasterRenderer {
         this.animatedShader = new AnimatedModelShader();
         this.entityRenderer = new EntityRenderer(shader, projectionMatrix);
         this.terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
-        this.collisionObjectRenderer = new CollisionObjectRenderer(shader, projectionMatrix);
         this.animatedRender = new AnimatedModelRenderer(animatedShader);
     }
 
@@ -117,7 +115,6 @@ public class MasterRenderer {
         shader.loadSkyColor(skyColor);
         shader.loadViewMatrix(cam);
         entityRenderer.render(entities);
-        collisionObjectRenderer.render(theEntity);
         shader.unBind();
 
         if (theEntity != null && theEntity.getModel().isAnimated()) {

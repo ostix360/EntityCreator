@@ -6,7 +6,7 @@ import fr.entityCreator.graphics.textures.Texture;
 import fr.entityCreator.graphics.shader.TerrainShader;
 import fr.entityCreator.terrain.Terrain;
 import fr.entityCreator.terrain.texture.TerrainTexturePack;
-import fr.entityCreator.toolBox.Maths;
+import fr.entityCreator.toolBox.maths.Maths;
 import fr.entityCreator.toolBox.OpenGL.VAO;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;

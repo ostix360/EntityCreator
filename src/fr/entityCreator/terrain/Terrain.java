@@ -3,24 +3,15 @@ package fr.entityCreator.terrain;
 
 
 import fr.entityCreator.core.Timer;
-import fr.entityCreator.core.loader.Loader;
 import fr.entityCreator.core.loader.ModelLoaderRequest;
-import fr.entityCreator.core.resourcesProcessor.GLRequest;
 import fr.entityCreator.core.resourcesProcessor.GLRequestProcessor;
 import fr.entityCreator.graphics.model.MeshModel;
 import fr.entityCreator.graphics.model.ModelData;
 import fr.entityCreator.terrain.texture.TerrainTexture;
 import fr.entityCreator.terrain.texture.TerrainTexturePack;
-import fr.entityCreator.toolBox.Logger;
-import fr.entityCreator.toolBox.Maths;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL11;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
 
 public class Terrain {
     private static final int SIZE = 800;

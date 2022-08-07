@@ -33,6 +33,7 @@ public class MenuBar extends JMenuBar {
 
         JMenuItem settings = new JMenuItem("Options");
         others.add(settings);
+
         addOpenFileFunction(openFile, frame);
         addSaveFunction(save);
         addNewStaticFileFunction(newStaticFile);

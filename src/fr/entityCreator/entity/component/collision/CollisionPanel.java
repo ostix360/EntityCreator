@@ -1,7 +1,6 @@
 package fr.entityCreator.entity.component.collision;
 
 import fr.entityCreator.frame.*;
-import fr.entityCreator.graphics.CollisionObjectRenderer;
 
 import javax.swing.*;
 
@@ -26,6 +25,6 @@ public class CollisionPanel extends ComponentPanel {
 
     @Override
     public void cleanUp() {
-        CollisionObjectRenderer.boundingModels.clear();
+
     }
 }

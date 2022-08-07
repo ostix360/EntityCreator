@@ -4,7 +4,7 @@ import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.frame.JFloatSlider;
 import fr.entityCreator.frame.MainFrame;
 import fr.entityCreator.frame.VectorPanel;
-import fr.entityCreator.toolBox.Maths;
+import fr.entityCreator.toolBox.maths.Maths;
 import org.joml.Math;
 import org.joml.Vector2f;
 import org.joml.Vector3f;

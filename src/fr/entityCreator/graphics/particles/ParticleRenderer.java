@@ -4,7 +4,7 @@ package fr.entityCreator.graphics.particles;
 import fr.entityCreator.core.loader.Loader;
 import fr.entityCreator.entity.camera.Camera;
 import fr.entityCreator.graphics.model.MeshModel;
-import fr.entityCreator.toolBox.Maths;
+import fr.entityCreator.toolBox.maths.Maths;
 import fr.entityCreator.toolBox.OpenGL.VAO;
 import fr.entityCreator.toolBox.OpenGL.VBO;
 import org.joml.Matrix4f;

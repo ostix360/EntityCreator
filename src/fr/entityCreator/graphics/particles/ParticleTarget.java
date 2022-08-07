@@ -2,7 +2,7 @@ package fr.entityCreator.graphics.particles;
 
 
 import fr.entityCreator.entity.Entity;
-import fr.entityCreator.toolBox.Maths;
+import fr.entityCreator.toolBox.maths.Maths;
 import org.joml.Vector3f;
 
 import java.util.Objects;

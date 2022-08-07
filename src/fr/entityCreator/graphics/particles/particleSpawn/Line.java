@@ -4,7 +4,7 @@ import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.frame.JFloatSlider;
 import fr.entityCreator.frame.MainFrame;
 import fr.entityCreator.frame.VectorPanel;
-import fr.entityCreator.toolBox.Maths;
+import fr.entityCreator.toolBox.maths.Maths;
 import org.joml.Math;
 import org.joml.Vector3f;
 
@@ -15,7 +15,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.channels.FileChannel;
 import java.util.Objects;
 

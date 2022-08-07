@@ -1,5 +1,6 @@
 package fr.entityCreator.toolBox;
 
+import fr.entityCreator.toolBox.maths.*;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 

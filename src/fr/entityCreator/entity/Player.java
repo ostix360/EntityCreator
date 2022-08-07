@@ -1,7 +1,5 @@
 package fr.entityCreator.entity;
 
-
-import com.flowpowered.react.math.*;
 import fr.entityCreator.core.Input;
 import fr.entityCreator.graphics.model.Model;
 import org.joml.Vector3f;
@@ -48,13 +46,11 @@ public class Player extends Entity {
         float distance = currentSpeed * 0.006f;
         float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotation().y())));
         float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotation().y())));
-        forceToCenter.set(new Vector3(dx, 0, dz));
         //    upwardsSpeed += GRAVITY;
         if (upwardsSpeed <= 0f) {
             canJump = true;
             upwardsSpeed = 0f;
         }
-        forceToCenter.add(new Vector3(0, upwardsSpeed, 0));
 
         super.increasePosition(new Vector3f(dx, upwardsSpeed, dz));
         if (!canJump) {

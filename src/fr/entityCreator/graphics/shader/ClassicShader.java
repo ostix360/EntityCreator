@@ -4,7 +4,7 @@ package fr.entityCreator.graphics.shader;
 import fr.entityCreator.entity.component.light.Light;
 import fr.entityCreator.entity.camera.Camera;
 import fr.entityCreator.toolBox.Color;
-import fr.entityCreator.toolBox.Maths;
+import fr.entityCreator.toolBox.maths.Maths;
 import fr.entityCreator.toolBox.OpenGL.uniform.*;
 import org.joml.Matrix4f;
 

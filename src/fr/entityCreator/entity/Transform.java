@@ -3,7 +3,8 @@ package fr.entityCreator.entity;
 import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.frame.MainFrame;
 import fr.entityCreator.frame.VectorPanel;
-import fr.entityCreator.toolBox.Maths;
+import fr.entityCreator.toolBox.maths.Maths;
+import org.joml.Math;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
@@ -23,6 +24,8 @@ public class Transform {
     private Vector3f rotation;
     private Vector3f scale;
     private Matrix3f rotationMatrix;
+
+    private Quaternionf QRotation;
     private JPanel panel;
     private float realScale = 1;
 
@@ -104,10 +107,11 @@ public class Transform {
                 float y = Float.parseFloat(rotPanel.getYField().getText().replaceAll(",", "."));
                 float z = Float.parseFloat(rotPanel.getZField().getText().replaceAll(",", "."));
                 setRotation(new Vector3f(x, y, z));
+
             }
         });
         gc.gridy = 2;
-        panel.add(createErrorPanel(), gc);
+        panel.add(createScalePanel(), gc);
         this.panel = panel;
     }
 
@@ -141,6 +145,15 @@ public class Transform {
     public void setQ(Quaternionf q) {
         rotationMatrix = new Matrix3f().identity();
         rotationMatrix.rotate(q);
+    }
+
+    public Quaternionf getQRotation(){
+        Matrix3f matrix = new Matrix3f();
+
+        matrix.rotate(Math.toRadians(this.getRotZ()), new Vector3f(0, 0, 1));
+        matrix.rotate(Math.toRadians(this.getRotY()), new Vector3f(0, 1, 0));
+        matrix.rotate(Math.toRadians(this.getRotX()), new Vector3f(1, 0, 0));
+        return matrix.getNormalizedRotation(new Quaternionf());
     }
 
     public Matrix4f getTransformation() {
@@ -189,7 +202,7 @@ public class Transform {
         return panel;
     }
 
-    private JPanel createErrorPanel() {
+    private JPanel createScalePanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         JLabel label = new JLabel("Scale: ");

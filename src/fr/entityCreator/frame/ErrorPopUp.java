@@ -61,7 +61,7 @@ public class ErrorPopUp {
         confirm.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 frame.setVisible(false);
-                System.out.println("MODIFY ErrorPopUp 58");
+                System.out.println("ErrorPopUp 58");
                 frame.dispose();
                 System.exit(-168);
             }

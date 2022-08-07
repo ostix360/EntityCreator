@@ -3,7 +3,7 @@ package fr.entityCreator.graphics.particles.particleSpawn;
 import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.frame.JFloatSlider;
 import fr.entityCreator.frame.MainFrame;
-import fr.entityCreator.toolBox.Maths;
+import fr.entityCreator.toolBox.maths.Maths;
 import org.joml.Math;
 import org.joml.Vector3f;
 
@@ -12,7 +12,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.channels.FileChannel;
 import java.util.Objects;
 import java.util.Random;

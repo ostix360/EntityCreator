@@ -1,7 +1,6 @@
-package fr.entityCreator.toolBox;
+package fr.entityCreator.toolBox.maths;
 
 
-import com.flowpowered.react.math.*;
 import fr.entityCreator.entity.camera.Camera;
 import org.joml.Math;
 import org.joml.*;
@@ -74,10 +73,6 @@ public class Maths {
      *
      */
 
-    public static Vector3f toVector3f(Vector3 value) {
-        return new Vector3f(value.getX(), value.getY(), value.getZ());
-    }
-
     public static Vector3f rotateVector(Vector3f direction, float rotX, float rotY, float rotZ) {
         Matrix4f matrix = createTransformationMatrix(new Vector3f(0.0F, 0.0F, 0.0F),
                 new Vector3f(rotX, rotY, rotZ), new Vector3f(1.0F));
@@ -94,9 +89,6 @@ public class Maths {
         float x = (float) (rootOneMinusZSquared * java.lang.Math.cos(theta));
         float y = (float) (rootOneMinusZSquared * java.lang.Math.sin(theta));
         return new Vector3f(x, y, z);
-    }
-    public static Vector3 toVector3(Vector3f value) {
-        return new Vector3(value.x(), value.y(), value.z());
     }
 
 }

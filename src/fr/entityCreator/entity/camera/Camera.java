@@ -2,15 +2,11 @@ package fr.entityCreator.entity.camera;
 
 
 import fr.entityCreator.core.Input;
-import fr.entityCreator.entity.Player;
 import fr.entityCreator.entity.Transform;
 import fr.entityCreator.graphics.MasterRenderer;
-import fr.entityCreator.toolBox.Maths;
+import fr.entityCreator.toolBox.maths.Maths;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
 

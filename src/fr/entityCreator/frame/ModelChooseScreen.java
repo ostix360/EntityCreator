@@ -29,7 +29,6 @@ public class ModelChooseScreen {
     }
 
     private void applySimpleChoice(CollisionObjectPanel p) {
-        p.setObjectFile(getFileChoosen(p));
         this.chooser.setVisible(false);
     }
 

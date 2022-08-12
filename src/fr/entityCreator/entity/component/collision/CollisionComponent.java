@@ -4,7 +4,6 @@ import fr.entityCreator.core.exporter.*;
 import fr.entityCreator.entity.*;
 import fr.entityCreator.entity.component.*;
 import fr.entityCreator.frame.*;
-import fr.entityCreator.graphics.*;
 
 import java.io.*;
 import java.nio.channels.*;
@@ -12,8 +11,11 @@ import java.nio.channels.*;
 public class CollisionComponent extends Component {
     private CollisionPanel panel;
 
-    public CollisionComponent(Entity e) {
+    private final CollisionProperty prop;
+
+    public CollisionComponent(Entity e, CollisionProperty prop) {
         super(ComponentType.COLLISION_COMPONENT, e);
+        this.prop = prop;
     }
 
     @Override
@@ -23,8 +25,8 @@ public class CollisionComponent extends Component {
 
     @Override
     public void export(FileChannel fc) throws IOException {
-            fc.write(DataTransformer.casteString(this.getType().toString() + "\n"));
-
+        fc.write(DataTransformer.casteString(this.getType().toString() + "\n"));
+        fc.write(DataTransformer.casteString(this.prop.getControllerType() + "\n"));
     }
 
     @Override
@@ -35,4 +37,7 @@ public class CollisionComponent extends Component {
         return panel;
     }
 
+    public CollisionProperty getProp() {
+        return prop;
+    }
 }

@@ -31,21 +31,31 @@ public class CollisionObjectPanel extends JPanel {
         this.settings = settingsPanel;
 
         JLabel label = new JLabel("Collision Component added");
-        add(label);
+        add(label,getGC(0));
         JLabel label2 = new JLabel("the entiy model will be use for the collision");
-        add(label2);
+        add(label2,getGC(1));
 
+        JTextArea textArea = new JTextArea(3,30);
+        textArea.setText("Character is used for entities which can move.\n" +
+                "And RigidBody is used for entities which can't move.\n");
+        textArea.setEditable(false);
+
+        add(textArea,getGC(2));
+
+        JComboBox<String> controllerType = new JComboBox<>();
+        controllerType.setModel(new DefaultComboBoxModel<>(new String[]{"RigidBody","Character"}));
+        controllerType.addActionListener(e -> collisionComponent.getProp().setControllerType((String) controllerType.getSelectedItem()));
+        add(controllerType,getGC(3));
     }
 
 
 
 
-    private GridBagConstraints getGC(int x, int y, int width) {
+    private GridBagConstraints getGC( int y) {
         GridBagConstraints gc = new GridBagConstraints();
         gc.fill = 4;
-        gc.gridx = x;
+        gc.gridx = 0;
         gc.gridy = y;
-        gc.gridwidth = width;
         gc.weightx = 1;
         gc.weighty = 1;
         return gc;

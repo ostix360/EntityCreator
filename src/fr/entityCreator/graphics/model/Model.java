@@ -119,12 +119,7 @@ public class Model {
             FileOutputStream fos = new FileOutputStream(output);
             FileChannel fcWriter = fos.getChannel();
         ){
-            ByteBuffer buffer = ByteBuffer.allocate(4096);
-            while (fcReader.read(buffer) !=-1) {
-                buffer.flip();
-                fcWriter.write(buffer);
-                buffer.flip();
-            }
+            fcWriter.transferFrom(fcReader,0,fcReader.size());
         }
     }
 

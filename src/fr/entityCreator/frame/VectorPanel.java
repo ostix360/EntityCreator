@@ -17,6 +17,9 @@ public class VectorPanel extends JPanel {
         setPreferredSize(new Dimension(width, height));
         setLayout(new GridBagLayout());
         setupName(name);
+        if (name.equals("Color")){
+            setUpCInputs(x,y,z);
+        }
         setUpInputs(x,y,z);
     }
 
@@ -81,6 +84,16 @@ public class VectorPanel extends JPanel {
         setUpLabel(" z:", 5);
         this.z = setUpValueInput(z, 6);
     }
+
+    private void setUpCInputs(float x, float y, float z) {
+        setUpLabel(" r:", 1);
+        this.x = setUpValueInput(x, 2);
+        setUpLabel(" g:", 3);
+        this.y = setUpValueInput(y, 4);
+        setUpLabel(" b:", 5);
+        this.z = setUpValueInput(z, 6);
+    }
+
     public void addTotalListener(DocumentListener listener) {
         this.x.getDocument().addDocumentListener(listener);
         this.y.getDocument().addDocumentListener(listener);

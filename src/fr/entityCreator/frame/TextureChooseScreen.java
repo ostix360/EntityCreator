@@ -46,35 +46,37 @@ public class TextureChooseScreen {
 
     private void applyChoice(JPanel parent, int id) {
         File tex = getFileChoosen(parent);
-        TextureLoader texID;
-        TextureLoaderRequest request;
-        assert tex != null;
-        switch (id) {
-            case 2:
+        if (tex != null) {
+            TextureLoader texID;
+            TextureLoaderRequest request;
+            assert tex != null;
+            switch (id) {
+                case 2:
                     request = new TextureLoaderRequest(tex.getAbsolutePath());
                     GLRequestProcessor.sendRequest(request);
                     Timer.waitForRequest(request);
                     texID = request.getTexture();
                     entity.getModel().getTexture().setSpecularMap(texID);
-                break;
-            case 3:
+                    break;
+                case 3:
                     request = new TextureLoaderRequest(tex.getAbsolutePath());
                     GLRequestProcessor.sendRequest(request);
                     Timer.waitForRequest(request);
                     texID = request.getTexture();
                     entity.getModel().getTexture().setNormalMapFile(texID);
-                break;
-            default:
-                entity.setTexturedFile(tex);
-                entity.getModel().getTexture().setNewDiffuse(tex);
-                break;
-        }
-        if (parent instanceof TexturePanel) {
-            boolean success = panel.setNewIcon(id);
-            if (success) {
-                this.chooser.setVisible(false);
-            } else {
-                new ErrorPopUp("Impossible d'ouvrir la texture!");
+                    break;
+                default:
+                    entity.setTexturedFile(tex);
+                    entity.getModel().getTexture().setNewDiffuse(tex);
+                    break;
+            }
+            if (parent instanceof TexturePanel) {
+                boolean success = panel.setNewIcon(id);
+                if (success) {
+                    this.chooser.setVisible(false);
+                } else {
+                    new ErrorPopUp("Impossible d'ouvrir la texture!");
+                }
             }
         }
         this.chooser.setVisible(false);

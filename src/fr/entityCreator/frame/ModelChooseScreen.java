@@ -33,11 +33,14 @@ public class ModelChooseScreen {
     }
 
     private void applyChoice(JPanel parent, MainFrame frame) {
-        entity.setModelFile(getFileChoosen(parent));
-        frame.notifyModelSet();
-        if (button != null) {
-            button.setText("Changer de Model...");
-            button.setForeground(new Color(0, 155, 0));
+        File f = getFileChoosen(parent);
+        if (f != null) {
+            entity.setModelFile(f);
+            frame.notifyModelSet();
+            if (button != null) {
+                button.setText("Changer de Model...");
+                button.setForeground(new Color(0, 155, 0));
+            }
         }
         this.chooser.setVisible(false);
     }

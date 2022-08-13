@@ -195,7 +195,7 @@ public class Entity {
     }
 
     public void setModelFile(File file) {
-        if (file.exists() && file.canRead()) {
+        if (file != null && file.exists() && file.canRead()) {
             if (file.getName().endsWith(".dae")) {
                 this.model = AnimatedModelLoader.loadEntity(file.getAbsolutePath(), 5, this);
                 Config.CURRENT_ANIMATION = LoadAnimation.loadAnimatedModel(file.getAbsolutePath());

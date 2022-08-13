@@ -72,6 +72,7 @@ public class OptionPanel {
             }
             Config.MODELS_FOLDER = output.getSelectedFile();
             this.model = output.getSelectedFile().getAbsolutePath();
+            label.setText(model);
             this.frame.validate();
             this.frame.repaint();
         });
@@ -97,6 +98,7 @@ public class OptionPanel {
             }
             Config.TEXTURES_FOLDER = output.getSelectedFile();
             this.texture = output.getSelectedFile().getAbsolutePath();
+            label.setText(texture);
             this.frame.validate();
             this.frame.repaint();
         });
@@ -122,6 +124,7 @@ public class OptionPanel {
             }
             Config.OUTPUT_FOLDER = output.getSelectedFile();
             this.output = output.getSelectedFile().getAbsolutePath();
+            label.setText(this.output);
             this.frame.validate();
             this.frame.repaint();
         });

@@ -12,10 +12,12 @@ import fr.entityCreator.entity.component.particle.*;
 import fr.entityCreator.frame.*;
 import fr.entityCreator.graphics.model.*;
 import fr.entityCreator.toolBox.*;
+import fr.ostix.entities.*;
 import org.joml.*;
 
 import javax.management.openmbean.*;
 import java.io.*;
+import java.lang.reflect.*;
 import java.nio.*;
 import java.nio.channels.*;
 import java.util.*;
@@ -231,11 +233,12 @@ public class Entity {
         exportEntity();
     }
 
-    public static Entity load(File file){
+    public static Entity load(File file) throws Exception {
         String name = file.getName().replaceAll(".json","");
-        Entity e = new Entity(name);
         String content = JsonUtils.loadJson(file.getAbsolutePath());
         String[] values = content.split(";");
+        Entity e = Entities.getClass(values[3]).getDeclaredConstructor(String.class).newInstance(name);
+
         Model.load(values[0],e );
         content = JsonUtils.loadJson(Config.OUTPUT_FOLDER + "/component/"
                 + values[2].replaceAll("\n","") + ".component");
@@ -245,7 +248,7 @@ public class Entity {
 
     public void exportEntity() throws Exception {
         StringBuilder fileContent = new StringBuilder();
-        fileContent.append(model.getName()).append(";").append(name.hashCode()).append(";").append(hashCode());
+        fileContent.append(model.getName()).append(";").append(name.hashCode()).append(";").append(hashCode()).append(";").append(type);
         File file = new File(Config.OUTPUT_FOLDER,
                 "/entities/data/" + name + ".json");
         if (!file.exists()) {

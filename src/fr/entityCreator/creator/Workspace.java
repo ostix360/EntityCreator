@@ -12,7 +12,7 @@ public class Workspace {
 
     private Entity currentEntity;
 
-    private Logger log = Logger.getLogger("Workspace");
+    private final Logger log = Logger.getLogger("Workspace");
     public void save() {
         try {
             if (currentEntity != null)EntityExporter.exportEntity(currentEntity);
@@ -30,7 +30,11 @@ public class Workspace {
     }
 
     public void open(){
-        currentEntity = EntityImporter.importEntity();
+        try {
+            currentEntity = EntityImporter.importEntity();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void newEntity(String name){
@@ -44,6 +48,5 @@ public class Workspace {
         }catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
-        System.out.println();
     }
 }

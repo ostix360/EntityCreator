@@ -4,7 +4,7 @@ import fr.entityCreator.entity.*;
 import fr.entityCreator.frame.*;
 
 public class EntityImporter {
-    public static Entity importEntity(){
+    public static Entity importEntity() throws Exception {
         return Entity.load(new EntityChooserScreen().getChosen());
     }
 }

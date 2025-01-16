@@ -4,6 +4,7 @@ package fr.entityCreator.graphics.particles;
 import com.google.gson.annotations.Expose;
 import fr.entityCreator.core.exporter.DataTransformer;
 import fr.entityCreator.core.loader.json.JsonUtils;
+import fr.entityCreator.core.resources.TextureProperties;
 import fr.entityCreator.graphics.textures.TextureLoader;
 import fr.entityCreator.toolBox.Config;
 
@@ -20,17 +21,14 @@ public class ParticleTexture {
     @Expose
     private String name;
     @Expose
-    private int numberOfRows;
-    @Expose
-    private boolean additive;
-    @Expose
-    private boolean affectedByLighting;
+    private TextureProperties properties;
 
     public ParticleTexture(TextureLoader texture, int numberOfRows, boolean additive, boolean affectedByLighting) {
-        this.additive = additive;
         this.texture = texture;
-        this.numberOfRows = numberOfRows;
-        this.affectedByLighting = affectedByLighting;
+        this.properties = new TextureProperties();
+        this.properties.setAdditive(additive);
+        this.properties.setAffectedByLighting(affectedByLighting);
+        this.properties.setNumbersOfRows(numberOfRows);
     }
 
     @Override
@@ -38,12 +36,12 @@ public class ParticleTexture {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ParticleTexture that = (ParticleTexture) o;
-        return texture == that.texture && numberOfRows == that.numberOfRows && additive == that.additive && affectedByLighting == that.affectedByLighting;
+        return texture == that.texture && Objects.equals(properties, that.properties);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(texture, numberOfRows, additive, affectedByLighting);
+        return Objects.hash(texture, properties);
     }
 
 
@@ -84,32 +82,43 @@ public class ParticleTexture {
         this.texture = texture;
     }
 
-    public void setNumberOfRows(int numberOfRows) {
-        this.numberOfRows = numberOfRows;
-    }
-
-    public void setAdditive(boolean additive) {
-        this.additive = additive;
-    }
-
-    public void setAffectedByLighting(boolean affectedByLighting) {
-        this.affectedByLighting = affectedByLighting;
-    }
-
-    public boolean isAffectedByLighting() {
-        return affectedByLighting;
-    }
-
-    public boolean isAdditive() {
-        return additive;
-    }
-
     public TextureLoader getTextureID() {
         return texture;
     }
 
     public int getNumberOfRows() {
-        return numberOfRows;
+        return properties.getNumbersOfRows();
     }
 
+    public boolean isAdditive() {
+        return properties.isAdditive();
+    }
+
+    public boolean isAffectedByLighting() {
+        return properties.isAffectedByLighting();
+    }
+
+    public TextureProperties getProperties() {
+        return properties;
+    }
+
+    public void setProperties(TextureProperties properties) {
+        this.properties = properties;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNumberOfRows(int numberOfRows) {
+        properties.setNumbersOfRows(numberOfRows);
+    }
+
+    public void setAdditive(boolean additive) {
+        properties.setAdditive(additive);
+    }
+
+    public void setAffectedByLighting(boolean affectedByLighting) {
+        properties.setAffectedByLighting(affectedByLighting);
+    }
 }

@@ -122,6 +122,14 @@ public class TextureProperties {
     public void setInverseNormal(boolean inverseNormal) {
     }
 
+    public void setAdditive(boolean additive) {
+        this.additive = additive;
+    }
+
+    public void setAffectedByLighting(boolean affectedByLighting) {
+        this.affectedByLighting = affectedByLighting;
+    }
+
     public String getNormalMapFile() {
         return normalMapFile == null ? null : normalMapFile.getFile().getAbsolutePath();
     }

@@ -32,7 +32,7 @@ public class ParticleCreator implements ComponentCreator {
 
         String json = JsonUtils.loadJson(Config.OUTPUT_FOLDER.getAbsolutePath() + "/textures/data/" + lines[lines.length - 1]+ ".json");
         TextureResources texResources = JsonUtils.gsonInstance(false).fromJson(json, TextureResources.class);
-        TextureLoaderRequest textureRequest = new TextureLoaderRequest(texResources.getPath());
+        TextureLoaderRequest textureRequest = new TextureLoaderRequest(Config.OUTPUT_FOLDER+"/textures/"+texResources.getPath()+".png");
         GLRequestProcessor.sendRequest(textureRequest);
         String[] values;
         try {
